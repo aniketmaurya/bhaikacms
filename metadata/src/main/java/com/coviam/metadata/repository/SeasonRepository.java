@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SeasonRepository extends CrudRepository {
+public interface SeasonRepository extends CrudRepository<Season, String> {
 
 
     List<Season> save(Season season);

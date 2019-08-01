@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EpisodeRepository extends CrudRepository {
+public interface EpisodeRepository extends CrudRepository<Episode, String> {
 
     List<Episode> findBySeasonId(String SeasonId);
 }

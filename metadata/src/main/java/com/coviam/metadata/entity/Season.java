@@ -21,7 +21,7 @@ public class Season {
     String id;
 
     @ManyToOne
-    @JoinColumn(name = "programId")
+    @JoinColumn(name = "program_id")
     Program programId;
 
     Integer seasonNumber;
@@ -33,5 +33,6 @@ public class Season {
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
     private Map<Crew, String> crewRoles;
+
 
 }

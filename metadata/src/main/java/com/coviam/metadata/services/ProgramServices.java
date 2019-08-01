@@ -1,5 +1,6 @@
 package com.coviam.metadata.services;
 
+import com.coviam.metadata.dto.ProgramDto;
 import com.coviam.metadata.entity.Program;
 
 import java.util.List;
@@ -8,10 +9,12 @@ public interface ProgramServices {
 
     boolean addProgram(Program program);
 
-    List<Program> getAllPrograms();
+    List<ProgramDto> getAllPrograms(Integer pageNumber, Integer size);
 
-    List<Program> getProgramsByUser(String userName);
+    List<ProgramDto> getProgramsByAuthor(String userName);
 
-    List<Program> getProgramsByKeywords(List<String> keywords);
+    ProgramDto getProgramByProgramId(String programId);
+
+    boolean deleteProgramByProgramId(String programId);
 
 }
