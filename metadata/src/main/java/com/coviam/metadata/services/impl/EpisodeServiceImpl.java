@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,10 +33,15 @@ public class EpisodeServiceImpl implements EpisodeServices {
     }
 
     @Override
-    public List<Episode> getEpisodesBySeasonId(String seasonId) {
+    public List<EpisodeDto> getEpisodesBySeasonId(String seasonId) {
         List<Episode> episodesBySeasonIdList = episodeRepository.findBySeasonId(seasonId);
-        return episodesBySeasonIdList;
-
+        List<EpisodeDto> episodesDtoBySeasonList = new ArrayList<EpisodeDto>();
+        for(Episode episode:episodesBySeasonIdList){
+            EpisodeDto episodeDto = new EpisodeDto();
+            BeanUtils.copyProperties(episode,episodeDto);
+            episodesDtoBySeasonList.add(episodeDto);
+        }
+        return episodesDtoBySeasonList;
     }
 
     @Override

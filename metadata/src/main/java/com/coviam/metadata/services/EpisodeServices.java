@@ -10,5 +10,5 @@ public interface EpisodeServices {
 
     boolean addSingleEpisodeVideo(EpisodeDto episodeDto);
     boolean addMultipleEpisodeVideos(List<EpisodeDto> episodeDtoList);
-    List<Episode> getEpisodesBySeasonId(String seasonId);
+    List<EpisodeDto> getEpisodesBySeasonId(String seasonId);
 }
