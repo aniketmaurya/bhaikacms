@@ -14,6 +14,7 @@ public class UserAdminDetailsDto {
         this.firstName = firstName;
     }
 
+
     public String getLastName() {
         return lastName;
     }
