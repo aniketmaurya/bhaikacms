@@ -38,5 +38,9 @@ public class SingleVideo {
     @Column(columnDefinition = "hstore")
     private Map<String, String> videoImgUrls = new HashMap<>();
 
+    @Type(type = "hstore")
+    @Column(columnDefinition = "hstore")
+    private Map<String, String> crewList = new HashMap<>();
+
 
 }

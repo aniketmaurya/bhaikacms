@@ -1,6 +1,5 @@
 package com.coviam.metadata.services.impl;
 
-import com.coviam.metadata.dto.SingleVideoDto;
 import com.coviam.metadata.entity.SingleVideo;
 import com.coviam.metadata.repository.SingleVideoRepository;
 import com.coviam.metadata.services.SingleVideoServices;
@@ -14,8 +13,24 @@ public class SingleVideoServiceImpl implements SingleVideoServices {
     SingleVideoRepository singleVideoRepository;
 
     @Override
-    public boolean addSingleVideo(SingleVideoDto singleVideoDto) {
-        SingleVideo singleVideo = new SingleVideo();
+    public Boolean addSingleVideo(SingleVideo singleVideo) {
+        try {
+            singleVideoRepository.save(singleVideo);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean deleteSingleVideoById(String singleVideoId) {
+        try {
+            singleVideoRepository.deleteById(singleVideoId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return true;
+        }
         return false;
     }
 }

@@ -7,5 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SeasonRepository extends CrudRepository<Season, String> {
 
+    Integer countByProgramId(String programId);
+
+    Iterable<Season> findByProgramId(String programId);
 
 }

@@ -1,6 +1,7 @@
 package com.coviam.metadata.services.impl;
 
 import com.coviam.metadata.entity.Season;
+import com.coviam.metadata.repository.EpisodeRepository;
 import com.coviam.metadata.repository.SeasonRepository;
 import com.coviam.metadata.services.SeasonServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,11 @@ public class SeasonServiceImpl implements SeasonServices {
     @Autowired
     private SeasonRepository seasonRepository;
 
-    @Override
-    public Boolean addMultiCategory(Season season) {
-        return false;
-    }
+    @Autowired
+    private EpisodeRepository episodeRepository;
 
     @Override
     public Boolean addSeason(Season season) {
-
         try {
             seasonRepository.save(season);
             return true;
@@ -29,5 +27,23 @@ public class SeasonServiceImpl implements SeasonServices {
         return false;
     }
 
+    @Override
+    public Integer countSeasonsByProgram(String programId) {
 
+
+        return seasonRepository.countByProgramId(programId);
+    }
+
+    @Override
+    public Boolean deleteSeasonById(String seasonId) {
+
+        try {
+            episodeRepository.deleteBySeasonId(seasonId);
+            seasonRepository.deleteById(seasonId);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

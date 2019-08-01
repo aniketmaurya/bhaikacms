@@ -1,14 +1,19 @@
 package com.coviam.metadata.services;
 
-import com.coviam.metadata.dto.EpisodeDto;
+import com.coviam.metadata.entity.Episode;
 
 import java.util.List;
 
 public interface EpisodeServices {
 
-    boolean addSingleEpisodeVideo(EpisodeDto episodeDto);
+    Boolean addEpisode(Episode episode);
 
-    boolean addMultipleEpisodeVideos(List<EpisodeDto> episodeDtoList);
+    Boolean addMultipleEpisodes(List<Episode> episodes);
 
-    List<EpisodeDto> getEpisodesBySeasonId(String seasonId);
+    Integer countEpisodesBySeasonId(String seasonId);
+
+    Boolean deleteEpisode(String episodeId);
+
+    Boolean deleteAllEpisodes();
+
 }

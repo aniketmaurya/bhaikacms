@@ -1,7 +1,10 @@
 package com.coviam.metadata.services;
 
-import com.coviam.metadata.dto.SingleVideoDto;
+import com.coviam.metadata.entity.SingleVideo;
 
 public interface SingleVideoServices {
-    boolean addSingleVideo(SingleVideoDto singleVideoDto);
+
+    Boolean addSingleVideo(SingleVideo singleVideo);
+
+    Boolean deleteSingleVideoById(String singleVideoId);
 }

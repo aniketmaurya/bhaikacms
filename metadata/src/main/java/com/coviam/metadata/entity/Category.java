@@ -21,6 +21,6 @@ public class Category {
 
     @OneToOne
     @JoinColumn(nullable = true)
-    private String parentId;
+    private Category parentId;
     private String categoryName;
 }

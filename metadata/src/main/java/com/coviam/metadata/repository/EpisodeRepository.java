@@ -10,4 +10,8 @@ import java.util.List;
 public interface EpisodeRepository extends CrudRepository<Episode, String> {
 
     List<Episode> findBySeasonId(String SeasonId);
+
+    Integer countBySeasonId(String seasonId);
+
+    void deleteBySeasonId(String seasonId);
 }
