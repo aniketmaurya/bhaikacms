@@ -42,4 +42,8 @@ public class Program {
     Date expiryDate;
 
     Boolean isAlive;
+
+    // to store which user has uploaded this file
+    private String userId;
+    private String userName;
 }
