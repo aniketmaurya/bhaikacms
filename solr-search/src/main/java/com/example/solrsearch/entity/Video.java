@@ -16,21 +16,24 @@ import java.util.List;
 @SolrDocument(solrCoreName = "video")
 public class Video {
 
-    @Id
     @Field
-    private String contentId;
+    List<String> keywords;
+    @Field
+    String videoUrl;
     @Field
     private String programName;
     @Field
     List<Crew> crewList;
+    @Id
     @Field
-    String keywords;
+    private String id;
     @Field
     String languages;
     @Field
     String programDescription;
     @Field
     String videoType;
-    String videoUrl;
+    @Field
+    private String programId;
 
 }
