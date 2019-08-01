@@ -6,8 +6,6 @@ import com.coviam.metadata.services.SeasonServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class SeasonServiceImpl implements SeasonServices {
 
@@ -15,13 +13,20 @@ public class SeasonServiceImpl implements SeasonServices {
     private SeasonRepository seasonRepository;
 
     @Override
-    public boolean addMultiCategory(Season season) {
+    public Boolean addMultiCategory(Season season) {
         return false;
     }
 
     @Override
-    public List<Season> addSeason(Season season) {
-        return seasonRepository.save(season);
+    public Boolean addSeason(Season season) {
+
+        try {
+            seasonRepository.save(season);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 

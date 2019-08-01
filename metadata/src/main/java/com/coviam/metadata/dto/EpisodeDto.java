@@ -2,60 +2,22 @@ package com.coviam.metadata.dto;
 
 import com.coviam.metadata.entity.Season;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class EpisodeDto {
+    private String id;
 
-    String id;
-    Season seasonId;
-    Integer episodeNumber;
-    String episodeDescription;
-    String episodeUrl;
-    String episodeImageUrl;
+    private Season seasonId;
 
-    public String getId() {
-        return id;
-    }
+    private Integer episodeNumber;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    private String episodeDescription;
 
-    public Season getSeasonId() {
-        return seasonId;
-    }
+    private String episodeVideoUrl;
 
-    public void setSeasonId(Season seasonId) {
-        this.seasonId = seasonId;
-    }
+    // todo multiple imgs: Done
+    private Map<String, String> episodeImageUrls = new HashMap<>();
 
-    public Integer getEpisodeNumber() {
-        return episodeNumber;
-    }
 
-    public void setEpisodeNumber(Integer episodeNumber) {
-        this.episodeNumber = episodeNumber;
-    }
-
-    public String getEpisodeDescription() {
-        return episodeDescription;
-    }
-
-    public void setEpisodeDescription(String episodeDescription) {
-        this.episodeDescription = episodeDescription;
-    }
-
-    public String getEpisodeUrl() {
-        return episodeUrl;
-    }
-
-    public void setEpisodeUrl(String episodeUrl) {
-        this.episodeUrl = episodeUrl;
-    }
-
-    public String getEpisodeImageUrl() {
-        return episodeImageUrl;
-    }
-
-    public void setEpisodeImageUrl(String episodeImageUrl) {
-        this.episodeImageUrl = episodeImageUrl;
-    }
 }

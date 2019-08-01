@@ -3,50 +3,67 @@ package com.coviam.metadata.entity;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLHStoreType;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.util.List;
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Data
-@TypeDef(name = "hstore", typeClass = PostgreSQLHStoreType.class)
 @Table(name = Program.TABLE_NAME)
+@TypeDef(name = "hstore", typeClass = PostgreSQLHStoreType.class)
 public class Program {
 
-    public static final String TABLE_NAME="Program";
-    public static final String ID_COLUMN="ID";
+    public static final String TABLE_NAME = "Program";
+    public static final String ID_COLUMN = "ID";
 
     @Id
-    @GeneratedValue(generator = "prog_id")
-    @GenericGenerator(name = "prog_id",strategy = "increment")
-    @Column(name=Program.ID_COLUMN)
-    String id;
+    @GeneratedValue(generator = "program_id")
+    @GenericGenerator(name = "program_id", strategy = "increment")
+    @Column(name = Program.ID_COLUMN)
+    private String id;
 
-    String programType;
+    private String programType;
 
-    String description;
+    private String description;
 
-    String programName;
+    private String programName;
 
-    String parentalRating;
+    private String parentalRating;
 
-    List<String> keywords;
+    // we will store keywords as space separated values
+    private String keywords;
 
-    List<Language> languageId;
+    // We will languages as space separated values
+    private String languageId;
 
-    String programImgUrl;
+    private String programImgUrl;
 
-    Long startDate;
-    Long expiryDate;
+    private Date startDate;
+    private Date expiryDate;
 
-/*    @Type(type = "hstore")
-    @Column(columnDefinition = "hstore")
-    private Map<Crew, String> crewRoles;*/
+    private Boolean isAlive;
 
-    Boolean isAlive;
     // to store which user has uploaded this file
     private String userId;
 
     private String author;
+
+
+    @Type(type = "hstore")
+    @Column(columnDefinition = "hstore")
+    private Map<String, String> videoImgUrls = new HashMap<>();
+
+
+    // We are maintaining crew data below program level
+    /*
+    @Type(type = "hstore")
+    @Column(columnDefinition = "hstore")
+    private Map<String, String> crewRoles = new HashMap<>();
+*/
+
+
 }

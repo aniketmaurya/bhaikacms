@@ -1,13 +1,19 @@
 package com.coviam.metadata.entity;
 
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLHStoreType;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Data
 @Table(name = SingleVideo.TABLE_NAME)
+@TypeDef(name = "hstore", typeClass = PostgreSQLHStoreType.class)
 public class SingleVideo {
 
     public static final String TABLE_NAME = "single_video";
@@ -16,12 +22,17 @@ public class SingleVideo {
     @Id
     @GeneratedValue(generator = "single_video_generator")
     @GenericGenerator(name = "single_video_generator", strategy = "increment")
-    String id;
+    private String id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "program_id")
-    Program programId;
+    private Program programId;
 
-    String videoURL;
+    private String videoUrl;
+
+    @Type(type = "hstore")
+    @Column(columnDefinition = "hstore")
+    private Map<String, String> videoImgUrls = new HashMap<>();
+
 
 }

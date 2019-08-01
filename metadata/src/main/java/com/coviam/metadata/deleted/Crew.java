@@ -1,3 +1,4 @@
+/*
 package com.coviam.metadata.entity;
 
 import lombok.Data;
@@ -17,7 +18,8 @@ public class Crew {
     @GeneratedValue(generator = "crew_id")
     @GenericGenerator(name = "crew_id",strategy = "increment")
     @Column(name=Crew.ID_COLUMN)
-    String id;
+    private String id;
 
-    String role;
+    private String role;
 }
+*/
