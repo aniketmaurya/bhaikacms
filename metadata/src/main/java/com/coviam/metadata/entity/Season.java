@@ -2,8 +2,10 @@ package com.coviam.metadata.entity;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Map;
 
 @Entity
 @Data
@@ -27,5 +29,9 @@ public class Season {
     String seasonDescription;
 
     String seasonImgUrl;
+
+    @Type(type = "hstore")
+    @Column(columnDefinition = "hstore")
+    private Map<Crew, String> crewRoles;
 
 }

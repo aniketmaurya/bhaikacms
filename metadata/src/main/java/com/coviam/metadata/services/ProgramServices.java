@@ -14,6 +14,8 @@ public interface ProgramServices {
     // confusion
     List<Program> getProgramsByCategory(Category category);
 
-    List<Program> getProgramsByUser(String userId);
+    List<Program> getProgramsByUser(String userName);
+
+    List<Program> getProgramsByKeywords(List<String> keywords);
 
 }

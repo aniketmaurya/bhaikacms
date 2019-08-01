@@ -3,13 +3,10 @@ package com.coviam.metadata.entity;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLHStoreType;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Data
@@ -38,13 +35,14 @@ public class Program {
 
     List<Language> languageId;
 
-    Long startDate;
-
     String programImgUrl;
+
+    Long startDate;
     Long expiryDate;
-    @Type(type = "hstore")
+
+/*    @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
-    private Map<Crew, String> crewRoles = new HashMap<>();
+    private Map<Crew, String> crewRoles;*/
 
     Boolean isAlive;
     // to store which user has uploaded this file
