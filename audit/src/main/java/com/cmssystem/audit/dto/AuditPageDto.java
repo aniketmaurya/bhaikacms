@@ -1,0 +1,13 @@
+package com.cmssystem.audit.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AuditPageDto {
+    private Integer pageNumber;
+    private Integer countInPage;
+}
