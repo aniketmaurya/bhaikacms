@@ -1,8 +1,13 @@
 package com.coviam.metadata.entity;
 
-import java.util.HashMap;
+import lombok.Data;
+
+import javax.persistence.Entity;
+import java.util.Date;
 import java.util.List;
 
+@Entity
+@Data
 public class Program {
 
     String id;
@@ -10,9 +15,10 @@ public class Program {
     String description;
     String programName;
     String parentalRating;
-    HashMap<String, List<String>> crewRole;
     List<String> keywords;
-    Language languageId;
-
-
+    List<Language> languageId;
+    String programImgUrl;
+    Date startDate;
+    Date expiryDate;
+    Boolean isAlive;
 }
