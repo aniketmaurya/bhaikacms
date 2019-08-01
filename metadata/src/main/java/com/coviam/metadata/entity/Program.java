@@ -48,5 +48,5 @@ public class Program {
     // to store which user has uploaded this file
     private String userId;
 
-    private String userName;
+    private String author;
 }

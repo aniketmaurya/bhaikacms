@@ -14,12 +14,12 @@ public class Episode {
     public static final String ID_COLUMN="ID";
 
     @Id
-    @GeneratedValue(generator = "ep_id")
-    @GenericGenerator(name = "ep_id",strategy = "increment")
+    @GeneratedValue(generator = "ep_generator")
+    @GenericGenerator(name = "ep_generator", strategy = "increment")
     String id;
 
     @ManyToOne
-    @JoinColumn(name = "seasonId")
+    @JoinColumn(name = "season_id")
     Season seasonId;
 
     Integer episodeNumber;

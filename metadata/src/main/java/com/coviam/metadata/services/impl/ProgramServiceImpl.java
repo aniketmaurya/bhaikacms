@@ -1,6 +1,5 @@
 package com.coviam.metadata.services.impl;
 
-import com.coviam.metadata.entity.Category;
 import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.repository.ProgramRepository;
 import com.coviam.metadata.services.ProgramServices;
@@ -27,13 +26,9 @@ public class ProgramServiceImpl implements ProgramServices {
     }
 
     @Override
-    public List<Program> getProgramsByCategory(Category category) {
-        return null;
-    }
+    public List<Program> getProgramsByUser(String author) {
 
-    @Override
-    public List<Program> getProgramsByUser(String userName) {
-        return null;
+        return programRepository.findByAuthor(author);
     }
 
     @Override

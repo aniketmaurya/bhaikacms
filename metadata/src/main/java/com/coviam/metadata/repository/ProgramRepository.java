@@ -10,4 +10,6 @@ import java.util.List;
 public interface ProgramRepository extends CrudRepository {
 
     List<Program> findAll();
+
+    List<Program> findByAuthor(String author);
 }
