@@ -9,6 +9,7 @@ public class EpisodeDto {
     Integer episodeNumber;
     String episodeDescription;
     String episodeUrl;
+    String episodeImageUrl;
 
     public String getId() {
         return id;
@@ -48,5 +49,13 @@ public class EpisodeDto {
 
     public void setEpisodeUrl(String episodeUrl) {
         this.episodeUrl = episodeUrl;
+    }
+
+    public String getEpisodeImageUrl() {
+        return episodeImageUrl;
+    }
+
+    public void setEpisodeImageUrl(String episodeImageUrl) {
+        this.episodeImageUrl = episodeImageUrl;
     }
 }

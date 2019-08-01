@@ -20,13 +20,8 @@ public class SingleVideo {
 
     @ManyToOne
     @JoinColumn(name = "program_id")
-    Season seasonId;
+    Program programId;
 
-    Integer episodeNumber;
-
-    String episodeDescription;
-
-    String episodeUrl;
-
+    String videoURL;
 
 }

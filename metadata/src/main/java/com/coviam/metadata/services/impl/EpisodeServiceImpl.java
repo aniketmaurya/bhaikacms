@@ -34,9 +34,9 @@ public class EpisodeServiceImpl implements EpisodeServices {
 
     @Override
     public List<EpisodeDto> getEpisodesBySeasonId(String seasonId) {
-        List<Episode> episodesBySeasonIdList = episodeRepository.findBySeasonId(seasonId);
+        List<Episode> episodesBySeasonList = episodeRepository.findBySeasonId(seasonId);
         List<EpisodeDto> episodesDtoBySeasonList = new ArrayList<EpisodeDto>();
-        for(Episode episode:episodesBySeasonIdList){
+        for(Episode episode:episodesBySeasonList){
             EpisodeDto episodeDto = new EpisodeDto();
             BeanUtils.copyProperties(episode,episodeDto);
             episodesDtoBySeasonList.add(episodeDto);

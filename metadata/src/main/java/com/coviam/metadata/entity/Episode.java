@@ -27,4 +27,6 @@ public class Episode {
     String episodeDescription;
 
     String episodeUrl;
+
+    String episodeImageUrl;
 }
