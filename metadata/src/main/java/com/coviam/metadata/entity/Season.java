@@ -25,7 +25,7 @@ public class Season {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "program_id")
+    @JoinColumn(name = "program_id", nullable = false)
     private Program programId;
 
     private Integer seasonNumber;

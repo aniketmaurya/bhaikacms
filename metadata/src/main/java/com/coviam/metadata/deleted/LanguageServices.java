@@ -1,4 +1,4 @@
-package com.coviam.metadata.services;
+package com.coviam.metadata.deleted;
 
 public interface LanguageServices {
 }

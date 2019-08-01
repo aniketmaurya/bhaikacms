@@ -52,6 +52,10 @@ public class Program {
 
     private String author;
 
+    @OneToOne
+    @JoinColumn(nullable = false)
+    private Category category;
+
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")

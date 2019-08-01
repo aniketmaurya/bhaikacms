@@ -25,10 +25,12 @@ public class Episode {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "season_id")
+    @JoinColumn(name = "season_id", nullable = false)
     private Season seasonId;
 
     private Integer episodeNumber;
+
+    private String episodeTitle;
 
     private String episodeDescription;
 

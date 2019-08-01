@@ -28,7 +28,11 @@ public class SingleVideo {
     @JoinColumn(name = "program_id")
     private Program programId;
 
+    private String videoTitle;
+
     private String videoUrl;
+
+    private String videoDescription;
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")

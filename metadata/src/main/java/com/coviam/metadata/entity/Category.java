@@ -19,5 +19,8 @@ public class Category {
     @Column(name = Category.ID_COLUMN)
     private String id;
 
+    @OneToOne
+    @JoinColumn(nullable = true)
     private String parentId;
+    private String categoryName;
 }
