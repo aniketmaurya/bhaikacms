@@ -8,8 +8,7 @@ import java.util.List;
 
 public interface EpisodeServices {
 
-    boolean addEpisodeVideo(EpisodeDto episodeDto);
-    int countEpisode(String seasonId);
-    boolean addEpisodeVideos(List<EpisodeDto> episodeDtoList);
-    List<Episode> findEpisodesBySeasonId
+    boolean addSingleEpisodeVideo(EpisodeDto episodeDto);
+    boolean addMultipleEpisodeVideos(List<EpisodeDto> episodeDtoList);
+    List<Episode> getEpisodesBySeasonId(String seasonId);
 }

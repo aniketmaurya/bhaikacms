@@ -19,7 +19,7 @@ public class EpisodeServiceImpl implements EpisodeServices {
     EpisodeRepository episodeRepository;
 
     @Override
-    public boolean addEpisodeVideo(EpisodeDto episodeDto){
+    public boolean addSingleEpisodeVideo(EpisodeDto episodeDto){
             Episode episode = new Episode();
             BeanUtils.copyProperties(episodeDto,episode);
         try{
@@ -32,17 +32,14 @@ public class EpisodeServiceImpl implements EpisodeServices {
     }
 
     @Override
-    public int countEpisode(String seasonId) {
-        int count = 0;
-        List<Episode> episodeList = episodeRepository.findBySeasonId(seasonId);
-        for (Episode episode:episodeList){
-            count++;
-        }
-        return count;
+    public List<Episode> getEpisodesBySeasonId(String seasonId) {
+        List<Episode> episodesBySeasonIdList = episodeRepository.findBySeasonId(seasonId);
+        return episodesBySeasonIdList;
+
     }
 
     @Override
-    public boolean addEpisodeVideos(List<EpisodeDto> episodeDtoList) {
+    public boolean addMultipleEpisodeVideos(List<EpisodeDto> episodeDtoList) {
         for (EpisodeDto episodeDto:episodeDtoList) {
             Episode episode = new Episode();
             BeanUtils.copyProperties(episodeDto,episode);
