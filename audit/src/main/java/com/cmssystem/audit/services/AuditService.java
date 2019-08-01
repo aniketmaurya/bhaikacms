@@ -14,4 +14,8 @@ public interface AuditService {
     List<AuditDto> getAllAudits(AuditPageDto pageDto);
 
     List<AuditDto> getRecentAudits(Integer size);
+
+    List<AuditDto> getAuditsInDateRange(Long startDate, Long endDate);
+
+    AuditDto getAuditByUserId(String UserId);
 }

@@ -21,12 +21,18 @@ import java.util.List;
 @Slf4j
 public class AuditServiceImpl implements AuditService {
 
+
+
     @Autowired
     private AuditRepository auditRepository;
 
 
     @Override
     public AddAuditResponseDto addAudit(AddAuditDto addAuditDto) {
+
+        log.debug("addAudit in AuditServiceImpl");
+
+
 
         Audit audit = new Audit();
         AddAuditResponseDto response = new AddAuditResponseDto();
@@ -43,6 +49,7 @@ public class AuditServiceImpl implements AuditService {
             response.setAdded(true);
             response.setMessage("Audit logged successfully");
         }
+        log.debug(response.getMessage());
         return response;
     }
 
@@ -80,6 +87,11 @@ public class AuditServiceImpl implements AuditService {
             auditDtoList.add(auditDto);
         }
         return auditDtoList;
+    }
+
+    @Override
+    public List<AuditDto> getAuditsInDateRange(Long startDate, Long endDate) {
+        return null;
     }
 
 }

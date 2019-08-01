@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class AuditController {
     @RequestMapping(method = RequestMethod.POST, value = "/addAudit")
     public ResponseEntity<?> addAudit(@RequestBody AddAuditDto addAuditDto) {
         AddAuditResponseDto response = auditService.addAudit(addAuditDto);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -37,15 +38,27 @@ public class AuditController {
     @RequestMapping(method = RequestMethod.POST, value = "/getAllAudits")
     public ResponseEntity<?> getAllAudits(@RequestBody AuditPageDto auditPageDto) {
         List<AuditDto> response = auditService.getAllAudits(auditPageDto);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getRecentAudits")
     public ResponseEntity<?> getRecentAudits(@RequestParam(value = "size") Integer size) {
         List<AuditDto> response = auditService.getRecentAudits(size);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getAuditsInDateRange")
+    public ResponseEntity<?> getAuditsInDateRange(@RequestParam(value = "startDate")Long startDate,
+                                              @RequestParam(value = "endDate")Long endDate){
+        List<AuditDto> response=new ArrayList<>();//TODO: GET DETAILS
+        return ResponseEntity.ok(response);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getAuditsByUser")
+    public ResponseEntity<?> getAuditsByUser(@RequestParam(value = "userId")String userId){
+        List<AuditDto> response=new ArrayList<>();//TODO: GET DETAILS
+        return ResponseEntity.ok(response);
+    }
 //    public EmployeeDto getEmployeeByID(@RequestParam(value = "employeeId") String ID) {
 //        Optional<Employee> employee = employeeService.getEmployeeByID(ID);
 //        if (employee.isPresent()) {
