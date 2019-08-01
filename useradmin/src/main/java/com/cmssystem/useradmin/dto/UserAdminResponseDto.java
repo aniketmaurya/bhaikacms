@@ -1,14 +1,18 @@
 package com.cmssystem.useradmin.dto;
 
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class UserAdminDetailsDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserAdminResponseDto {
 
+    private String email;
     private String name;
     private String password;
-    private String email;
     private int roleId;
     private int videosUploaded;
-
 }
