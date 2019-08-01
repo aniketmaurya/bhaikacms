@@ -21,12 +21,12 @@ public class Crew {
 
     String role;
 
-    String name;
+//    String name;
 
-    @JoinTable(
-            name = "program_crew",
-            joinColumns = @JoinColumn(name = "programId"),
-            inverseJoinColumns = @JoinColumn(name = "crewId")
-    )
-    Program program;
+//    @JoinTable(
+//            name = "program_crew",
+//            joinColumns = @JoinColumn(name = "programId"),
+//            inverseJoinColumns = @JoinColumn(name = "crewId")
+//    )
+//    Program program;
 }

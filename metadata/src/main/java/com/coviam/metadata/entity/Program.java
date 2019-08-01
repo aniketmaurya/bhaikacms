@@ -1,14 +1,19 @@
 package com.coviam.metadata.entity;
 
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLHStoreType;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Data
+@TypeDef(name = "hstore", typeClass = PostgreSQLHStoreType.class)
 @Table(name = Program.TABLE_NAME)
 public class Program {
 
@@ -31,19 +36,19 @@ public class Program {
 
     List<String> keywords;
 
-    @OneToMany
-    @JoinColumn(name = "languageId")
     List<Language> languageId;
 
+    Long startDate;
+
     String programImgUrl;
-
-    Date startDate;
-
-    Date expiryDate;
+    Long expiryDate;
+    @Type(type = "hstore")
+    @Column(columnDefinition = "hstore")
+    private Map<Crew, String> crewRoles = new HashMap<>();
 
     Boolean isAlive;
-
     // to store which user has uploaded this file
     private String userId;
+
     private String userName;
 }
