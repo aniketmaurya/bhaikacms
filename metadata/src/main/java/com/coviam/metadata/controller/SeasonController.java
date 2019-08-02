@@ -18,14 +18,13 @@ public class SeasonController {
     private SeasonServices seasonServices;
 
     @PostMapping(value = "addSeason/")
-    public ResponseEntity<?> addSeason(@RequestBody Season season){
-
-        return new ResponseEntity<Season>(seasonServices.addSeason(season),HttpStatus.OK);
+    public ResponseEntity<Optional<Season>> addSeason(@RequestBody Season season){
+        return new ResponseEntity<>(seasonServices.addSeason(season),HttpStatus.OK);
 
     }
 
     @DeleteMapping(value = "deleteSeasonById/")
-    public ResponseEntity<?> deleteSeasonById(@RequestParam(name = "seasonId") String seasonId){
+    public ResponseEntity<Boolean> deleteSeasonById(@RequestParam(name = "seasonId") String seasonId){
 
         return new ResponseEntity<>(seasonServices.deleteSeasonById(seasonId),HttpStatus.OK);
     }
@@ -54,11 +53,5 @@ public class SeasonController {
 
         return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
 
-    }
-
-    @PutMapping(value = "updateSeason/")
-    public ResponseEntity<?> updateSeason(@RequestBody Season season){
-
-        return new ResponseEntity<Season>(seasonServices.addSeason(season),HttpStatus.OK);
     }
 }

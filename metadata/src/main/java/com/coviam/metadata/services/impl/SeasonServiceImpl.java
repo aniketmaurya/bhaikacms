@@ -24,16 +24,16 @@ public class SeasonServiceImpl implements SeasonServices {
 
 
     @Override
-    public Season addSeason(Season season) {
+    public Optional<Season> addSeason(Season season) {
 
         try {
-            return seasonRepository.save(season);
+            return Optional.of(seasonRepository.save(season));
 
         }catch (Exception exception){
 
             log.error("exception "+ exception.getMessage()+" while adding season ");
 
-            return null;
+            return Optional.empty();
         }
 
     }
@@ -42,13 +42,13 @@ public class SeasonServiceImpl implements SeasonServices {
     public Boolean deleteSeasonById(String seasonId) {
 
         try {
-            episodeRepository.deleteBySeasonId(seasonId);
+            episodeRepository.deleteAllBySeasonId(seasonId);
             seasonRepository.deleteById(seasonId);
-            return true;
         } catch (Exception exception) {
             log.error("exception "+ exception.getMessage()+" while deleting season by seasonId : "+seasonId);
+            return false;
         }
-        return false;
+        return true;
     }
 
     @Override

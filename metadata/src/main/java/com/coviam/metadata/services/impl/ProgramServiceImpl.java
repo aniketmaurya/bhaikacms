@@ -46,7 +46,7 @@ public class ProgramServiceImpl implements ProgramServices {
         try {
             Page<Season> seasonIterable = seasonRepository.findByProgramId(programId, PageRequest.of(0,10));
             for (Season season : seasonIterable) {
-                seasonServices.deleteBySeasonId(season.getId());
+                seasonServices.deleteSeasonById(season.getId());
             }
             programRepository.deleteById(programId);
 

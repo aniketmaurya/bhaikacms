@@ -12,4 +12,6 @@ public interface EpisodeRepository extends CrudRepository<Episode, String> {
     Page<Episode> findBySeasonId(String SeasonId, Pageable pageable);
 
     void deleteById(String episodeId);
+
+    void deleteAllBySeasonId(String seasonId);
 }

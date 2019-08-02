@@ -8,12 +8,13 @@ import java.util.Optional;
 public interface SeasonServices {
     /**
      * addSeason and addMultiCategory are same just a difference of implementation and display
-     **/
+     *
+     * @param season
+     * @return*/
 
-    Season addSeason(Season season);
+    Optional<Season> addSeason(Season season);
 
-    Boolean deleteBySeasonId(String seasonId);
-
+    Boolean deleteSeasonById(String seasonId);
 
     Optional<Season> getSeasonById(String seasonId);
 

@@ -54,12 +54,4 @@ public class Program implements Serializable {
     private Map<String, String> programImgUrl = new HashMap<>();
 
 
-    // We are maintaining crew data below program level
-    /*
-    @Type(type = "hstore")
-    @Column(columnDefinition = "hstore")
-    private Map<String, String> crewRoles = new HashMap<>();
-*/
-
-
 }
