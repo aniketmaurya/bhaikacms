@@ -12,7 +12,8 @@ public interface SeasonServices {
 
     Season addSeason(Season season);
 
-    Boolean deleteSeasonById(String seasonId);
+    Boolean deleteBySeasonId(String seasonId);
+
 
     Optional<Season> getSeasonById(String seasonId);
 

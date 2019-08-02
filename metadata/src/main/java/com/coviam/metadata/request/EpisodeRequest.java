@@ -1,10 +1,16 @@
 package com.coviam.metadata.request;
 
 import com.coviam.metadata.entity.Season;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class EpisodeRequest {
     private String id;
 
