@@ -2,36 +2,29 @@ package com.coviam.metadata.services.impl;
 
 import com.coviam.metadata.entity.SingleVideo;
 import com.coviam.metadata.repository.SingleVideoRepository;
-import com.coviam.metadata.response.SingleVideoResponse;
 import com.coviam.metadata.services.SingleVideoServices;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Slf4j
 @Service
+@Slf4j
 public class SingleVideoServiceImpl implements SingleVideoServices {
 
     @Autowired
     SingleVideoRepository singleVideoRepository;
 
     @Override
-    public SingleVideoResponse addSingleVideo(SingleVideo singleVideo) {
-        SingleVideoResponse singleVideoResponse = SingleVideoResponse
-                .builder()
-                .singleVideo(singleVideo)
-                .build();
+    public Boolean addSingleVideo(SingleVideo singleVideo) {
+
         try {
-            SingleVideo singleVideo1 = singleVideoRepository.save(singleVideo);
-            SingleVideoResponse.builder().isSuccessful(Boolean.TRUE);
-
-            return singleVideoResponse;
-
+            singleVideoRepository.save(singleVideo);
         } catch (Exception e) {
-            log.error("Error in adding single video");
-
+            e.printStackTrace();
+            log.debug("Error while adding single video with id:{}", singleVideo.getId());
+            return false;
         }
-        return singleVideoResponse;
+        return true;
     }
 
     @Override
@@ -40,6 +33,7 @@ public class SingleVideoServiceImpl implements SingleVideoServices {
             singleVideoRepository.deleteById(singleVideoId);
         } catch (Exception e) {
             e.printStackTrace();
+            log.debug("Error while deleting single video with id:{}", singleVideoId);
             return false;
         }
         return true;

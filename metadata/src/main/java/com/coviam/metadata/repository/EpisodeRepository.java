@@ -1,17 +1,15 @@
 package com.coviam.metadata.repository;
 
 import com.coviam.metadata.entity.Episode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface EpisodeRepository extends CrudRepository<Episode, String> {
 
-    List<Episode> findBySeasonId(String SeasonId);
+    Page<Episode> findBySeasonId(String SeasonId, Pageable pageable);
 
-    Integer countBySeasonId(String seasonId);
-
-    void deleteBySeasonId(String seasonId);
+    void deleteById(String episodeId);
 }

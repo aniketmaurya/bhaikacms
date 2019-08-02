@@ -2,6 +2,7 @@ package com.coviam.metadata.entity;
 
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLHStoreType;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -19,7 +20,8 @@ public class Episode {
     public static final String ID_COLUMN = "ID";
 
     @Id
-    @GeneratedValue(generator = "episode_generator")
+    @GeneratedValue(generator = "ep_generator")
+    @GenericGenerator(name = "ep_generator", strategy = "uuid")
     private String id;
 
     @ManyToOne

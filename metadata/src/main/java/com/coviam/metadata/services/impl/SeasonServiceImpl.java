@@ -48,11 +48,9 @@ public class SeasonServiceImpl implements SeasonServices {
     }
 
     @Override
-    public Boolean deleteBySeasonId(String seasonId) {
-
-
+    public Boolean deleteSeasonById(String seasonId) {
         try {
-            episodeRepository.deleteBySeasonId(seasonId);
+//            episodeRepository.deleteBySeasonId(seasonId);
             seasonRepository.deleteById(seasonId);
             return true;
         } catch (Exception e) {
@@ -60,38 +58,4 @@ public class SeasonServiceImpl implements SeasonServices {
         }
         return false;
     }
-
-    @Override
-    public SeasonRequest getSeasonById(String seasonId) {
-
-        Optional<Season> seasonOptional=seasonRepository.findById(seasonId);
-        Season season=seasonOptional.get();
-        SeasonRequest seasonRequest = new SeasonRequest();
-        BeanUtils.copyProperties(season, seasonRequest);
-        return seasonRequest;
-    }
-
-    @Override
-    public List<SeasonResponse> getSeasonsByProgramId(String programId, Integer page, Integer size) {
-
-        Page<Season> seasonPage=null;
-
-        try {
-
-            seasonPage=seasonRepository.findByProgramId(programId, PageRequest.of(page,size));
-
-        }catch (Exception exception){
-
-            log.error("exception : " +exception.getMessage()+ " while getting seasons by programId : "+programId);
-        }
-
-        List<SeasonResponse> seasonRequestList = new ArrayList<>();
-        for (Season season:seasonPage) {
-            SeasonResponse seasonResponse = SeasonResponse.builder().season(season).build();
-            seasonRequestList.add(seasonResponse);
-        }
-        return seasonRequestList;
-    }
-
-
 }
