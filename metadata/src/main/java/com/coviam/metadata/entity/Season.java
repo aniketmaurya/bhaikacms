@@ -20,8 +20,8 @@ public class Season {
     public static final String ID_COLUMN = "ID";
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(generator = "season_id")
+    @GenericGenerator(name = "season_id", strategy = "uuid2")
     private String id;
 
     @ManyToOne
@@ -32,13 +32,10 @@ public class Season {
 
     private String seasonDescription;
 
-    // todo multiple urls: Done
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
     private Map<String, String> seasonImgUrls = new HashMap<>();
 
-
-    // todo update it: Done
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
     private Map<String, String> crewList = new HashMap<>();

@@ -22,7 +22,6 @@ public class EpisodeRequest {
 
     private String episodeVideoUrl;
 
-    // todo multiple imgs: Done
     private Map<String, String> episodeImageUrls = new HashMap<>();
 
 
