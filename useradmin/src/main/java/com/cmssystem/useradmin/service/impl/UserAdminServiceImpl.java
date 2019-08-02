@@ -64,7 +64,8 @@ public class UserAdminServiceImpl implements UserAdminService {
         userAdminResponseDto.setRoleId(userAdmin.getRoleId());
         userAdminResponseDto.setActive(userAdmin.isActive());
         System.out.println(userAdminResponseDto.toString());
-        System.out.println("Gave details for the " + name);
+        //System.out.println("Gave details for the " + name);
+
         return userAdminResponseDto;
 
 
@@ -108,13 +109,12 @@ public class UserAdminServiceImpl implements UserAdminService {
         if(!utilityClass.checkPass(password,userAdmin.getPassword())){
             userLoginResponseDto.setLogin(false);
             userLoginResponseDto.setMessage("Email or Password is wrong!");
-            System.out.println("User is not logged In");
+            log.debug(userLoginResponseDto.getMessage());
             return userLoginResponseDto;
         }
         userLoginResponseDto.setLogin(true);
         userLoginResponseDto.setMessage("User is logged in");
-        System.out.println("User is logged In");
-
+        log.debug(userLoginResponseDto.getMessage());
         return userLoginResponseDto;
 
     }
