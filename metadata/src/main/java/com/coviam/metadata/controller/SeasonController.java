@@ -30,7 +30,7 @@ public class SeasonController {
     }
 
     @GetMapping(value = "getSeasonById/")
-    public ResponseEntity<?> getSeasonById(@RequestParam(name="seasonId") String seasonId){
+    public ResponseEntity<Season> getSeasonById(@RequestParam(name = "seasonId") String seasonId) {
 
         Optional<Season> seasonOptional = seasonServices.getSeasonById(seasonId);
 
@@ -40,7 +40,7 @@ public class SeasonController {
     
 
     @GetMapping(value = "getSeasonsByProgramId/")
-    public ResponseEntity<?> getSeasonByProgramId(@RequestParam(name = "programId") String programId,
+    public ResponseEntity<Page<Season>> getSeasonByProgramId(@RequestParam(name = "programId") String programId,
                                                              @RequestParam(name = "page",defaultValue = "0") int page,
                                                              @RequestParam(name = "size",defaultValue = "10") int size){
 
@@ -48,7 +48,7 @@ public class SeasonController {
 
 
         if(seasonPage.isEmpty()){
-            return new ResponseEntity<Page<Season>>(seasonPage,HttpStatus.OK);
+            return new ResponseEntity<>(seasonPage, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);

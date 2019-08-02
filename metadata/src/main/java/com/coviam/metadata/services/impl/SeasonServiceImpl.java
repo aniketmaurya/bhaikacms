@@ -38,6 +38,9 @@ public class SeasonServiceImpl implements SeasonServices {
 
     }
 
+    // todo use formatter in place of +
+    // todo use boolean
+    // todo use @Transactional for both episode delete and season delete
     @Override
     public Boolean deleteSeasonById(String seasonId) {
 
@@ -51,6 +54,7 @@ public class SeasonServiceImpl implements SeasonServices {
         return true;
     }
 
+    //TODO: remove try catch
     @Override
     public Optional<Season> getSeasonById(String seasonId) {
         try {

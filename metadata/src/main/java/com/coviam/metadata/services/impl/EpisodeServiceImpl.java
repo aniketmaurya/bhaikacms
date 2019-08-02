@@ -21,6 +21,7 @@ public class EpisodeServiceImpl implements EpisodeServices {
     private EpisodeRepository episodeRepository;
 
 
+    //TODO: add exception msg
     @Override
     public List<Episode> addEpisodes(List<EpisodeRequest> episodeRequests) {
         List<Episode> episodeList = new ArrayList<>();
@@ -33,20 +34,20 @@ public class EpisodeServiceImpl implements EpisodeServices {
             });
             episodeRepository.saveAll(episodeList);
         } catch (Exception e) {
-            log.debug("Error while adding episode");
+            log.error("Error while adding episode");
         }
 
         return episodeList;
     }
 
-
+    //TODO use boolean
     @Override
     public Boolean deleteEpisode(String episodeId) {
         try {
             episodeRepository.deleteById(episodeId);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.debug("Error deleting in episode with Episode Id:{}", episodeId);
+            //e.printStackTrace();
+            log.error("Error deleting in episode with Episode Id:{}", episodeId);
             return false;
         }
         return true;

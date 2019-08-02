@@ -17,7 +17,7 @@ public class ProgramController {
     private ProgramServices programServices;
 
 
-    @PutMapping("/addProgram")
+    @PutMapping("/addProgram")//TODO return type not optional
     public ResponseEntity<Optional<Program>> addProgram(@RequestBody Program program) {
         return ResponseEntity.ok(programServices.addProgram(program));
     }
@@ -27,7 +27,7 @@ public class ProgramController {
         return ResponseEntity.ok(programServices.deleteProgramById(programId));
     }
 
-    @GetMapping("/getProgramById")
+    @GetMapping("/getProgramById")//TODO return type not optional
     public ResponseEntity<Optional<Program>> getProgramById(@RequestParam(name = "programId") String programId) {
         return ResponseEntity.ok(programServices.getProgramById(programId));
 
