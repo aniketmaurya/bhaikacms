@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AuditApplication {
 
     public static void main(String[] args) {
+        System.out.println(System.currentTimeMillis());
         SpringApplication.run(AuditApplication.class, args);
     }
 

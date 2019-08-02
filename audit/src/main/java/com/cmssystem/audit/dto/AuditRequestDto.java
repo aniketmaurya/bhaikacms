@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuditPageDto {
+public class AuditRequestDto {
     private Integer pageNumber;
-    private Integer countInPage;
+    private Integer pageSize;
+    private Long startDate;
+    private Long endDate;
+    private String userId;
 }
