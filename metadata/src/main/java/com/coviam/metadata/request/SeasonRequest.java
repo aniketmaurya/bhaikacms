@@ -5,7 +5,7 @@ import com.coviam.metadata.entity.Program;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SeasonDto {
+public class SeasonRequest {
 
     String id;
 
