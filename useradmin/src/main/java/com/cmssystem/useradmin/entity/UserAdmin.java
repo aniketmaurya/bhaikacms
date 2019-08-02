@@ -28,7 +28,7 @@ public class UserAdmin {
     private String name;
     private String password;
     private int roleId;
-    private int videosUploaded;
+    private boolean isActive;
 
 
 }

@@ -9,6 +9,5 @@ public class UserAdminDetailsDto {
     private String password;
     private String email;
     private int roleId;
-    private int videosUploaded;
 
 }

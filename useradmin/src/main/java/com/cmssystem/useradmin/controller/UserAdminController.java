@@ -37,16 +37,15 @@ public class UserAdminController {
         {
             userAdminAddResponseDto.setAdded(false);
             userAdminAddResponseDto.setMessage("User Not Created");
-            return new ResponseEntity<>(userAdminAddResponseDto, HttpStatus.OK);
         }
 
         else {
             userAdminAddResponseDto = userAdminService.addUser(userAdminDetailsDto);
             userAdminAddResponseDto.setAdded(true);
             userAdminAddResponseDto.setMessage("User Created");
-            return new ResponseEntity<>(userAdminAddResponseDto, HttpStatus.OK);
         }
 
+        return new ResponseEntity<>(userAdminAddResponseDto, HttpStatus.OK);
     }
 
 
@@ -59,8 +58,8 @@ public class UserAdminController {
 
 
     @GetMapping(value = "/getAllUsers")
-    public ResponseEntity<List<UserAdmin>> getAllUsers(){
-        List<UserAdmin> userAdmins = userAdminService.getAllUsers();
+    public ResponseEntity<List<UserAdmin>> getAllUsers(@RequestParam(value = "pageNumber") int pageNumber,@RequestParam(value = "pageSize") int pageSize){
+        List<UserAdmin> userAdmins = userAdminService.getAllUsers(pageNumber,pageSize);
         return new ResponseEntity<>(userAdmins,HttpStatus.OK);
     }
 
@@ -81,7 +80,7 @@ public class UserAdminController {
         if(userLoginDto.getEmail()==null|| userLoginDto.getPassword()==null || userLoginDto.getEmail().equals("") || userLoginDto.getPassword().equals("")) {
             userLoginResponseDto.setLogin(false);
             System.out.println("Invalid Login");
-            return new ResponseEntity<>(userLoginResponseDto, HttpStatus.OK);
+            return new ResponseEntity<>(userLoginResponseDto, HttpStatus.BAD_REQUEST);
         }
 
         userLoginResponseDto = userAdminService.authenticateLoginUser(userLoginDto.getEmail(),userLoginDto.getPassword());
@@ -89,9 +88,5 @@ public class UserAdminController {
         System.out.println("Login Done");
         return new ResponseEntity<>(userLoginResponseDto, HttpStatus.OK);
     }
-
-
-
-
 
 }

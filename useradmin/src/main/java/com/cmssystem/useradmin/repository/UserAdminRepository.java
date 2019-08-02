@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface UserAdminRepository extends PagingAndSortingRepository<UserAdmin, String> {
 
     UserAdmin findByName(String name);
+
+    UserAdmin findByEmail(String email);
 }

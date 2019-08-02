@@ -1,12 +1,13 @@
 package com.cmssystem.useradmin.service.impl;
 
 import com.cmssystem.useradmin.dto.*;
-//import com.cmssystem.useradmin.dto.UserAdminResponseDto;
-//import com.cmssystem.useradmin.dto.UserDeleteResponseDto;
+import com.cmssystem.useradmin.dto.UserAdminResponseDto;
+import com.cmssystem.useradmin.dto.UserDeleteResponseDto;
 import com.cmssystem.useradmin.entity.UserAdmin;
 import com.cmssystem.useradmin.repository.UserAdminRepository;
 import com.cmssystem.useradmin.service.UserAdminService;
 import com.cmssystem.useradmin.utility.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class UserAdminServiceImpl implements UserAdminService {
 
@@ -33,7 +35,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         UtilityClass utilityClass = new UtilityClass();
         userAdmin.setPassword(utilityClass.hashPassword(userAdminDetailsDto.getPassword()));
         userAdmin.setRoleId(userAdminDetailsDto.getRoleId());
-        userAdmin.setRoleId(userAdminDetailsDto.getVideosUploaded());
+        userAdmin.setActive(true);
 
         boolean result = userAdminRepository.exists(userAdminDetailsDto.getEmail());
         System.out.println("result : "+result);
@@ -42,10 +44,10 @@ public class UserAdminServiceImpl implements UserAdminService {
             userAdminAddResponseDto.setAdded(false);
             userAdminAddResponseDto.setMessage("Not Created");
         }
-        else{
+        else {
             userAdminRepository.save(userAdmin);
-           userAdminAddResponseDto.setAdded(true);
-           userAdminAddResponseDto.setMessage("Created");
+            userAdminAddResponseDto.setAdded(true);
+            userAdminAddResponseDto.setMessage("Created");
         }
 
         return userAdminAddResponseDto;
@@ -60,8 +62,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         userAdminResponseDto.setEmail(userAdmin.getEmail());
         userAdminResponseDto.setName(name);
         userAdminResponseDto.setRoleId(userAdmin.getRoleId());
-        userAdminResponseDto.setVideosUploaded(userAdmin.getVideosUploaded());
-
+        userAdminResponseDto.setActive(userAdmin.isActive());
         System.out.println(userAdminResponseDto.toString());
         System.out.println("Gave details for the " + name);
         return userAdminResponseDto;
@@ -81,7 +82,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         UserDeleteResponseDto userDeleteResponseDto = new UserDeleteResponseDto();
         if(userAdmin != null)
         {
-            userAdminRepository.delete(userAdmin);
+            userAdmin.setActive(false);
             userDeleteResponseDto.setDeleted(true);
         }
         else
@@ -93,45 +94,29 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     @Override
     public UserLoginResponseDto authenticateLoginUser(String email, String password) {
-
-
-        try {
-            UtilityClass utilityClass = new UtilityClass();
-            password = utilityClass.hashPassword(password);
-            e.printStackTrace();
-        }
-
-
-        User user = userRepository.findByEmail(email);
+        UserAdmin userAdmin = userAdminRepository.findByEmail(email);
         UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto();
 
-        if(user==null){
+
+        if(userAdmin==null){
+            userLoginResponseDto.setLogin(false);
             userLoginResponseDto.setMessage("User Doesn't Exist");
             System.out.println("User is not logged In");
             return userLoginResponseDto;
         }
-
-        if(!user.getPassword().equals(password)){
+        UtilityClass utilityClass = new UtilityClass();
+        if(!utilityClass.checkPass(password,userAdmin.getPassword())){
+            userLoginResponseDto.setLogin(false);
             userLoginResponseDto.setMessage("Email or Password is wrong!");
             System.out.println("User is not logged In");
             return userLoginResponseDto;
         }
-
-
-        UserToken userToken = new UserToken();
-        userToken.setUser(user);
-        UUID uuid = UUID.randomUUID();
-        userToken.setToken(uuid);
-
-        userTokenRepository.save(userToken);
-
-        userLoginResponseDto.setUserId(email);
-        userLoginResponseDto.setToken(uuid);
-        userLoginResponseDto.setMessage("User is Logged In.");
-
+        userLoginResponseDto.setLogin(true);
+        userLoginResponseDto.setMessage("User is logged in");
         System.out.println("User is logged In");
 
         return userLoginResponseDto;
+
     }
 
 

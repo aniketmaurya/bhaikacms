@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserLoginResponseDto {
     private boolean isLogin;
+    private String message;
 
 }
