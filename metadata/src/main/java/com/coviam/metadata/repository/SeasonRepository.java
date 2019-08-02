@@ -9,8 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SeasonRepository extends CrudRepository<Season, String> {
 
-    Integer countByProgramId(String programId);
-
     Page<Season> findByProgramId(String programId, Pageable pageable);
+
 
 }
