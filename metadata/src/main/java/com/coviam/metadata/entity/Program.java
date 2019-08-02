@@ -8,7 +8,6 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,8 +36,8 @@ public class Program implements Serializable {
 
     // We will languages as space separated values
     private String languageId;
-    private Date startDate;
-    private Date expiryDate;
+    private Long startDate;
+    private Long expiryDate;
     private Boolean isAlive;
 
     // to store which user has uploaded this file
