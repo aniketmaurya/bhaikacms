@@ -8,6 +8,8 @@ import com.coviam.metadata.services.ProgramServices;
 import com.coviam.metadata.services.SeasonServices;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,7 +44,7 @@ public class ProgramServiceImpl implements ProgramServices {
     @Override
     public Boolean deleteProgramById(String programId) {
         try {
-            List<Season> seasonIterable = seasonRepository.findByProgramId(programId);
+            Page<Season> seasonIterable = seasonRepository.findByProgramId(programId, PageRequest.of(0,10));
             for (Season season : seasonIterable) {
                 seasonServices.deleteBySeasonId(season.getId());
             }
