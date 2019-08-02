@@ -1,13 +1,25 @@
 package com.coviam.metadata.services.impl;
 
+import com.coviam.metadata.request.SeasonRequest;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.repository.EpisodeRepository;
 import com.coviam.metadata.repository.SeasonRepository;
+import com.coviam.metadata.response.SeasonResponse;
 import com.coviam.metadata.services.SeasonServices;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Service
+@Slf4j
 public class SeasonServiceImpl implements SeasonServices {
 
     @Autowired
@@ -38,7 +50,7 @@ public class SeasonServiceImpl implements SeasonServices {
     @Override
     public Boolean deleteSeasonById(String seasonId) {
         try {
-            episodeRepository.deleteBySeasonId(seasonId);
+//            episodeRepository.deleteBySeasonId(seasonId);
             seasonRepository.deleteById(seasonId);
             return true;
         } catch (Exception e) {

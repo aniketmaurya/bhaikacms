@@ -20,8 +20,8 @@ public class SingleVideo {
     public static final String ID_COLUMN = "ID";
 
     @Id
-    @GeneratedValue(generator = "single_video_generator")
-    @GenericGenerator(name = "single_video_generator", strategy = "increment")
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
     @OneToOne

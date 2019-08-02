@@ -20,8 +20,8 @@ public class Season {
     public static final String ID_COLUMN = "ID";
 
     @Id
-    @GeneratedValue(generator = "season_id")
-    @GenericGenerator(name = "season_id", strategy = "increment")
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
     @ManyToOne
