@@ -13,4 +13,7 @@ public interface SeasonRepository extends CrudRepository<Season, String> {
 
     List<Season> findByProgramId(String programId);
 
+    void deleteByProgramId(String programId);
+
+
 }

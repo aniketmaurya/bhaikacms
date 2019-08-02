@@ -4,7 +4,6 @@ import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.repository.ProgramRepository;
 import com.coviam.metadata.repository.SeasonRepository;
-import com.coviam.metadata.response.ProgramResponse;
 import com.coviam.metadata.services.ProgramServices;
 import com.coviam.metadata.services.SeasonServices;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -27,33 +27,43 @@ public class ProgramServiceImpl implements ProgramServices {
     private SeasonServices seasonServices;
 
     @Override
-    public ProgramResponse addProgram(Program program) {
-        ProgramResponse programResponse = ProgramResponse.builder().program(program).build();
+    public Optional<Program> addProgram(Program program) {
         try {
-            programResponse.setSuccessful(Boolean.TRUE);
             programRepository.save(program);
+            log.debug("Added/updated program {}", program.getProgramName());
         } catch (Exception e) {
-            programResponse.setSuccessful(Boolean.FALSE);
             log.error("Exception while creating program with programId: {}", program.getId());
+            return Optional.empty();
         }
-        return programResponse;
+        return Optional.of(program);
     }
 
+    // optimise
     @Override
-    public ProgramResponse deleteProgramById(String programId) {
-        ProgramResponse programResponse = ProgramResponse.builder().build();
+    public Boolean deleteProgramById(String programId) {
         try {
             List<Season> seasonIterable = seasonRepository.findByProgramId(programId);
             for (Season season : seasonIterable) {
-                seasonServices.deleteSeasonById(season.getId());
+                seasonServices.deleteBySeasonId(season.getId());
             }
             programRepository.deleteById(programId);
-            programResponse.setSuccessful(Boolean.TRUE);
+
         } catch (Exception e) {
             log.error("Exception while deleting program with programId: {}", programId);
-            programResponse.setSuccessful(Boolean.FALSE);
+            return false;
         }
 
-        return programResponse;
+        return true;
+    }
+
+    @Override
+    public Optional<Program> getProgramById(String programId) {
+        Optional<Program> program = Optional.empty();
+        try {
+            program = programRepository.findById(programId);
+        } catch (Exception e) {
+            log.error("Couldn't get program for program Id: {}", programId);
+        }
+        return program;
     }
 }

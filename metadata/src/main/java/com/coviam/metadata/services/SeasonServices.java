@@ -11,6 +11,7 @@ public interface SeasonServices {
 
     Integer countSeasonsByProgram(String programId);
 
-    Boolean deleteSeasonById(String seasonId);
+    Boolean deleteBySeasonId(String seasonId);
+
 
 }

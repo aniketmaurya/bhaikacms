@@ -36,7 +36,7 @@ public class SeasonServiceImpl implements SeasonServices {
     }
 
     @Override
-    public Boolean deleteSeasonById(String seasonId) {
+    public Boolean deleteBySeasonId(String seasonId) {
 
 
         try {

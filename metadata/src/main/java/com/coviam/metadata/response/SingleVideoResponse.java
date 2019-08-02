@@ -1,6 +1,6 @@
 package com.coviam.metadata.response;
 
-import com.coviam.metadata.entity.Program;
+import com.coviam.metadata.entity.SingleVideo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProgramResponse {
-    private Program program;
-    private boolean isSuccessful;
+public class SingleVideoResponse {
+    private SingleVideo singleVideo;
+    private Boolean isSuccessful;
 }
