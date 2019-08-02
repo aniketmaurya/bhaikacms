@@ -1,4 +1,4 @@
-package com.coviam.metadata.dto;
+package com.coviam.metadata.request;
 
 import lombok.Data;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.Map;
 @Data
 @Getter
 @Setter
-public class ProgramDto {
+public class ProgramRequest {
 
     private String id;
 

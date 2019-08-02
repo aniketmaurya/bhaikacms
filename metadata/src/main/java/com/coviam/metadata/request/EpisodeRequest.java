@@ -1,11 +1,11 @@
-package com.coviam.metadata.dto;
+package com.coviam.metadata.request;
 
 import com.coviam.metadata.entity.Season;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class EpisodeDto {
+public class EpisodeRequest {
     private String id;
 
     private Season seasonId;

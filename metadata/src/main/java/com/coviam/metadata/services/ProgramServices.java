@@ -1,12 +1,13 @@
 package com.coviam.metadata.services;
 
 import com.coviam.metadata.entity.Program;
+import com.coviam.metadata.response.ProgramResponse;
 
 public interface ProgramServices {
 
-    Boolean addProgram(Program program);
+    ProgramResponse addProgram(Program program);
 
     // todo on del prgm -> del all under it : Done
-    Boolean deleteProgramById(String programId);
+    ProgramResponse deleteProgramById(String programId);
 
 }

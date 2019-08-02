@@ -5,5 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
-public class PilotController {
+public class SeasonController {
+
 }

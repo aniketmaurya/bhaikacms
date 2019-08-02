@@ -4,11 +4,14 @@ import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.repository.ProgramRepository;
 import com.coviam.metadata.repository.SeasonRepository;
+import com.coviam.metadata.response.ProgramResponse;
 import com.coviam.metadata.services.ProgramServices;
 import com.coviam.metadata.services.SeasonServices;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -24,26 +27,33 @@ public class ProgramServiceImpl implements ProgramServices {
     private SeasonServices seasonServices;
 
     @Override
-    public Boolean addProgram(Program program) {
+    public ProgramResponse addProgram(Program program) {
+        ProgramResponse programResponse = ProgramResponse.builder().program(program).build();
         try {
+            programResponse.setSuccessful(Boolean.TRUE);
             programRepository.save(program);
         } catch (Exception e) {
-            e.printStackTrace();
+            programResponse.setSuccessful(Boolean.FALSE);
+            log.error("Exception while creating program with programId: {}", program.getId());
         }
-        return false;
+        return programResponse;
     }
 
     @Override
-    public Boolean deleteProgramById(String programId) {
+    public ProgramResponse deleteProgramById(String programId) {
+        ProgramResponse programResponse = ProgramResponse.builder().build();
         try {
-            Iterable<Season> seasonIterable = seasonRepository.findByProgramId(programId);
+            List<Season> seasonIterable = seasonRepository.findByProgramId(programId);
             for (Season season : seasonIterable) {
                 seasonServices.deleteSeasonById(season.getId());
             }
             programRepository.deleteById(programId);
+            programResponse.setSuccessful(Boolean.TRUE);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception while deleting program with programId: {}", programId);
+            programResponse.setSuccessful(Boolean.FALSE);
         }
-        return false;
+
+        return programResponse;
     }
 }

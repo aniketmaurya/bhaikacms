@@ -40,8 +40,6 @@ public class Program {
     // We will languages as space separated values
     private String languageId;
 
-    private String programImgUrl;
-
     private Date startDate;
     private Date expiryDate;
 
@@ -50,7 +48,7 @@ public class Program {
     // to store which user has uploaded this file
     private String userId;
 
-    private String author;
+//    private String author;
 
     @OneToOne
     @JoinColumn(nullable = false)
@@ -59,7 +57,7 @@ public class Program {
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
-    private Map<String, String> videoImgUrls = new HashMap<>();
+    private Map<String, String> programImgUrl = new HashMap<>();
 
 
     // We are maintaining crew data below program level
