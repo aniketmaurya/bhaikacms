@@ -17,7 +17,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class EpisodeServiceImpl implements EpisodeServices {
-
     @Autowired
     private EpisodeRepository episodeRepository;
 
@@ -34,7 +33,7 @@ public class EpisodeServiceImpl implements EpisodeServices {
             });
             episodeRepository.saveAll(episodeList);
         } catch (Exception e) {
-            log.error("Error while adding an episode");
+            log.debug("Error while adding episode");
         }
 
         return episodeList;
@@ -47,7 +46,7 @@ public class EpisodeServiceImpl implements EpisodeServices {
             episodeRepository.deleteById(episodeId);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("Error deleting in episode with Episode Id:{}", episodeId);
+            log.debug("Error deleting in episode with Episode Id:{}", episodeId);
             return false;
         }
         return true;

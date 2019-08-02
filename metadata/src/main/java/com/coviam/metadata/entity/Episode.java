@@ -21,7 +21,7 @@ public class Episode {
 
     @Id
     @GeneratedValue(generator = "ep_generator")
-    @GenericGenerator(name = "ep_generator", strategy = "increment")
+    @GenericGenerator(name = "ep_generator", strategy = "uuid")
     private String id;
 
     @ManyToOne
