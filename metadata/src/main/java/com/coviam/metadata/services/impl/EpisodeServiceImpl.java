@@ -15,19 +15,7 @@ public class EpisodeServiceImpl implements EpisodeServices {
     private EpisodeRepository episodeRepository;
 
     @Override
-    public Boolean addEpisode(Episode episode) {
-        try {
-            episodeRepository.save(episode);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    @Override
-    public Boolean addMultipleEpisodes(List<Episode> episodes) {
+    public Boolean addEpisodes(List<Episode> episodes) {
         try {
             episodeRepository.saveAll(episodes);
             return true;
@@ -38,6 +26,7 @@ public class EpisodeServiceImpl implements EpisodeServices {
         return false;
     }
 
+    @Deprecated
     @Override
     public Integer countEpisodesBySeasonId(String seasonId) {
 
@@ -55,14 +44,4 @@ public class EpisodeServiceImpl implements EpisodeServices {
         return false;
     }
 
-    @Override
-    public Boolean deleteAllEpisodes() {
-        try {
-            episodeRepository.deleteAll();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 }

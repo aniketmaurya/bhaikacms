@@ -27,6 +27,7 @@ public class SeasonServiceImpl implements SeasonServices {
         return false;
     }
 
+    @Deprecated
     @Override
     public Integer countSeasonsByProgram(String programId) {
 

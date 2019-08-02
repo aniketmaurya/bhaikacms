@@ -1,4 +1,4 @@
-package com.coviam.metadata.dto;
+package com.coviam.metadata.request;
 
 import com.coviam.metadata.entity.Program;
 
