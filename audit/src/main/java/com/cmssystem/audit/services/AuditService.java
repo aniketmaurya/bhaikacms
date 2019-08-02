@@ -1,17 +1,14 @@
 package com.cmssystem.audit.services;
 
-import com.cmssystem.audit.dto.AddAuditDto;
 import com.cmssystem.audit.dto.AddAuditResponseDto;
 import com.cmssystem.audit.dto.AuditDto;
-import com.cmssystem.audit.dto.AuditPageDto;
-
-import java.util.List;
+import com.cmssystem.audit.dto.AuditRequestDto;
+import org.springframework.data.domain.Page;
 
 public interface AuditService {
 
-    AddAuditResponseDto addAudit(AddAuditDto addAuditDto);
+    AddAuditResponseDto addAudit(AuditDto auditDto);
 
-    List<AuditDto> getAllAudits(AuditPageDto pageDto);
+    Page<AuditDto> getAudits(AuditRequestDto pageDto);
 
-    List<AuditDto> getRecentAudits(Integer size);
 }

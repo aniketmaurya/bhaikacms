@@ -1,6 +1,7 @@
 package com.cmssystem.audit.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -8,12 +9,12 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 public class Audit {
 
     @Id
@@ -22,8 +23,10 @@ public class Audit {
     private String auditId;
     private String contentId;
     private String contentName;
+    private String oldContent;
+    private String newContent;
     private String actionName;
-    private Timestamp actionTime;
+    private Long actionTime;
     private String actionBy;
 
 }
