@@ -27,7 +27,7 @@ public class Episode implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "season_id", nullable = false)
-    private Season season;
+    private Season seasonId;
 
     private Integer episodeNumber;
 

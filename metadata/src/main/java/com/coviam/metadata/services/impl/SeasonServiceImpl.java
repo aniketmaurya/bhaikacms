@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,62 +26,33 @@ public class SeasonServiceImpl implements SeasonServices {
 
     @Override
     public Optional<Season> addSeason(Season season) {
-
-        try {
-            return Optional.of(seasonRepository.save(season));
-
-        }catch (Exception exception){
-
-            log.error("exception "+ exception.getMessage()+" while adding season ");
-
-            return Optional.empty();
-        }
-
+        return Optional.of(seasonRepository.save(season));
     }
 
+    @Transactional
     @Override
     public Boolean deleteSeasonById(String seasonId) {
-
-        try {
-            episodeRepository.deleteAllBySeasonId(seasonId);
-            seasonRepository.deleteById(seasonId);
-        } catch (Exception exception) {
-            log.error("exception "+ exception.getMessage()+" while deleting season by seasonId : "+seasonId);
-            return false;
-        }
-        return true;
+        episodeRepository.deleteAllBySeasonId(seasonId);
+        seasonRepository.deleteById(seasonId);
+        return Boolean.TRUE;
     }
 
     @Override
     public Optional<Season> getSeasonById(String seasonId) {
-        try {
-
-            return seasonRepository.findById(seasonId);
-
-        } catch (Exception exception){
-
-            log.error("exception : " +exception.getMessage()+ " while getting seasons by seasonId : "+ seasonId);
-
-            return Optional.empty();
-
-        }
-
+        return seasonRepository.findById(seasonId);
     }
 
+    // todo change the log error
     @Override
     public Page<Season> getSeasonsByProgramId(String programId, Integer page, Integer size) {
-
-        try {
-
-            return seasonRepository.findByProgramId(programId, PageRequest.of(page,size));
-
-        }catch (Exception exception){
-
-            log.error("exception : " +exception.getMessage()+ " while getting seasons by programId : "+programId);
-
+        return seasonRepository.findByProgramId(programId, PageRequest.of(page, size));
+        /*try {
+            return seasonRepository.findByProgramId(programId, PageRequest.of(page, size));
+        } catch (Exception exception) {
+            log.error("exception : {} while getting seasons by programId : {}",
+                    exception.getMessage(), programId);
             return Page.empty();
-        }
-
+        }*/
     }
 
 

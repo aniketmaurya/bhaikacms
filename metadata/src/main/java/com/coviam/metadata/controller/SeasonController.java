@@ -17,41 +17,41 @@ public class SeasonController {
     @Autowired
     private SeasonServices seasonServices;
 
-    @PostMapping(value = "addSeason/")
-    public ResponseEntity<Optional<Season>> addSeason(@RequestBody Season season){
-        return new ResponseEntity<>(seasonServices.addSeason(season),HttpStatus.OK);
+    @PostMapping(value = "/addSeason")
+    public ResponseEntity<Optional<Season>> addSeason(@RequestBody Season season) {
+        return new ResponseEntity<>(seasonServices.addSeason(season), HttpStatus.OK);
 
     }
 
-    @DeleteMapping(value = "deleteSeasonById/")
-    public ResponseEntity<Boolean> deleteSeasonById(@RequestParam(name = "seasonId") String seasonId){
+    @DeleteMapping(value = "/deleteSeasonById")
+    public ResponseEntity<Boolean> deleteSeasonById(@RequestParam(name = "seasonId") String seasonId) {
 
-        return new ResponseEntity<>(seasonServices.deleteSeasonById(seasonId),HttpStatus.OK);
+        return new ResponseEntity<>(seasonServices.deleteSeasonById(seasonId), HttpStatus.OK);
     }
 
-    @GetMapping(value = "getSeasonById/")
-    public ResponseEntity<?> getSeasonById(@RequestParam(name="seasonId") String seasonId){
+    @GetMapping(value = "/getSeasonById")
+    public ResponseEntity<?> getSeasonById(@RequestParam(name = "seasonId") String seasonId) {
 
         Optional<Season> seasonOptional = seasonServices.getSeasonById(seasonId);
 
         return seasonOptional.map(season -> new ResponseEntity<>(season, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new Season(), HttpStatus.NO_CONTENT));
 
     }
-    
 
-    @GetMapping(value = "getSeasonsByProgramId/")
+
+    @GetMapping(value = "/getSeasonsByProgramId")
     public ResponseEntity<?> getSeasonByProgramId(@RequestParam(name = "programId") String programId,
-                                                             @RequestParam(name = "page",defaultValue = "0") int page,
-                                                             @RequestParam(name = "size",defaultValue = "10") int size){
+                                                  @RequestParam(name = "page", defaultValue = "0") int page,
+                                                  @RequestParam(name = "size", defaultValue = "10") int size) {
 
-        Page<Season> seasonPage= seasonServices.getSeasonsByProgramId(programId,page,size);
+        Page<Season> seasonPage = seasonServices.getSeasonsByProgramId(programId, page, size);
 
 
-        if(seasonPage.isEmpty()){
-            return new ResponseEntity<Page<Season>>(seasonPage,HttpStatus.OK);
+        if (seasonPage.isEmpty()) {
+            return new ResponseEntity<Page<Season>>(seasonPage, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
 
     }
 }

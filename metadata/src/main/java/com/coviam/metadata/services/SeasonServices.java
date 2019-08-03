@@ -10,7 +10,8 @@ public interface SeasonServices {
      * addSeason and addMultiCategory are same just a difference of implementation and display
      *
      * @param season
-     * @return*/
+     * @return
+     */
 
     Optional<Season> addSeason(Season season);
 

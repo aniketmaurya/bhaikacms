@@ -21,6 +21,7 @@ public class EpisodeServiceImpl implements EpisodeServices {
     private EpisodeRepository episodeRepository;
 
 
+    // TODO CHANGE FROM EPISODREQUEST TO EPISODE
     @Override
     public List<Episode> addEpisodes(List<EpisodeRequest> episodeRequests) {
         List<Episode> episodeList = new ArrayList<>();
@@ -33,7 +34,7 @@ public class EpisodeServiceImpl implements EpisodeServices {
             });
             episodeRepository.saveAll(episodeList);
         } catch (Exception e) {
-            log.debug("Error while adding episode");
+            log.error("Error while adding episode");
         }
 
         return episodeList;
@@ -42,19 +43,14 @@ public class EpisodeServiceImpl implements EpisodeServices {
 
     @Override
     public Boolean deleteEpisode(String episodeId) {
-        try {
-            episodeRepository.deleteById(episodeId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.debug("Error deleting in episode with Episode Id:{}", episodeId);
-            return false;
-        }
-        return true;
+        episodeRepository.deleteById(episodeId);
+        log.debug("Deleted EpisodeId: {} ", episodeId);
+        return Boolean.TRUE;
     }
 
 
     @Override
-    public Page<Episode> getEpisodesBySeasonId(String seasonId, int pageNumber, int pageSize) {
+    public Page<Episode> getEpisodesBySeasonId(String seasonId, Integer pageNumber, Integer pageSize) {
         return episodeRepository.findBySeasonId(seasonId, PageRequest.of(pageNumber, pageSize));
     }
 }
