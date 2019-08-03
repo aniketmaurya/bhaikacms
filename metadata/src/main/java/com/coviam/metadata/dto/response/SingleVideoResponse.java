@@ -1,4 +1,4 @@
-package com.coviam.metadata.response;
+package com.coviam.metadata.dto.response;
 
 import com.coviam.metadata.entity.SingleVideo;
 import lombok.AllArgsConstructor;
