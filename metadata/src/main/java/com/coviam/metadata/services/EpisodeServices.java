@@ -1,19 +1,17 @@
 package com.coviam.metadata.services;
 
 import com.coviam.metadata.entity.Episode;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface EpisodeServices {
 
-    Boolean addEpisode(Episode episode);
 
-    Boolean addMultipleEpisodes(List<Episode> episodes);
-
-    Integer countEpisodesBySeasonId(String seasonId);
+    List<Episode> addEpisodes(List<Episode> episodes);
 
     Boolean deleteEpisode(String episodeId);
 
-    Boolean deleteAllEpisodes();
+    Page<Episode> getEpisodesBySeasonId(String seasonId, Integer pageNumber, Integer pageSize);
 
 }

@@ -4,7 +4,7 @@ import com.coviam.metadata.entity.SingleVideo;
 
 public interface SingleVideoServices {
 
-    Boolean addSingleVideo(SingleVideo singleVideo);
+    SingleVideo addEpisodes(SingleVideo singleVideos);
 
-    Boolean deleteSingleVideoById(String singleVideoId);
+    Boolean deleteEpisode(String videoId);
 }

@@ -20,8 +20,8 @@ public class SingleVideo {
     public static final String ID_COLUMN = "ID";
 
     @Id
-    @GeneratedValue(generator = "single_video_generator")
-    @GenericGenerator(name = "single_video_generator", strategy = "increment")
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
 
     @OneToOne
@@ -32,7 +32,7 @@ public class SingleVideo {
 
     private String videoUrl;
 
-    private String videoDescription;
+    private String description;
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
@@ -41,6 +41,4 @@ public class SingleVideo {
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
     private Map<String, String> crewList = new HashMap<>();
-
-
 }
