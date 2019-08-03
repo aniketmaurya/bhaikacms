@@ -26,7 +26,7 @@ public class Season {
 
     @ManyToOne
     @JoinColumn(name = "program_id", nullable = false)
-    private Program programId;
+    private Program program;
 
     private Integer seasonNumber;
 
@@ -36,9 +36,11 @@ public class Season {
     @Column(columnDefinition = "hstore")
     private Map<String, String> seasonImgUrls = new HashMap<>();
 
+/*
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
     private Map<String, String> crewList = new HashMap<>();
+*/
 
 
 }

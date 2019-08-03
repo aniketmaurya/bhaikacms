@@ -1,4 +1,4 @@
-package com.coviam.metadata.request;
+package com.coviam.metadata.dto.request;
 
 import com.coviam.metadata.entity.Program;
 import lombok.Data;

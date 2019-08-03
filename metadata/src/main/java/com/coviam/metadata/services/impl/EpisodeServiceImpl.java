@@ -2,16 +2,13 @@ package com.coviam.metadata.services.impl;
 
 import com.coviam.metadata.entity.Episode;
 import com.coviam.metadata.repository.EpisodeRepository;
-import com.coviam.metadata.request.EpisodeRequest;
 import com.coviam.metadata.services.EpisodeServices;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -21,40 +18,36 @@ public class EpisodeServiceImpl implements EpisodeServices {
     private EpisodeRepository episodeRepository;
 
 
+    // TODO CHANGE FROM EPISODREQUEST TO EPISODE
     @Override
-    public List<Episode> addEpisodes(List<EpisodeRequest> episodeRequests) {
-        List<Episode> episodeList = new ArrayList<>();
-        try {
+    public List<Episode> addEpisodes(List<Episode> episodes) {
+//        List<Episode> episodeList = new ArrayList<>();
+//        try {
+//
+//            episodeRequests.forEach(episodeRequest -> {
+//                Episode episode = new Episode();
+//                BeanUtils.copyProperties(episodeRequest, episode);
+//                episodeList.add(episode);
+//            });
+        episodeRepository.saveAll(episodes);
+//        } catch (Exception e) {
+//            log.error("Error while adding episode");
+//        }
 
-            episodeRequests.forEach(episodeRequest -> {
-                Episode episode = new Episode();
-                BeanUtils.copyProperties(episodeRequest, episode);
-                episodeList.add(episode);
-            });
-            episodeRepository.saveAll(episodeList);
-        } catch (Exception e) {
-            log.debug("Error while adding episode");
-        }
-
-        return episodeList;
+        return episodes;
     }
 
 
     @Override
     public Boolean deleteEpisode(String episodeId) {
-        try {
-            episodeRepository.deleteById(episodeId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.debug("Error deleting in episode with Episode Id:{}", episodeId);
-            return false;
-        }
-        return true;
+        episodeRepository.deleteById(episodeId);
+        log.debug("Deleted EpisodeId: {} ", episodeId);
+        return Boolean.TRUE;
     }
 
 
     @Override
-    public Page<Episode> getEpisodesBySeasonId(String seasonId, int pageNumber, int pageSize) {
+    public Page<Episode> getEpisodesBySeasonId(String seasonId, Integer pageNumber, Integer pageSize) {
         return episodeRepository.findBySeasonId(seasonId, PageRequest.of(pageNumber, pageSize));
     }
 }

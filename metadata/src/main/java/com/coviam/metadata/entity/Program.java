@@ -26,16 +26,16 @@ public class Program implements Serializable {
     @Column(name = Program.ID_COLUMN)
     private String id;
 
-    private String programType;
+    private String type;
     private String description;
-    private String programName;
+    private String name;
     private String parentalRating;
 
     // we will store keywords as space separated values
     private String keywords;
 
     // We will languages as space separated values
-    private String languageId;
+    private String languages;
     private Long startDate;
     private Long expiryDate;
     private Boolean isAlive;
@@ -50,7 +50,7 @@ public class Program implements Serializable {
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
-    private Map<String, String> programImgUrl = new HashMap<>();
+    private Map<String, String> imgUrls = new HashMap<>();
 
 
 }

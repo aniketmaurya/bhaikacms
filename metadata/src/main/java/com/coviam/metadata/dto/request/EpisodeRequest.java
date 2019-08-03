@@ -1,4 +1,4 @@
-package com.coviam.metadata.request;
+package com.coviam.metadata.dto.request;
 
 import com.coviam.metadata.entity.Season;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class EpisodeRequest {
     private String id;
 
-    private Season seasonId;
+    private Season season;
 
     private Integer episodeNumber;
 

@@ -42,4 +42,7 @@ public class Episode implements Serializable {
     @Column(columnDefinition = "hstore")
     private Map<String, String> episodeImageUrls = new HashMap<>();
 
+    @Type(type = "hstore")
+    @Column(columnDefinition = "hstore")
+    private Map<String, String> crewList = new HashMap<>();
 }

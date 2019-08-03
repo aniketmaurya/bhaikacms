@@ -12,30 +12,16 @@ import org.springframework.stereotype.Service;
 public class SingleVideoServiceImpl implements SingleVideoServices {
 
     @Autowired
-    SingleVideoRepository singleVideoRepository;
+    private SingleVideoRepository singleVideoRepository;
 
     @Override
-    public Boolean addSingleVideo(SingleVideo singleVideo) {
-
-        try {
-            singleVideoRepository.save(singleVideo);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.debug("Error while adding single video with id:{}", singleVideo.getId());
-            return false;
-        }
-        return true;
+    public SingleVideo addEpisodes(SingleVideo singleVideo) {
+        return singleVideoRepository.save(singleVideo);
     }
 
     @Override
-    public Boolean deleteSingleVideoById(String singleVideoId) {
-        try {
-            singleVideoRepository.deleteById(singleVideoId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.debug("Error while deleting single video with id:{}", singleVideoId);
-            return false;
-        }
-        return true;
+    public Boolean deleteEpisode(String videoId) {
+        singleVideoRepository.deleteById(videoId);
+        return Boolean.TRUE;
     }
 }
