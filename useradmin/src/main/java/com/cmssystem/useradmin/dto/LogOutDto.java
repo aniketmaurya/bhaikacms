@@ -4,13 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserAdminDetailsDto {
-
-    private String name;
-    private String password;
-    private String email;
-    private int roleId;
+public class LogOutDto {
+    private String userId;
+    private UUID token;
 }

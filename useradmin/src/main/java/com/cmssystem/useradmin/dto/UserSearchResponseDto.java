@@ -1,4 +1,4 @@
-package com.cmssystem.useradmin.dto;
+/*package com.cmssystem.useradmin.dto;
 
 
 import lombok.AllArgsConstructor;
@@ -13,4 +13,4 @@ public class UserSearchResponseDto {
     private String name;
     private int roleId;
     private int videosUploaded;
-}
+}*/
