@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class VideoSearchServiceImp implements VideoSearchService {
 
@@ -17,7 +19,8 @@ public class VideoSearchServiceImp implements VideoSearchService {
 
 
     @Override
-    public boolean addVideos(Iterable<Video> videos) {
+    public boolean addVideos(List<Video> videos) {
+
         Iterable<Video> videoList = videoRepository.saveAll(videos);
         return videoList != null;
     }
@@ -25,7 +28,19 @@ public class VideoSearchServiceImp implements VideoSearchService {
 
     @Override
     public Page<Video> getAllVideos(int pageNumber, int pageSize) {
-        return videoRepository.findAll(PageRequest.of(pageNumber, pageSize));
+//        return new PageImpl<>(videoRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent().stream().map(video -> {
+//            return VideoDto.builder()
+//                    .categoriesList(video.getCategoriesList())
+//                    .crewList(video.getCrewList())
+//                    .keywords(video.getKeywords())
+//                    .languages(video.getLanguages())
+//                    .programDescription(video.getProgramDescription())
+//                    .programId(video.getProgramId())
+//                    .programName(video.getProgramName())
+//                    .videoType(video.getVideoType())
+//                    .videoUrl(video.getVideoUrl()).build();
+//        }).collect(Collectors.toList()));
+        return videoRepository.getAllVideos(PageRequest.of(pageNumber, pageSize));
     }
 
     @Override
@@ -39,14 +54,15 @@ public class VideoSearchServiceImp implements VideoSearchService {
         return videoRepository.search(searchTerm, PageRequest.of(pageNumber, pageSize));
     }
 
-    @Override
-    public Page<Video> searchContaining(String searchTerm, int pageNumber, int pageSize) {
-        return videoRepository.searchContaining(searchTerm, PageRequest.of(pageNumber, pageSize));
-    }
+//    @Override
+//    public Page<Video> searchContaining(String searchTerm, int pageNumber, int pageSize) {
+//        return videoRepository.searchContaining(searchTerm, PageRequest.of(pageNumber, pageSize));
+//    }
 
     @Override
     public Video update(Video video) {
-        String contentId = video.getProgramId();
+        //String video = video.getProgramId();
+
         return null;
 
     }

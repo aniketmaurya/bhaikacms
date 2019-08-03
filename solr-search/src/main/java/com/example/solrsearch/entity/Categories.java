@@ -1,22 +1,20 @@
 package com.example.solrsearch.entity;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.solr.client.solrj.beans.Field;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.solr.core.mapping.SolrDocument;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@SolrDocument(solrCoreName = "employee")
-public class Employee {
+public class Categories {
 
-    @Id
     @Field
-    private String  employeeId;
+    String categoryId;
     @Field
-    private String name;
+    String parent;
+    @Field
+    String categoryName;
 }
