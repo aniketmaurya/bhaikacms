@@ -1,12 +1,13 @@
 package com.bhaikacms.scheduler.dto;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
-public class DeleteProgramDto {
+public class ProgramDto {
     private String pId;
     private String programName;
-    private Date startDate;
-    private Date expDate;
+    private Timestamp startDate;
+    private Timestamp expDate;
 
     public String getpId() {
         return pId;
@@ -24,19 +25,20 @@ public class DeleteProgramDto {
         this.programName = programName;
     }
 
-    public Date getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
-    public Date getExpDate() {
+    public Timestamp getExpDate() {
         return expDate;
     }
 
-    public void setExpDate(Date expDate) {
+    public void setExpDate(Timestamp expDate) {
         this.expDate = expDate;
     }
 }
+
