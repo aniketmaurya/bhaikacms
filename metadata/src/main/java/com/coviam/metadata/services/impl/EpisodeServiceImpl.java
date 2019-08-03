@@ -61,7 +61,7 @@ public class EpisodeServiceImpl implements EpisodeServices {
 //        }
 
         //TODO Audit
-        AddAuditResponse response=restTemplate.postForObject(auditServiceUrl+"/audit/addAudit",auditRequests,AddAuditResponse.class);
+        Boolean response=restTemplate.postForObject(auditServiceUrl+"/audit/addAudit",auditRequests,Boolean.class);
 
         return episodes;
     }
