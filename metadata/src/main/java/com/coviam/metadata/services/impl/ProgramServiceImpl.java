@@ -27,7 +27,7 @@ public class ProgramServiceImpl implements ProgramServices {
 
     @Override
     public Optional<Program> addProgram(Program program) {
-        log.info("Adding program programName: {}", program.getProgramName());
+        log.info("Adding program programName: {}", program.getName());
         return Optional.of(programRepository.save(program));
     }
 

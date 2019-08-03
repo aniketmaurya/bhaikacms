@@ -1,6 +1,6 @@
 package com.coviam.metadata.controller;
 
-import com.coviam.metadata.request.EpisodeRequest;
+import com.coviam.metadata.entity.Episode;
 import com.coviam.metadata.services.impl.EpisodeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +16,8 @@ public class EpisodeController {
     EpisodeServiceImpl episodeService;
 
     @PostMapping("/addEpisodes")
-    ResponseEntity<?> addEpisodes(@RequestBody List<EpisodeRequest> episodeRequestList) {
-        return ResponseEntity.ok(episodeService.addEpisodes(episodeRequestList));
+    ResponseEntity<?> addEpisodes(@RequestBody List<Episode> episodes) {
+        return ResponseEntity.ok(episodeService.addEpisodes(episodes));
     }
 
     @DeleteMapping("/deleteEpisode")

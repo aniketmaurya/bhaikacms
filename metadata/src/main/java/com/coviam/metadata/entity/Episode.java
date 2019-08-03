@@ -27,7 +27,7 @@ public class Episode implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "season_id", nullable = false)
-    private Season seasonId;
+    private Season season;
 
     private Integer episodeNumber;
 
@@ -42,4 +42,7 @@ public class Episode implements Serializable {
     @Column(columnDefinition = "hstore")
     private Map<String, String> episodeImageUrls = new HashMap<>();
 
+    @Type(type = "hstore")
+    @Column(columnDefinition = "hstore")
+    private Map<String, String> crewList = new HashMap<>();
 }

@@ -14,7 +14,7 @@ import java.util.Map;
 public class EpisodeRequest {
     private String id;
 
-    private Season seasonId;
+    private Season season;
 
     private Integer episodeNumber;
 
