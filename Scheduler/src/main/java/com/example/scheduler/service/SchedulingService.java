@@ -2,41 +2,41 @@ package com.example.scheduler.service;
 
 import com.example.scheduler.entity.SchedulingEntity;
 import com.example.scheduler.repository.SchedulerRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Slf4j
 public class SchedulingService {
-    private static int i = 0;
     @Autowired
-    SchedulerRepo test1;
+    private SchedulerRepo schedulerRepo;
 
     //for soft delete
     @Scheduled(fixedRate = 1000)
     public String expiryDetection() {
-        System.out.println("running");
+        log.debug("running");
         long date = System.currentTimeMillis();
         List<SchedulingEntity> expired = null;
-        expired = test1.findByExpiryDateList(date);
+        expired = schedulerRepo.findByExpiryDateLessThan(date, new PageRequest(0, 100)).getContent();
+        List<SchedulingEntity> softDelete = new ArrayList<>();
         for (SchedulingEntity temp : expired) {
-            temp.setAlive(false);
-            test1.save(temp);
+            temp.setIsAlive(false);
+            softDelete.add(temp);
         }
+        schedulerRepo.save(softDelete);
 
-        //for hard Delete
-        for (SchedulingEntity temp : expired) {
-            long tempDate = temp.getExpiryDate();
             long check = (LocalDate.now().minusDays(30)).toDate().getTime();
-            if (tempDate <= check) {
-                test1.delete(temp);
-            }
+        List<SchedulingEntity> hardDelete = schedulerRepo.findByExpiryDateLessThan(check, new PageRequest(0, 10)).getContent();
+        schedulerRepo.delete(hardDelete);
 
-
-        }
         return "Successfully deleted";
 
     }
@@ -45,13 +45,13 @@ public class SchedulingService {
     @Scheduled(fixedRate = 5000)
     public String startProgram() {
         long currentTime = System.currentTimeMillis();
-        List<SchedulingEntity> startTimeList = test1.findByStartDateList(currentTime);
+        Page<SchedulingEntity> startTimeList = schedulerRepo.findByStartDateLessThan(currentTime, new PageRequest(0, 10));
         for (SchedulingEntity temp : startTimeList) {
             if (temp.getExpiryDate() > temp.getStartDate()) {
-                temp.setAlive(true);
-                test1.save(temp);
+                temp.setIsAlive(true);
             }
         }
+        schedulerRepo.save(startTimeList);//todo save as a list
         return "Program Started";
     }
 }

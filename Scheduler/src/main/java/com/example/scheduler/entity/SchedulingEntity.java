@@ -17,9 +17,9 @@ import javax.persistence.Table;
 @Table(name = SchedulingEntity.TABLE_NAME)
 public class SchedulingEntity {
     public static final String TABLE_NAME = "TEST";
-    boolean isAlive;
-    long expiryDate;
-    long startDate;
+    private Boolean isAlive;
+    private Long expiryDate;
+    private Long startDate;
     @Id
     private String pid;
 
