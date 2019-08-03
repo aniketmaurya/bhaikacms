@@ -1,5 +1,5 @@
 /*
-package com.coviam.metadata.request;
+package com.coviam.metadata.dto.request;
 
 public class LanguageDto {
 }

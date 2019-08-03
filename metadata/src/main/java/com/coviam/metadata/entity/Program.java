@@ -8,7 +8,6 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,18 +26,18 @@ public class Program implements Serializable {
     @Column(name = Program.ID_COLUMN)
     private String id;
 
-    private String programType;
+    private String type;
     private String description;
-    private String programName;
+    private String name;
     private String parentalRating;
 
     // we will store keywords as space separated values
     private String keywords;
 
     // We will languages as space separated values
-    private String languageId;
-    private Date startDate;
-    private Date expiryDate;
+    private String languages;
+    private Long startDate;
+    private Long expiryDate;
     private Boolean isAlive;
 
     // to store which user has uploaded this file
@@ -51,15 +50,7 @@ public class Program implements Serializable {
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
-    private Map<String, String> programImgUrl = new HashMap<>();
-
-
-    // We are maintaining crew data below program level
-    /*
-    @Type(type = "hstore")
-    @Column(columnDefinition = "hstore")
-    private Map<String, String> crewRoles = new HashMap<>();
-*/
+    private Map<String, String> imgUrls = new HashMap<>();
 
 
 }

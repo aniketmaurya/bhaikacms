@@ -6,20 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @CrossOrigin
 public class ProgramController {
-
 
     @Autowired
     private ProgramServices programServices;
 
 
     @PutMapping("/addProgram")
-    public ResponseEntity<Optional<Program>> addProgram(@RequestBody Program program) {
-        return ResponseEntity.ok(programServices.addProgram(program));
+    public ResponseEntity<Program> addProgram(@RequestBody Program program) {
+        return ResponseEntity.ok(programServices.addProgram(program).orElse(new Program()));
     }
 
     @DeleteMapping("/deleteProgramById")
@@ -27,9 +24,8 @@ public class ProgramController {
         return ResponseEntity.ok(programServices.deleteProgramById(programId));
     }
 
-    @GetMapping("/getProgramById")
-    public ResponseEntity<Optional<Program>> getProgramById(@RequestParam(name = "programId") String programId) {
-        return ResponseEntity.ok(programServices.getProgramById(programId));
-
+    @GetMapping(value = "/getProgramById")
+    public ResponseEntity<Program> getProgramById(@RequestParam(name = "programId") String programId) {
+        return ResponseEntity.ok(programServices.getProgramById(programId).orElse(new Program()));
     }
 }

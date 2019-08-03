@@ -1,19 +1,16 @@
-package com.coviam.metadata.response;
+package com.coviam.metadata.dto.response;
 
-import com.coviam.metadata.entity.Season;
+import com.coviam.metadata.entity.SingleVideo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SeasonResponse {
-
-    private Season season;
+public class SingleVideoResponse {
+    private SingleVideo singleVideo;
     private Boolean isSuccessful;
-
 }
