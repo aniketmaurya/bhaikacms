@@ -33,15 +33,14 @@ public class UserAdminController {
         String response = "";
         UserAdminAddResponseDto userAdminAddResponseDto = new UserAdminAddResponseDto();
 
+        log.warn("USERADMIN DETAIL:  {}",userAdminDetailsDto);
+
 
         if (userAdminDetailsDto.getName() == null || userAdminDetailsDto.getPassword() == null ||
-                userAdminDetailsDto.getEmail() == null)
-        {
+                userAdminDetailsDto.getEmail() == null) {
             userAdminAddResponseDto.setAdded(false);
             userAdminAddResponseDto.setMessage("User Not Created");
-        }
-
-        else {
+        } else {
             userAdminAddResponseDto = userAdminService.addUser(userAdminDetailsDto);
             userAdminAddResponseDto.setAdded(true);
             userAdminAddResponseDto.setMessage("User Created");
@@ -52,13 +51,11 @@ public class UserAdminController {
     }
 
 
-
     @GetMapping(value = "/searchUser")
-    public ResponseEntity<?> searchUser(@RequestParam(value = "name") String name){
+    public ResponseEntity<?> searchUser(@RequestParam(value = "name") String name) {
         UserAdminResponseDto userAdminResponseDto = userAdminService.searchUser(name);
-        return new ResponseEntity<>(userAdminResponseDto,HttpStatus.OK);
+        return new ResponseEntity<>(userAdminResponseDto, HttpStatus.OK);
     }
-
 
 
     @GetMapping(value = "/getAllUsers")
@@ -68,25 +65,25 @@ public class UserAdminController {
 
 
     @DeleteMapping(value = "/userDeleteByDetails")
-    public ResponseEntity<?> deleteUser(@RequestParam(value = "idDelete") String idDelete,@RequestParam(value = "id") String id){
-        UserDeleteResponseDto userDeleteResponseDto = userAdminService.deleteUser(idDelete,id);
+    public ResponseEntity<?> deleteUser(@RequestParam(value = "idDelete") String idDelete, @RequestParam(value = "id") String id) {
+        UserDeleteResponseDto userDeleteResponseDto = userAdminService.deleteUser(idDelete, id);
         return new ResponseEntity<>(userDeleteResponseDto, HttpStatus.OK);
     }
 
 
     @PostMapping(path = "/authenticate")
-    public ResponseEntity<?> authenticateLoginUser(@RequestBody UserLoginDto userLoginDto){
+    public ResponseEntity<?> authenticateLoginUser(@RequestBody UserLoginDto userLoginDto) {
 
         boolean serviceResponse = true;
-        UserLoginResponseDto userLoginResponseDto =new UserLoginResponseDto();
+        UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto();
 
-        if(userLoginDto.getEmail()==null|| userLoginDto.getPassword()==null || userLoginDto.getEmail().equals("") || userLoginDto.getPassword().equals("")) {
+        if (userLoginDto.getEmail() == null || userLoginDto.getPassword() == null || userLoginDto.getEmail().equals("") || userLoginDto.getPassword().equals("")) {
             userLoginResponseDto.setLogin(false);
             log.warn("Invalid Login");
             return new ResponseEntity<>(userLoginResponseDto, HttpStatus.BAD_REQUEST);
         }
 
-        userLoginResponseDto = userAdminService.authenticateLoginUser(userLoginDto.getEmail(),userLoginDto.getPassword());
+        userLoginResponseDto = userAdminService.authenticateLoginUser(userLoginDto.getEmail(), userLoginDto.getPassword());
 
         return new ResponseEntity<>(userLoginResponseDto, HttpStatus.OK);
     }
@@ -109,15 +106,15 @@ public class UserAdminController {
     }*/
 
     @PostMapping(value = "/logout")
-    public ResponseEntity<?> logout(@RequestBody LogOutDto logOutDto){
+    public ResponseEntity<?> logout(@RequestBody LogOutDto logOutDto) {
         boolean response = userAdminService.logOut(logOutDto);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getUserEmailId")
-    public ResponseEntity<?> getUserEmailId(@RequestParam(value = "id") String id){
+    public ResponseEntity<?> getUserEmailId(@RequestParam(value = "id") String id) {
         UserEmailDto userEmailDto = userAdminService.getUserEmailId(id);
-        return new ResponseEntity<>(userEmailDto,HttpStatus.OK);
+        return new ResponseEntity<>(userEmailDto, HttpStatus.OK);
     }
 
 

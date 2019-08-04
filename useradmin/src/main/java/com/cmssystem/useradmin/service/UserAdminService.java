@@ -14,7 +14,7 @@ public interface UserAdminService {
 
     Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize);
 
-    UserDeleteResponseDto deleteUser(String idDelete,String id);
+    UserDeleteResponseDto deleteUser(String idDelete, String id);
 
     UserLoginResponseDto authenticateLoginUser(String email, String password);
 

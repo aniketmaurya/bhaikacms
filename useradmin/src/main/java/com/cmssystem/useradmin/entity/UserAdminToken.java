@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -15,7 +17,7 @@ import java.util.UUID;
 @Table(name = UserAdminToken.TABLE_NAME)
 public class UserAdminToken implements Serializable {
 
-    public static final String TABLE_NAME="USERADMINTOKEN";
+    public static final String TABLE_NAME = "USERADMINTOKEN";
 
    /* @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")

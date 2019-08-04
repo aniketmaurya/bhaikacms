@@ -6,6 +6,7 @@ import com.cmssystem.useradmin.entity.UserAdminToken;
 import com.cmssystem.useradmin.repository.UserAdminRepository;
 import com.cmssystem.useradmin.repository.UserAdminTokenRepository;
 import com.cmssystem.useradmin.service.UserAdminService;
+import com.cmssystem.useradmin.utility.AuditUtility;
 import com.cmssystem.useradmin.utility.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,9 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Override
     public UserAdminAddResponseDto addUser(UserAdminDetailsDto userAdminDetailsDto) {
 
+        UserAdmin userAdmin1;
         log.warn(userAdminDetailsDto.toString());
-        UserAdmin userAdmin=new UserAdmin();
+        UserAdmin userAdmin = new UserAdmin();
         userAdmin.setEmail(userAdminDetailsDto.getEmail());
         userAdmin.setName(userAdminDetailsDto.getName());
         UtilityClass utilityClass = new UtilityClass();
@@ -43,20 +45,26 @@ public class UserAdminServiceImpl implements UserAdminService {
         userAdmin.setRoleId(userAdminDetailsDto.getRoleId());
         // boolean result = userAdminRepository.findByEmail(userAdminDetailsDto.getEmail());
         boolean result = userAdminRepository.existsByEmail(userAdminDetailsDto.getEmail());
-        log.warn("result : "+result);
+        log.warn("result : " + result);
         UserAdminAddResponseDto userAdminAddResponseDto = new UserAdminAddResponseDto();
-        if(result){
+
+        if (result) {
             userAdminAddResponseDto.setAdded(false);
             userAdminAddResponseDto.setMessage("User Already exists !!");
-        }
-        else {
-            userAdminRepository.save(userAdmin);
+        } else {
+            userAdmin1 = userAdminRepository.save(userAdmin);
+            log.warn("userID:: {}", userAdmin1.getId());
             userAdminAddResponseDto.setAdded(true);
             userAdminAddResponseDto.setMessage("Created");
             userAdminAddResponseDto.setUserId(userAdmin.getId());
-        }
 
+            AuditUtility auditUtility = new AuditUtility();
+            auditUtility.addAudit(userAdmin1.getId(),userAdmin1.getName());
+
+        }
         return userAdminAddResponseDto;
+
+
     }
 
     @Override
@@ -69,19 +77,19 @@ public class UserAdminServiceImpl implements UserAdminService {
         userAdminResponseDto.setName(name);
         userAdminResponseDto.setRoleId(userAdmin.getRoleId());
         userAdminResponseDto.setActive(userAdmin.isActive());
-        log.warn("details: {}",userAdminResponseDto.toString());
-        log.warn("Gave details for {}",name);
+        log.warn("details: {}", userAdminResponseDto.toString());
+        log.warn("Gave details for {}", name);
 
         return userAdminResponseDto;
 
 
     }
 
-   @Override
-   public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
-       Page<UserAdmin> page = userAdminRepository.findAll(PageRequest.of(pageNumber, pageSize));
-       return page.map(this::convertToDto);
-   }
+    @Override
+    public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
+        Page<UserAdmin> page = userAdminRepository.findAll(PageRequest.of(pageNumber, pageSize));
+        return page.map(this::convertToDto);
+    }
 
     private UserDto convertToDto(UserAdmin userAdmin) {
         return UserDto.builder()
@@ -94,22 +102,22 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
     @Override
-    public UserDeleteResponseDto deleteUser(String idDelete,String id) {
+    public UserDeleteResponseDto deleteUser(String idDelete, String id) {
+        UserAdmin userAdmin2;
         UserAdmin userAdmin = userAdminRepository.findById(idDelete).get();
         UserAdmin userAdmin1 = userAdminRepository.findById(id).get();
         UserDeleteResponseDto userDeleteResponseDto = new UserDeleteResponseDto();
-        if (userAdmin != null && (userAdmin1.getRoleId()) == 1 && (userAdmin.isActive() != false))
-        {
+        if (userAdmin != null && (userAdmin1.getRoleId()) == 1 && (userAdmin.isActive() != false)) {
             userAdmin.setActive(false);
             userDeleteResponseDto.setDeleted(true);
-            userAdminRepository.save(userAdmin);
+            userAdmin2=userAdminRepository.save(userAdmin);
+            AuditUtility auditUtility = new AuditUtility();
+            auditUtility.deleteAudit(userAdmin.getId(),userAdmin1.getId(),userAdmin.getName(),userAdmin1.getName());
             return userDeleteResponseDto;
-        }
-        else
-        {
+        } else {
             userAdmin.setActive(true);
             userDeleteResponseDto.setDeleted(false);
-            userAdminRepository.save(userAdmin);
+            userAdmin2=userAdminRepository.save(userAdmin);
             return userDeleteResponseDto;
         }
 
@@ -123,7 +131,7 @@ public class UserAdminServiceImpl implements UserAdminService {
 
         long newtime = System.currentTimeMillis() + 6000000;
 
-        if(userAdmin==null){
+        if (userAdmin == null) {
             userLoginResponseDto.setLogin(false);
             userLoginResponseDto.setMessage("User Doesn't Exist");
             log.warn(userLoginResponseDto.getMessage());
@@ -131,14 +139,14 @@ public class UserAdminServiceImpl implements UserAdminService {
         }
         UtilityClass utilityClass = new UtilityClass();
 
-        if(!utilityClass.checkPass(password,userAdmin.getPassword())){
+        if (!utilityClass.checkPass(password, userAdmin.getPassword())) {
             userLoginResponseDto.setLogin(false);
             userLoginResponseDto.setMessage("Email or Password is wrong!");
             log.debug(userLoginResponseDto.getMessage());
             return userLoginResponseDto;
         }
 
-        UserAdminToken userAdminToken= new UserAdminToken();
+        UserAdminToken userAdminToken = new UserAdminToken();
         userAdminToken.setId(userAdmin.getId());
         UUID uuid = UUID.randomUUID();
         userAdminToken.setToken(uuid);
@@ -200,11 +208,10 @@ public class UserAdminServiceImpl implements UserAdminService {
     public UserEmailDto getUserEmailId(String id) {
         UserAdmin userAdmin = userAdminRepository.findById(id).get();
         UserEmailDto userEmailDto = new UserEmailDto();
-        if(userAdmin!=null) {
+        if (userAdmin != null) {
             userEmailDto.setEmail(userAdmin.getEmail());
             userEmailDto.setMessage("Email Sent");
-        }
-        else {
+        } else {
             userEmailDto.setMessage("No such user exists !!");
         }
         return userEmailDto;
