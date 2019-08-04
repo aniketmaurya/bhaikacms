@@ -53,4 +53,36 @@ public class Program implements Serializable {
     private Map<String, String> imgUrls = new HashMap<>();
 
 
+    @Override
+    public String toString() {
+        return "Program{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                ", description='" + description + '\'' +
+                ", name='" + name + '\'' +
+                ", parentalRating='" + parentalRating + '\'' +
+                ", keywords='" + keywords + '\'' +
+                ", languages='" + languages + '\'' +
+                ", startDate=" + startDate +
+                ", expiryDate=" + expiryDate +
+                ", isAlive=" + isAlive +
+                ", userId='" + userId + '\'' +
+                ", category=" + category +
+                ", imgUrls=" + imgUrls +
+                '}';
+    }
+/*
+    public Map<String, String> toMap() {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("name", getName());
+        hashMap.put("type", getType());
+        hashMap.put("description", getDescription());
+        hashMap.put("keywords", getKeywords());
+        hashMap.put("languages", getLanguages());
+        hashMap.put("startDate", getStartDate().toString());
+        hashMap.put("expiryDate", getExpiryDate().toString());
+        hashMap.put("parentalRating", getParentalRating());
+
+        return hashMap;
+    }*/
 }

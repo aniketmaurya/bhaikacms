@@ -14,6 +14,7 @@ public interface SeasonRepository extends CrudRepository<Season, String> {
 
     Page<Season> findByProgramId(String programId, Pageable pageable);
 
+    Page<Season> findAll(Pageable pageable);
 
     Optional<List<Season>> findByProgramId(String programId);
 }
