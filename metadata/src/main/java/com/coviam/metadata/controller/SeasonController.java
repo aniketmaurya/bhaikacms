@@ -1,5 +1,6 @@
 package com.coviam.metadata.controller;
 
+import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.services.SeasonServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ public class SeasonController {
     }
 
     @DeleteMapping(value = "/deleteSeasonById")
-    public ResponseEntity<Boolean> deleteSeasonById(@RequestParam(name = "seasonId") String seasonId) {
+    public ResponseEntity<Boolean> deleteSeasonById(@RequestBody DeleteRequest deleteRequest) {
 
-        return ResponseEntity.ok(seasonServices.deleteSeasonById(seasonId));
+        return ResponseEntity.ok(seasonServices.deleteSeasonById(deleteRequest));
     }
 
     @GetMapping(value = "/getSeasonById")
@@ -35,6 +36,7 @@ public class SeasonController {
     }
 
 
+    // todo fix this
     @GetMapping(value = "/getSeasonsByProgramId")
     public ResponseEntity<?> getSeasonByProgramId(
             @RequestParam(name = "programId") String programId,
@@ -50,11 +52,18 @@ public class SeasonController {
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
-    // todo fix this to with annotations get default values
     @GetMapping("/getAllSeasonalVideo")
     public ResponseEntity<Page<Season>> getAllSeasonalVideo(
             @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
             @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber) {
         return ResponseEntity.ok(seasonServices.getAllSeasons(pageSize, pageNumber));
+    }
+
+    @GetMapping("/getAllMultiVideo")
+    public ResponseEntity<Page<Season>> getAllMultiVideo(
+            @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
+            @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber) {
+
+        return ResponseEntity.ok(seasonServices.getAllMultiVideo(pageSize, pageNumber));
     }
 }

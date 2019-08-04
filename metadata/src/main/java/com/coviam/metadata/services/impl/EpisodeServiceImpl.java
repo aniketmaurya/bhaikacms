@@ -5,7 +5,6 @@ import com.coviam.metadata.repository.EpisodeRepository;
 import com.coviam.metadata.services.EpisodeServices;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -18,20 +17,14 @@ public class EpisodeServiceImpl implements EpisodeServices {
     @Autowired
     private EpisodeRepository episodeRepository;
 
-    @Value("${audit.service.url}")
-    private String auditServiceUrl;
-
-
     // TODO CHANGE FROM EPISODREQUEST TO EPISODE
     @Override
     public List<Episode> addEpisodes(List<Episode> episodes) {
 
+        episodes.forEach(episode -> episode.setCreationDate(System.currentTimeMillis()));
         String userId = "", modification = "ADDED/UPDATED/DELETED";
         episodeRepository.saveAll(episodes);
         log.info("Adding episodes");
-
-        //TODO Audit
-//        Boolean response=restTemplate.postForObject(auditServiceUrl+"/audit/addAudit",auditRequests,Boolean.class);
         return episodes;
     }
 

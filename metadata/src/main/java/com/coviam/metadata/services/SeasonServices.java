@@ -1,5 +1,6 @@
 package com.coviam.metadata.services;
 
+import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.entity.Season;
 import org.springframework.data.domain.Page;
 
@@ -13,12 +14,16 @@ public interface SeasonServices {
 
     Season addSeason(Season season);
 
-    Boolean deleteSeasonById(String seasonId);
+    Boolean deleteSeasonById(DeleteRequest deleteRequest);
 
     Season getSeasonById(String seasonId);
 
     Page<Season> getSeasonsByProgramId(String programId, Integer page, Integer size);
 
     Page<Season> getAllSeasons(Integer pageNumber, Integer pageSize);
+
+    Page<Season> getAllMultiVideo(Integer pageNumber, Integer pageSize);
+
+
 
 }

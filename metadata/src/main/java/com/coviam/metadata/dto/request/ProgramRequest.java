@@ -34,12 +34,8 @@ public class ProgramRequest implements Serializable {
     // to store which user has uploaded this file
     private String userId;
 
+    //    private String author;
     private Category category;
 
     private Map<String, String> imgUrls = new HashMap<>();
-
-
-    // AUDIT
-    private String actionType;
-
 }

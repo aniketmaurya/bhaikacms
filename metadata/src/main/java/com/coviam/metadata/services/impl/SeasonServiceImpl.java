@@ -1,5 +1,6 @@
 package com.coviam.metadata.services.impl;
 
+import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.repository.EpisodeRepository;
 import com.coviam.metadata.repository.SeasonRepository;
@@ -26,14 +27,15 @@ public class SeasonServiceImpl implements SeasonServices {
 
     @Override
     public Season addSeason(Season season) {
+
+        season.setCreationDate(System.currentTimeMillis());
         return Optional.of(seasonRepository.save(season)).orElse(new Season());
     }
 
     @Transactional
     @Override
-    public Boolean deleteSeasonById(String seasonId) {
-        episodeRepository.deleteAllBySeasonId(seasonId);
-        seasonRepository.deleteById(seasonId);
+    public Boolean deleteSeasonById(DeleteRequest deleteRequest) {
+        seasonRepository.deleteById(deleteRequest.getId());
         return Boolean.TRUE;
     }
 
@@ -51,6 +53,11 @@ public class SeasonServiceImpl implements SeasonServices {
     @Override
     public Page<Season> getAllSeasons(Integer pageNumber, Integer pageSize) {
         return seasonRepository.findAll(PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Season> getAllMultiVideo(Integer pageNumber, Integer pageSize) {
+        return seasonRepository.findBySeasonNumber(0, PageRequest.of(pageNumber, pageSize));
     }
 
 }

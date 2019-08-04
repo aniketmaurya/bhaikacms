@@ -37,6 +37,8 @@ public class Episode implements Serializable {
 
     private String episodeVideoUrl;
 
+    private Long creationDate;
+
     // todo multiple imgs: Done
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
