@@ -1,8 +1,6 @@
 package com.cmssystem.useradmin.service.impl;
 
 import com.cmssystem.useradmin.dto.*;
-//import com.cmssystem.useradmin.dto.UserAdminResponseDto;
-//import com.cmssystem.useradmin.dto.UserDeleteResponseDto;
 import com.cmssystem.useradmin.entity.UserAdmin;
 import com.cmssystem.useradmin.entity.UserAdminToken;
 import com.cmssystem.useradmin.repository.UserAdminRepository;
@@ -18,6 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+
+//import com.cmssystem.useradmin.dto.UserAdminResponseDto;
+//import com.cmssystem.useradmin.dto.UserDeleteResponseDto;
 
 @Slf4j
 @Service
@@ -41,7 +42,8 @@ public class UserAdminServiceImpl implements UserAdminService {
         userAdmin.setPassword(utilityClass.hashPassword(userAdminDetailsDto.getPassword()));
         userAdmin.setActive(true);
         userAdmin.setRoleId(userAdminDetailsDto.getRoleId());
-        boolean result = userAdminRepository.exists(userAdminDetailsDto.getEmail());
+        // boolean result = userAdminRepository.findByEmail(userAdminDetailsDto.getEmail());
+        boolean result = userAdminRepository.existsByEmail(userAdminDetailsDto.getEmail());
         log.warn("result : "+result);
         UserAdminAddResponseDto userAdminAddResponseDto = new UserAdminAddResponseDto();
         if(result){
@@ -84,8 +86,8 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     @Override
     public UserDeleteResponseDto deleteUser(String idDelete,String id) {
-        UserAdmin userAdmin = userAdminRepository.findOne(idDelete);
-        UserAdmin userAdmin1 = userAdminRepository.findOne(id);
+        UserAdmin userAdmin = userAdminRepository.findById(idDelete).get();
+        UserAdmin userAdmin1 = userAdminRepository.findById(id).get();
         UserDeleteResponseDto userDeleteResponseDto = new UserDeleteResponseDto();
         if(userAdmin != null && userAdmin1.getRoleId()==1)
         {
@@ -99,8 +101,8 @@ public class UserAdminServiceImpl implements UserAdminService {
         return userDeleteResponseDto;
     }
 
+    @Cacheable(value = "token", key = "#email", cacheManager = "redisCacheManager")
     @Override
-    //@Cacheable(value = "token", key = "#password")
     public UserLoginResponseDto authenticateLoginUser(String email, String password) {
         UserAdmin userAdmin = userAdminRepository.findByEmail(email);
         UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto();
@@ -126,17 +128,20 @@ public class UserAdminServiceImpl implements UserAdminService {
         UUID uuid = UUID.randomUUID();
         userAdminToken.setToken(uuid);
 
+
         userAdminTokenRepository.save(userAdminToken);
+
 
         userLoginResponseDto.setLogin(true);
         userLoginResponseDto.setToken(uuid);
         userLoginResponseDto.setMessage("Logged in Successfully !!");
         userLoginResponseDto.setUserId(userAdmin.getId());
         userLoginResponseDto.setRoleId(userAdmin.getRoleId());
-        log.debug(userLoginResponseDto.getMessage());
+        log.warn(userLoginResponseDto.getMessage());
         return userLoginResponseDto;
 
     }
+
 
    /* @Override
     public boolean validateLogin(String userId, UUID token) {
@@ -162,17 +167,16 @@ public class UserAdminServiceImpl implements UserAdminService {
         return checkUserLogin;
     }*/
 
-//implement using ttl in redis
     @Override
     public boolean logOut(LogOutDto logOutDto) {
-        userAdminTokenRepository.delete(logOutDto.getUserId());
+        userAdminTokenRepository.deleteById(logOutDto.getUserId());
         log.warn("Token Deleted For user.");
         return true;
     }
 
     @Override
     public UserEmailDto getUserEmailId(String id) {
-        UserAdmin userAdmin = userAdminRepository.findOne(id);
+        UserAdmin userAdmin = userAdminRepository.findById(id).get();
         UserEmailDto userEmailDto = new UserEmailDto();
         if(userAdmin!=null) {
             userEmailDto.setEmail(userAdmin.getEmail());
