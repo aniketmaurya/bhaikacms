@@ -1,12 +1,9 @@
 package com.cmssystem.useradmin.service;
 
 import com.cmssystem.useradmin.dto.*;
-//import com.cmssystem.useradmin.dto.UserDeleteResponseDto;
-import com.cmssystem.useradmin.entity.UserAdmin;
+import org.springframework.data.domain.Page;
 
-import java.awt.print.Pageable;
-import java.util.List;
-import java.util.UUID;
+//import com.cmssystem.useradmin.dto.UserDeleteResponseDto;
 
 public interface UserAdminService {
 
@@ -15,7 +12,7 @@ public interface UserAdminService {
     UserAdminResponseDto searchUser(String name);
 
 
-    List<UserAdmin> getAllUsers(Integer pageNumber, Integer pageSize);
+    Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize);
 
     UserDeleteResponseDto deleteUser(String idDelete,String id);
 

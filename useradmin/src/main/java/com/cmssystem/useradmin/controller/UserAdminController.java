@@ -5,17 +5,17 @@ package com.cmssystem.useradmin.controller;
 //import com.cmssystem.useradmin.dto.UserAdminDetailsDto;
 //import com.cmssystem.useradmin.dto.UserAdminResponseDto;
 //import com.cmssystem.useradmin.dto.UserDeleteResponseDto;
+
 import com.cmssystem.useradmin.dto.*;
-import com.cmssystem.useradmin.entity.UserAdmin;
-//import com.cmssystem.useradmin.service.UserAdminService;
 import com.cmssystem.useradmin.service.UserAdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+//import com.cmssystem.useradmin.service.UserAdminService;
 
 @Slf4j
 @RestController
@@ -62,9 +62,8 @@ public class UserAdminController {
 
 
     @GetMapping(value = "/getAllUsers")
-    public ResponseEntity<List<UserAdmin>> getAllUsers(@RequestParam(value = "pageNumber") int pageNumber,@RequestParam(value = "pageSize") int pageSize){
-        List<UserAdmin> userAdmins = userAdminService.getAllUsers(pageNumber,pageSize);
-        return new ResponseEntity<>(userAdmins,HttpStatus.OK);
+    public ResponseEntity<Page<UserDto>> getAllUsers(@RequestParam(value = "pageNumber") int pageNumber, @RequestParam(value = "pageSize") int pageSize) {
+        return ResponseEntity.ok(userAdminService.getAllUsers(pageNumber, pageSize));
     }
 
 

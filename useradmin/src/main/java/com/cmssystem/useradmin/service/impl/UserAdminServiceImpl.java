@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 //import com.cmssystem.useradmin.dto.UserAdminResponseDto;
@@ -79,9 +78,19 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
    @Override
-    public List<UserAdmin> getAllUsers(Integer pageNumber,Integer pageSize) {
-       Page<UserAdmin> page=userAdminRepository.findAll(new PageRequest(pageNumber,pageSize));
-       return page.getContent();
+   public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
+       Page<UserAdmin> page = userAdminRepository.findAll(PageRequest.of(pageNumber, pageSize));
+       return page.map(this::convertToDto);
+   }
+
+    private UserDto convertToDto(UserAdmin userAdmin) {
+        return UserDto.builder()
+                .id(userAdmin.getId())
+                .email(userAdmin.getEmail())
+                .isActive(userAdmin.isActive())
+                .name(userAdmin.getName())
+                .roleId(userAdmin.getRoleId())
+                .build();
     }
 
     @Override
@@ -89,16 +98,21 @@ public class UserAdminServiceImpl implements UserAdminService {
         UserAdmin userAdmin = userAdminRepository.findById(idDelete).get();
         UserAdmin userAdmin1 = userAdminRepository.findById(id).get();
         UserDeleteResponseDto userDeleteResponseDto = new UserDeleteResponseDto();
-        if(userAdmin != null && userAdmin1.getRoleId()==1)
+        if (userAdmin != null && (userAdmin1.getRoleId()) == 1 && (userAdmin.isActive() != false))
         {
             userAdmin.setActive(false);
             userDeleteResponseDto.setDeleted(true);
+            userAdminRepository.save(userAdmin);
+            return userDeleteResponseDto;
         }
         else
         {
+            userAdmin.setActive(true);
             userDeleteResponseDto.setDeleted(false);
+            userAdminRepository.save(userAdmin);
+            return userDeleteResponseDto;
         }
-        return userDeleteResponseDto;
+
     }
 
     @Cacheable(value = "token", key = "#email", cacheManager = "redisCacheManager")
