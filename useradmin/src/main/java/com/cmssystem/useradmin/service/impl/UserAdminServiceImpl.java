@@ -121,6 +121,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         UserAdmin userAdmin = userAdminRepository.findByEmail(email);
         UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto();
 
+        long newtime = System.currentTimeMillis() + 6000000;
 
         if(userAdmin==null){
             userLoginResponseDto.setLogin(false);
@@ -151,7 +152,14 @@ public class UserAdminServiceImpl implements UserAdminService {
         userLoginResponseDto.setMessage("Logged in Successfully !!");
         userLoginResponseDto.setUserId(userAdmin.getId());
         userLoginResponseDto.setRoleId(userAdmin.getRoleId());
+        userLoginResponseDto.setLoginTime(System.currentTimeMillis());
+        log.warn("Time" + System.currentTimeMillis());
         log.warn(userLoginResponseDto.getMessage());
+
+
+        if (Math.abs(System.currentTimeMillis() - userLoginResponseDto.getLoginTime()) >= 600000) {
+            userAdminTokenRepository.deleteById(userAdmin.getId());
+        }
         return userLoginResponseDto;
 
     }
