@@ -45,4 +45,18 @@ public class Episode implements Serializable {
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
     private Map<String, String> crewList = new HashMap<>();
+
+    @Override
+    public String toString() {
+        return "Episode{" +
+                "id='" + id + '\'' +
+                ", season=" + season +
+                ", episodeNumber=" + episodeNumber +
+                ", episodeTitle='" + episodeTitle + '\'' +
+                ", episodeDescription='" + episodeDescription + '\'' +
+                ", episodeVideoUrl='" + episodeVideoUrl + '\'' +
+                ", episodeImageUrls=" + episodeImageUrls +
+                ", crewList=" + crewList +
+                '}';
+    }
 }

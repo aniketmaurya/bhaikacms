@@ -14,4 +14,16 @@ public class SingleVideoRequest {
     private String videoUrl;
 
     private String videoDescription;
+
+
+    @Override
+    public String toString() {
+        return "SingleVideoRequest{" +
+                "id='" + id + '\'' +
+                ", programId=" + programId +
+                ", videoTitle='" + videoTitle + '\'' +
+                ", videoUrl='" + videoUrl + '\'' +
+                ", videoDescription='" + videoDescription + '\'' +
+                '}';
+    }
 }
