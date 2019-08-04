@@ -1,25 +1,24 @@
 package com.coviam.metadata.services;
 
-import com.coviam.metadata.request.SeasonRequest;
 import com.coviam.metadata.entity.Season;
-import com.coviam.metadata.response.SeasonResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface SeasonServices {
     /**
      * addSeason and addMultiCategory are same just a difference of implementation and display
-     **/
+     *
+     * @param season
+     * @return
+     */
 
-    Boolean addSeason(Season season);
+    Season addSeason(Season season);
 
-    Integer countSeasonsByProgram(String programId);
+    Boolean deleteSeasonById(String seasonId);
 
-    Boolean deleteBySeasonId(String seasonId);
+    Season getSeasonById(String seasonId);
 
+    Page<Season> getSeasonsByProgramId(String programId, Integer page, Integer size);
 
-    SeasonRequest getSeasonById(String seasonId);
-
-    List<SeasonResponse> getSeasonsByProgramId(String programId, Integer page, Integer size);
+    Page<Season> getAllSeasons(Integer pageNumber, Integer pageSize);
 
 }

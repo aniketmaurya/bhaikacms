@@ -26,13 +26,13 @@ public class SingleVideo {
 
     @OneToOne
     @JoinColumn(name = "program_id")
-    private Program programId;
+    private Program program;
 
     private String videoTitle;
 
     private String videoUrl;
 
-    private String videoDescription;
+    private String description;
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
@@ -41,6 +41,4 @@ public class SingleVideo {
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
     private Map<String, String> crewList = new HashMap<>();
-
-
 }

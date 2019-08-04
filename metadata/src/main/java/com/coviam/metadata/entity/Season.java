@@ -20,28 +20,34 @@ public class Season {
     public static final String ID_COLUMN = "ID";
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(generator = "season_id")
+    @GenericGenerator(name = "season_id", strategy = "uuid2")
     private String id;
 
     @ManyToOne
     @JoinColumn(name = "program_id", nullable = false)
-    private Program programId;
+    private Program program;
+
+    private String seasonName;
 
     private Integer seasonNumber;
 
     private String seasonDescription;
 
-    // todo multiple urls: Done
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
     private Map<String, String> seasonImgUrls = new HashMap<>();
 
 
-    // todo update it: Done
-    @Type(type = "hstore")
-    @Column(columnDefinition = "hstore")
-    private Map<String, String> crewList = new HashMap<>();
-
-
+    @Override
+    public String toString() {
+        return "Season{" +
+                "id='" + id + '\'' +
+                ", program=" + program +
+                ", seasonName='" + seasonName + '\'' +
+                ", seasonNumber=" + seasonNumber +
+                ", seasonDescription='" + seasonDescription + '\'' +
+                ", seasonImgUrls=" + seasonImgUrls +
+                '}';
+    }
 }

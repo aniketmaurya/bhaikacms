@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Data
@@ -24,8 +25,36 @@ public class Category implements Serializable {
     @Column(name = Category.ID_COLUMN)
     private String id;
 
-    @OneToOne
-    @JoinColumn(nullable = true)
+    private String name;
+
+    //copy
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
     private Category parent;
-    private String categoryName;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "category")
+    private Set<Program> program;
+
+    @OneToMany(mappedBy = "parent")
+    private Set<Category> childCategories;
+
+    public Set<Category> getChildCategories() {
+        return childCategories;
+    }
+
+    public void setChildCategories(Set<Category> childCategories) {
+        this.childCategories = childCategories;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", parent=" + parent +
+                ", program=" + program +
+                ", childCategories=" + childCategories +
+                '}';
+    }
 }

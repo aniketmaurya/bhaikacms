@@ -2,46 +2,34 @@ package com.coviam.metadata.services.impl;
 
 import com.coviam.metadata.entity.SingleVideo;
 import com.coviam.metadata.repository.SingleVideoRepository;
-import com.coviam.metadata.response.SingleVideoResponse;
 import com.coviam.metadata.services.SingleVideoServices;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Slf4j
+import java.util.List;
+
 @Service
+@Slf4j
 public class SingleVideoServiceImpl implements SingleVideoServices {
 
     @Autowired
-    SingleVideoRepository singleVideoRepository;
+    private SingleVideoRepository singleVideoRepository;
 
     @Override
-    public SingleVideoResponse addSingleVideo(SingleVideo singleVideo) {
-        SingleVideoResponse singleVideoResponse = SingleVideoResponse
-                .builder()
-                .singleVideo(singleVideo)
-                .build();
-        try {
-            SingleVideo singleVideo1 = singleVideoRepository.save(singleVideo);
-            SingleVideoResponse.builder().isSuccessful(Boolean.TRUE);
-
-            return singleVideoResponse;
-
-        } catch (Exception e) {
-            log.error("Error in adding single video");
-
-        }
-        return singleVideoResponse;
+    public SingleVideo addEpisodes(SingleVideo singleVideo) {
+        log.info("Single video added videoName {}", singleVideo.getVideoTitle());
+        return singleVideoRepository.save(singleVideo);
     }
 
     @Override
-    public Boolean deleteSingleVideoById(String singleVideoId) {
-        try {
-            singleVideoRepository.deleteById(singleVideoId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+    public Boolean deleteEpisode(String videoId) {
+        singleVideoRepository.deleteById(videoId);
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public List<SingleVideo> getAllSingleVideo() {
+        return singleVideoRepository.findAll();
     }
 }
