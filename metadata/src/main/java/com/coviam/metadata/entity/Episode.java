@@ -42,7 +42,7 @@ public class Episode implements Serializable {
     // todo multiple imgs: Done
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
-    private Map<String, String> episodeImageUrls = new HashMap<>();
+    private Map<String, String> episodeImgUrls = new HashMap<>();
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
@@ -57,7 +57,7 @@ public class Episode implements Serializable {
                 ", episodeTitle='" + episodeTitle + '\'' +
                 ", episodeDescription='" + episodeDescription + '\'' +
                 ", episodeVideoUrl='" + episodeVideoUrl + '\'' +
-                ", episodeImageUrls=" + episodeImageUrls +
+                ", episodeImageUrls=" + episodeImgUrls +
                 ", crewList=" + crewList +
                 '}';
     }

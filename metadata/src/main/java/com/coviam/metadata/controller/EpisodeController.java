@@ -1,5 +1,6 @@
 package com.coviam.metadata.controller;
 
+import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.entity.Episode;
 import com.coviam.metadata.services.EpisodeServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,12 @@ public class EpisodeController {
         return ResponseEntity.ok(episodeService.addEpisodes(episodes));
     }
 
-    @DeleteMapping("/deleteEpisode")
-    ResponseEntity<Boolean> deleteEpisode(@RequestParam(value = "episodeId") String episodeId) {
-        return ResponseEntity.ok(episodeService.deleteEpisode(episodeId));
+    @DeleteMapping("/deleteEpisodeById")
+    ResponseEntity<Boolean> deleteEpisode(@RequestBody DeleteRequest deleteRequest) {
+        return ResponseEntity.ok(episodeService.deleteEpisode(deleteRequest));
     }
 
-    @GetMapping("/episodesBySeasonId")
+    @GetMapping("/getEpisodesBySeasonId")
     ResponseEntity<Page<Episode>> getEpisodesBySeasonId(@RequestParam(name = "seasonId") String seasonId,
                                                         @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
                                                         @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {

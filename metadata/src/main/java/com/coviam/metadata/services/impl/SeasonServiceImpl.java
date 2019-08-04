@@ -46,8 +46,8 @@ public class SeasonServiceImpl implements SeasonServices {
 
     // todo change the log error
     @Override
-    public Page<Season> getSeasonsByProgramId(String programId, Integer page, Integer size) {
-        return seasonRepository.findByProgramId(programId, PageRequest.of(page, size));
+    public Page<Season> getSeasonsByProgramId(String programId, Integer pageNumber, Integer size) {
+        return seasonRepository.findByProgramId(programId, PageRequest.of(pageNumber, size));
     }
 
     @Override

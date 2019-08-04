@@ -1,5 +1,6 @@
 package com.coviam.metadata.services.impl;
 
+import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.entity.Episode;
 import com.coviam.metadata.repository.EpisodeRepository;
 import com.coviam.metadata.services.EpisodeServices;
@@ -29,10 +30,12 @@ public class EpisodeServiceImpl implements EpisodeServices {
     }
 
     @Override
-    public Boolean deleteEpisode(String episodeId) {
-        episodeRepository.deleteById(episodeId);
-        log.debug("Deleted EpisodeId: {} ", episodeId);
+    public Boolean deleteEpisode(DeleteRequest deleteRequest) {
+        episodeRepository.deleteById(deleteRequest.getId());
+        log.debug("Deleted EpisodeId: {} ", deleteRequest.getId());
         //TODO Audit
+//        AuditUtility.deleteAudit("", "",
+//                deleteRequest.getUserId(), "EPISODE");
         return Boolean.TRUE;
     }
 

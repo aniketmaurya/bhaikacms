@@ -73,7 +73,7 @@ public class ProgramServiceImpl implements ProgramServices {
         Program program = programRepository.findById(programId).orElse(new Program());
 //        AuditUtility.programAudit(program, program, DELETE, deleteRequest.getUseId());
         AuditUtility.deleteAudit(program.toString(), "",
-                deleteRequest.getUseId(), "PROGRAM");
+                deleteRequest.getUserId(), "PROGRAM");
 
         programRepository.deleteById(programId);
         log.warn("Cascade delete action will be performed for programId: {}", programId);

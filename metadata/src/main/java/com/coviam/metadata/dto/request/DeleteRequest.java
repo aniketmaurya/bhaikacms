@@ -7,6 +7,5 @@ import lombok.Data;
 @Builder
 public class DeleteRequest {
     private String id;
-    private String useId;
+    private String userId;
 }
-
