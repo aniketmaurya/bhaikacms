@@ -1,9 +1,9 @@
 package com.cmssystem.audit.controller;
 
-import com.cmssystem.audit.dto.AddAuditResponseDto;
 import com.cmssystem.audit.dto.AuditDto;
 import com.cmssystem.audit.dto.AuditRequestDto;
 import com.cmssystem.audit.services.AuditService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/audit")
 @CrossOrigin(allowedHeaders = "*", origins = "*")
+@Slf4j
 public class AuditController {
 
     @Autowired
@@ -22,9 +23,9 @@ public class AuditController {
      * @return boolean added,string message
      */
     @RequestMapping(method = RequestMethod.POST, value = "/addAudit")
-    public ResponseEntity<AddAuditResponseDto> addAudit(@RequestBody AuditDto auditDto) {
-        AddAuditResponseDto response = auditService.addAudit(auditDto);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Boolean> addAudit(@RequestBody AuditDto auditDto) {
+
+        return ResponseEntity.ok(auditService.addAudits(auditDto));
     }
 
     /**

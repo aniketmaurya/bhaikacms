@@ -1,6 +1,5 @@
 package com.cmssystem.audit.services.serviceimpl;
 
-import com.cmssystem.audit.dto.AddAuditResponseDto;
 import com.cmssystem.audit.dto.AuditDto;
 import com.cmssystem.audit.dto.AuditRequestDto;
 import com.cmssystem.audit.entity.Audit;
@@ -24,9 +23,13 @@ public class AuditServiceImpl implements AuditService {
 
 
     @Override
-    public AddAuditResponseDto addAudit(AuditDto auditDto) {
+    public Boolean addAudits(AuditDto auditDto) {
 
         log.debug("addAudit in AuditServiceImpl");
+
+        //List<Audit audits=new ArrayList<>();
+
+        //for(AuditDto auditDto: auditDtos) {
 
         Audit audit = Audit.builder()
                 .actionBy(auditDto.getActionBy())
@@ -37,21 +40,20 @@ public class AuditServiceImpl implements AuditService {
                 .oldContent(auditDto.getOldContent())
                 .newContent(auditDto.getNewContent())
                 .build();
+        // audits.add(audit);
 
-        audit = auditRepository.save(audit);
+        // }
+        log.warn("Audit Old data: {}", audit.getOldContent());
+        log.warn("Audit New data: {}", audit.getNewContent());
 
-
-        AddAuditResponseDto response = AddAuditResponseDto.builder().build();
-        if (audit == null) {
-            response.setAdded(Boolean.FALSE);
-            response.setMessage("Audit could not be logged!!");
-        } else {
-            response.setAdded(Boolean.TRUE);
-            response.setMessage("Audit logged successfully!");
+        try {
+            auditRepository.save(audit);
+            return Boolean.TRUE;
+        } catch (Exception e) {
+            log.error("Error is: {}", e.toString());
+            return Boolean.FALSE;
         }
 
-        log.debug(response.getMessage());
-        return response;
     }
 
     @Override
@@ -97,7 +99,6 @@ public class AuditServiceImpl implements AuditService {
 
     private AuditDto convertAuditToDto(Audit audit) {
         return AuditDto.builder()
-                .auditId(audit.getAuditId())
                 .actionBy(audit.getActionBy())
                 .actionName(audit.getActionName())
                 .actionTime(audit.getActionTime())
