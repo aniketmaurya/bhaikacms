@@ -23,7 +23,7 @@ public class EpisodeController {
         return ResponseEntity.ok(episodeService.addEpisodes(episodes));
     }
 
-    @DeleteMapping("/deleteEpisodeById")
+    @PostMapping("/deleteEpisodeById")
     ResponseEntity<Boolean> deleteEpisode(@RequestBody DeleteRequest deleteRequest) {
         return ResponseEntity.ok(episodeService.deleteEpisode(deleteRequest));
     }

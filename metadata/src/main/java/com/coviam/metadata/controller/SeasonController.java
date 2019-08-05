@@ -21,7 +21,7 @@ public class SeasonController {
         return ResponseEntity.ok(seasonServices.addSeason(season));
     }
 
-    @DeleteMapping(value = "/deleteSeasonById")
+    @PostMapping(value = "/deleteSeasonById")
     public ResponseEntity<Boolean> deleteSeasonById(@RequestBody DeleteRequest deleteRequest) {
 
         return ResponseEntity.ok(seasonServices.deleteSeasonById(deleteRequest));

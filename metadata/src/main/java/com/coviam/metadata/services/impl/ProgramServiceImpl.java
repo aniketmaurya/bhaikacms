@@ -2,6 +2,7 @@ package com.coviam.metadata.services.impl;
 
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.ProgramRequest;
+import com.coviam.metadata.dto.response.EmailResponse;
 import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.repository.ProgramRepository;
 import com.coviam.metadata.repository.SeasonRepository;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -101,5 +103,21 @@ public class ProgramServiceImpl implements ProgramServices {
     public Page<Program> getAllMultiVideoProgram(Integer pageNumber, Integer pageSize) {
         return programRepository.findByType("Multi video program",
                 PageRequest.of(pageNumber, pageSize));
+    }
+
+    //added by apoorv
+    @Override
+    public List<EmailResponse> sendExpiredToEmail() {
+        List<EmailResponse> expiredResponse = null;
+        long currentTime = System.currentTimeMillis();
+        Page<Program> expired = programRepository.findByStartDateLessThan(currentTime, new PageRequest(0, 10));
+        for (Program temp : expired) {
+            EmailResponse emailResponse = new EmailResponse();
+            emailResponse.setExpiryDate(temp.getExpiryDate());
+            emailResponse.setId(temp.getUserId());
+            emailResponse.setStartDate(temp.getStartDate());
+            expiredResponse.add(emailResponse);
+        }
+        return expiredResponse;
     }
 }
