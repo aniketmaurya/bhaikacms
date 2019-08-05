@@ -21,9 +21,9 @@ import java.util.Collections;
 public class ImageServiceImpl implements ImageService {
 
     @Override
-    public ImageUploadResponse uploadImage(MultipartFile multipartFile, String type) {
+    public ImageUploadResponse uploadImage(MultipartFile multipartFile, String fileType, String type) {
 
-        log.warn("File: {} and type: {}", multipartFile, type);
+        log.warn("File: {} filetype: {} and type: {}", multipartFile, fileType, type);
         try {
             Credentials credentials = GoogleCredentials
                     .fromStream(new FileInputStream("src/chatwithexperts-88760-a26f3f484a87.json"));
@@ -31,15 +31,16 @@ public class ImageServiceImpl implements ImageService {
                     .setProjectId("chatwithexperts-88760").build().getService();
 
             BlobInfo blobInfo = storage.create(
-                    BlobInfo.newBuilder("bhaikabucket", type.concat("/" + System.currentTimeMillis()))
+                    BlobInfo.newBuilder("bhaikabucket",
+                            fileType.concat("/".concat(type.concat("/".concat(String.valueOf(System.currentTimeMillis()))))))
                             .setAcl(new ArrayList<>(Collections.singletonList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))
                             .build(),
                     multipartFile.getBytes());
 
-            return new ImageUploadResponse(multipartFile.getOriginalFilename(), blobInfo.getMediaLink());
+            return new ImageUploadResponse(multipartFile.getOriginalFilename()+ " Uploaded!", blobInfo.getMediaLink());
         } catch (Exception e) {
             log.warn("Error: {}", e.getMessage());
-            return new ImageUploadResponse(multipartFile.getOriginalFilename(), "");
+            return new ImageUploadResponse("Error: "+e.getMessage(), "");
         }
     }
 
