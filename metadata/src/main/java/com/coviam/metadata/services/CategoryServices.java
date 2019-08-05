@@ -1,6 +1,7 @@
 package com.coviam.metadata.services;
 
 import com.coviam.metadata.entity.Category;
+import com.coviam.metadata.utility.CategoryInfo;
 import com.coviam.metadata.utility.SubCategories;
 
 import java.util.List;
@@ -13,12 +14,13 @@ public interface CategoryServices {
     boolean deleteCategoryById(String categoryId);
 
     //immediate children
-    List<Category> getAllSubCategory(String parentCategoryName);
+    List<CategoryInfo> getAllSubCategory(String parentCategoryName);
 
     //all children
     SubCategories getAllSubCategoryTree(String parentCategoryName);
 
     List<SubCategories> getCompleteTree();
 
+    List<CategoryInfo> getAllParents();
 
 }

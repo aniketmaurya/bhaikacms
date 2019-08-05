@@ -3,6 +3,7 @@ package com.coviam.metadata.services.impl;
 import com.coviam.metadata.entity.Category;
 import com.coviam.metadata.repository.CategoryRepository;
 import com.coviam.metadata.services.CategoryServices;
+import com.coviam.metadata.utility.CategoryInfo;
 import com.coviam.metadata.utility.SubCategories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,11 +66,19 @@ public class CategoryServiceImpl implements CategoryServices {
     }
 
     @Override
-    public List<Category> getAllSubCategory(String parentCategoryName) {
+    public List<CategoryInfo> getAllSubCategory(String parentCategoryName) {
 
-        Category parentCategory = categoryRepository.findCategoryByCategoryName(parentCategoryName);
-        String parentId = parentCategory.getId();
-        return categoryRepository.findChildByCategoryId(parentId);
+        Category parentCategory=categoryRepository.findCategoryByCategoryName(parentCategoryName);
+        String parentId=parentCategory.getId();
+        List<Category> categoryList=categoryRepository.findChildByCategoryId(parentId);
+        List<CategoryInfo> categoryInfoList = new ArrayList<>();
+
+        for (Category category:categoryList) {
+            CategoryInfo categoryInfo = new CategoryInfo(category.getId(),category.getCategoryName());
+            categoryInfoList.add(categoryInfo);
+        }
+
+        return categoryInfoList;
     }
 
     @Override
@@ -100,6 +109,19 @@ public class CategoryServiceImpl implements CategoryServices {
             completeTree.add(getAllSubCategoryTree(parent.getCategoryName(), new ArrayList<>()));
         }
         return completeTree;
+    }
+
+    @Override
+    public List<CategoryInfo> getAllParents() {
+        List<Category> categories= categoryRepository.findAllParents();
+        List<CategoryInfo> categoryInfos=new ArrayList<>();
+
+        for (Category category:categories) {
+            CategoryInfo categoryInfo = new CategoryInfo(category.getId(),category.getCategoryName());
+            categoryInfos.add(categoryInfo);
+        }
+
+        return categoryInfos;
     }
 
 }
