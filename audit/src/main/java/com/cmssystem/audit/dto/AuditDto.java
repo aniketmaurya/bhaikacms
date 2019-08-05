@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AuditDto {
-    private String auditId;
     private String contentId;
     private String contentName;
     private String oldContent;

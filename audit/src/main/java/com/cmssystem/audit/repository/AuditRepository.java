@@ -12,4 +12,6 @@ public interface AuditRepository extends PagingAndSortingRepository<Audit, Strin
     Page<Audit> findByActionTimeBetween(Long start, Long end, Pageable pageable);
 
     Page<Audit> findByActionByAndActionTimeBetween(String actionBy, Long start, Long end, Pageable pageable);
+
+    Page<Audit> findByActionBy(String actionBy, Pageable pageable);
 }

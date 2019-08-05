@@ -1,6 +1,5 @@
 package com.cmssystem.audit.services.serviceimpl;
 
-import com.cmssystem.audit.dto.AddAuditResponseDto;
 import com.cmssystem.audit.dto.AuditDto;
 import com.cmssystem.audit.dto.AuditRequestDto;
 import com.cmssystem.audit.entity.Audit;
@@ -24,9 +23,13 @@ public class AuditServiceImpl implements AuditService {
 
 
     @Override
-    public AddAuditResponseDto addAudit(AuditDto auditDto) {
+    public Boolean addAudits(AuditDto auditDto) {
 
         log.debug("addAudit in AuditServiceImpl");
+
+        //List<Audit audits=new ArrayList<>();
+
+        //for(AuditDto auditDto: auditDtos) {
 
         Audit audit = Audit.builder()
                 .actionBy(auditDto.getActionBy())
@@ -37,21 +40,20 @@ public class AuditServiceImpl implements AuditService {
                 .oldContent(auditDto.getOldContent())
                 .newContent(auditDto.getNewContent())
                 .build();
+        // audits.add(audit);
 
-        audit = auditRepository.save(audit);
+        // }
+        log.warn("Audit Old data: {}", audit.getOldContent());
+        log.warn("Audit New data: {}", audit.getNewContent());
 
-
-        AddAuditResponseDto response = AddAuditResponseDto.builder().build();
-        if (audit == null) {
-            response.setAdded(false);
-            response.setMessage("Audit could not be logged!!");
-        } else {
-            response.setAdded(true);
-            response.setMessage("Audit logged successfully!");
+        try {
+            auditRepository.save(audit);
+            return Boolean.TRUE;
+        } catch (Exception e) {
+            log.error("Error is: {}", e.toString());
+            return Boolean.FALSE;
         }
 
-        log.debug(response.getMessage());
-        return response;
     }
 
     @Override
@@ -60,8 +62,14 @@ public class AuditServiceImpl implements AuditService {
         log.warn("Came into getAudits");
 
         String actionBy = (requestDto.getUserId() == null || requestDto.getUserId().trim().length() == 0) ? "" : requestDto.getUserId().trim();
-        Long start = (requestDto.getStartDate() == null) ? 0 : requestDto.getStartDate();
-        Long end = (requestDto.getEndDate() == null) ? System.currentTimeMillis() : requestDto.getEndDate();
+        Long start, end;
+        if (requestDto.getStartDate() == null && requestDto.getEndDate() == null) {
+            start = (long) -1;
+            end = (long) -1;
+        } else {
+            start = (requestDto.getStartDate() == null) ? 0 : requestDto.getStartDate();
+            end = (requestDto.getEndDate() == null) ? System.currentTimeMillis() : requestDto.getEndDate();
+        }
         Integer pageSize = requestDto.getPageSize() == null ? 10 : requestDto.getPageSize();
         Integer pageNumber = requestDto.getPageNumber() == null ? 0 : requestDto.getPageNumber();
 
@@ -71,20 +79,26 @@ public class AuditServiceImpl implements AuditService {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "actionTime"));
 
         Page<Audit> page;
-        if (StringUtils.isEmpty(actionBy)) {
+        if (StringUtils.isEmpty(actionBy) && !(start == -1 && end == -1)) {
             page = auditRepository.findByActionTimeBetween(start, end, pageRequest);
-            log.warn("Actionby is null.");
-        } else {
+            log.info("Actionby null & date is {} & {}.", start, end);
+        } else if (StringUtils.isEmpty(actionBy) && (start == -1 && end == -1)) {
+            page = auditRepository.findAll(pageRequest);
+            log.info("Actionby is null & date not provided.");
+        } else if (!StringUtils.isEmpty(actionBy) && (start == -1 && end == -1)) {
             page = auditRepository.findByActionByAndActionTimeBetween(actionBy, start, end, pageRequest);
-            log.warn("Actionby is {}", actionBy);
+            log.info("Actionby is {} & date is {} & {}", actionBy, start, end);
+        } else {
+            page = auditRepository.findByActionBy(actionBy, pageRequest);
+            log.info("Actionby is {} & date is null.", actionBy);
         }
+
 
         return page.map(this::convertAuditToDto);
     }
 
     private AuditDto convertAuditToDto(Audit audit) {
         return AuditDto.builder()
-                .auditId(audit.getAuditId())
                 .actionBy(audit.getActionBy())
                 .actionName(audit.getActionName())
                 .actionTime(audit.getActionTime())
