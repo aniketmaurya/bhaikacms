@@ -1,16 +1,18 @@
 package com.coviam.metadata.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+
 
 @Entity
-@Data
+@Setter
+@Getter
 @Table(name = Category.TABLE_NAME)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,36 +27,10 @@ public class Category implements Serializable {
     @Column(name = Category.ID_COLUMN)
     private String id;
 
-    private String name;
-
-    //copy
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @ManyToOne()
+    @JoinColumn(name = "parent_id", nullable = true)
     private Category parent;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "category")
-    private Set<Program> program;
+    private String categoryName;
 
-    @OneToMany(mappedBy = "parent")
-    private Set<Category> childCategories;
-
-    public Set<Category> getChildCategories() {
-        return childCategories;
-    }
-
-    public void setChildCategories(Set<Category> childCategories) {
-        this.childCategories = childCategories;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", parent=" + parent +
-                ", program=" + program +
-                ", childCategories=" + childCategories +
-                '}';
-    }
 }

@@ -1,10 +1,10 @@
 package com.coviam.metadata.controller;
 
+import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.services.SeasonServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +21,10 @@ public class SeasonController {
         return ResponseEntity.ok(seasonServices.addSeason(season));
     }
 
-    @DeleteMapping(value = "/deleteSeasonById")
-    public ResponseEntity<Boolean> deleteSeasonById(@RequestParam(name = "seasonId") String seasonId) {
+    @PostMapping(value = "/deleteSeasonById")
+    public ResponseEntity<Boolean> deleteSeasonById(@RequestBody DeleteRequest deleteRequest) {
 
-        return ResponseEntity.ok(seasonServices.deleteSeasonById(seasonId));
+        return ResponseEntity.ok(seasonServices.deleteSeasonById(deleteRequest));
     }
 
     @GetMapping(value = "/getSeasonById")
@@ -35,26 +35,35 @@ public class SeasonController {
     }
 
 
+    // todo fix this
     @GetMapping(value = "/getSeasonsByProgramId")
     public ResponseEntity<?> getSeasonByProgramId(
             @RequestParam(name = "programId") String programId,
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size) {
+            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
 
-        Page<Season> seasonPage = seasonServices.getSeasonsByProgramId(programId, page, size);
+        Page<Season> seasonPage = seasonServices.getSeasonsByProgramId(programId, pageNumber, pageSize);
 
-        if (seasonPage.isEmpty()) {
-            return new ResponseEntity<Page<Season>>(seasonPage, HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok(seasonPage);
+//        if (seasonPage.isEmpty()) {
+//            return new ResponseEntity<Page<Season>>(seasonPage, HttpStatus.OK);
+//        }
+//
+//        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
-    // todo fix this to with annotations get default values
     @GetMapping("/getAllSeasonalVideo")
     public ResponseEntity<Page<Season>> getAllSeasonalVideo(
-            @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize,
-            @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber) {
-        return ResponseEntity.ok(seasonServices.getAllSeasons(pageSize, pageNumber));
+            @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        return ResponseEntity.ok(seasonServices.getAllSeasons(pageNumber, pageSize));
+    }
+
+    @GetMapping("/getAllMultiVideo")
+    public ResponseEntity<Page<Season>> getAllMultiVideo(
+            @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+
+        return ResponseEntity.ok(seasonServices.getAllMultiVideo(pageNumber, pageSize));
     }
 }

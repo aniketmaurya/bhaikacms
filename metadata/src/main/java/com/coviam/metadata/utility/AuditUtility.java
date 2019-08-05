@@ -18,35 +18,87 @@ public class AuditUtility {
 
     }
 
-    public static void programAudit(Program oldProgram, Program newProgram, String actionName) {
+    public static void addAudit(String oldContent, String newContent,
+                                String actionBy,
+                                String contentType) {
 
-        // comparing difference of each object
+        AuditRequest auditRequest = AuditRequest.builder()
+                .newContent(newContent)
+                .oldContent(oldContent)
+                .contentType(contentType)
+                .actionBy(actionBy)
+                .actionName("ADD")
+                .build();
+
+        callAudit(auditRequest);
+    }
+
+    public static void editAudit(String oldContent, String newContent,
+                                 String actionBy,
+                                 String contentType) {
+
+        AuditRequest auditRequest = AuditRequest.builder()
+                .newContent(newContent)
+                .oldContent(oldContent)
+                .contentType(contentType)
+                .actionBy(actionBy)
+                .actionName("EDIT")
+                .actionTime(System.currentTimeMillis())
+                .build();
+        callAudit(auditRequest);
+
+
+    }
+
+    public static void deleteAudit(String oldContent, String newContent,
+                                   String actionBy,
+                                   String contentType) {
+
+        AuditRequest auditRequest = AuditRequest.builder()
+                .newContent(newContent)
+                .oldContent(oldContent)
+                .contentType(contentType)
+                .actionBy(actionBy)
+                .actionName("DELETE")
+                .actionTime(System.currentTimeMillis())
+                .build();
+        callAudit(auditRequest);
+    }
+
+    public static void programAudit(Program oldProgram, Program newProgram,
+                                    String actionName, String actionBy) {
+
 
         AuditRequest auditRequest = AuditRequest.builder()
                 .newContent(newProgram.toString())
                 .oldContent(oldProgram.toString())
                 .contentType("Program")
+                .actionBy(actionBy)
                 .actionName(actionName)
+                .actionTime(System.currentTimeMillis())
                 .build();
 
         callAudit(auditRequest);
 
     }
 
-    public static void seasonAudit(Season oldSeason, Season newSeason, String actionName) {
+    public static void seasonAudit(Season oldSeason, Season newSeason,
+                                   String actionName, String actionBy) {
 
         AuditRequest auditRequest = AuditRequest.builder()
                 .newContent(newSeason.toString())
                 .oldContent(oldSeason.toString())
                 .contentType("Season")
                 .actionName(actionName)
+                .actionBy(actionBy)
                 .build();
 
         callAudit(auditRequest);
 
     }
 
-    public static void episodeAudit(Episode oldEpisode, Episode newEpisode, String actionName) {
+    public static void episodeAudit(Episode oldEpisode, Episode newEpisode,
+                                    String actionName, String actionBy) {
 
         AuditRequest auditRequest = AuditRequest.builder()
                 .newContent(newEpisode.toString())
@@ -54,22 +106,24 @@ public class AuditUtility {
                 .contentType("Episode")
                 .contentId(newEpisode.getId())
                 .actionName(actionName)
+                .actionBy(actionBy)
                 .build();
 
         callAudit(auditRequest);
-
     }
 
-    public static void singleVideoAudit(SingleVideo newSingleVideo, SingleVideo oldSingleVideo, String actionName) {
-
+    public static void singleVideoAudit(SingleVideo newSingleVideo, SingleVideo oldSingleVideo,
+                                        String actionName, String actionBy) {
         AuditRequest auditRequest = AuditRequest.builder()
                 .newContent(newSingleVideo.toString())
                 .oldContent(oldSingleVideo.toString())
                 .contentType("Single Video Category")
                 .actionName(actionName)
+                .actionBy(actionBy)
                 .build();
 
         callAudit(auditRequest);
 
     }
 }
+

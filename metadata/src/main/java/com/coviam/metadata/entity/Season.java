@@ -38,6 +38,8 @@ public class Season {
     @Column(columnDefinition = "hstore")
     private Map<String, String> seasonImgUrls = new HashMap<>();
 
+    private Long creationDate;
+
 
     @Override
     public String toString() {

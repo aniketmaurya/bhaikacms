@@ -13,4 +13,6 @@ public class AuditRequest {
     private String oldContent;
     private String newContent;
     private Long actionTime;
+    private String actionBy;
 }
+

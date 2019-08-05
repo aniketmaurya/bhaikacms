@@ -26,6 +26,7 @@ public class Program implements Serializable {
     @Column(name = Program.ID_COLUMN)
     private String id;
 
+    // 1->single video, 2->multi 3->seasonal
     private String type;
     private String description;
     private String name;
@@ -53,6 +54,9 @@ public class Program implements Serializable {
     private Map<String, String> imgUrls = new HashMap<>();
 
 
+    private Long creationDate;
+
+
     @Override
     public String toString() {
         return "Program{" +
@@ -71,18 +75,4 @@ public class Program implements Serializable {
                 ", imgUrls=" + imgUrls +
                 '}';
     }
-/*
-    public Map<String, String> toMap() {
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("name", getName());
-        hashMap.put("type", getType());
-        hashMap.put("description", getDescription());
-        hashMap.put("keywords", getKeywords());
-        hashMap.put("languages", getLanguages());
-        hashMap.put("startDate", getStartDate().toString());
-        hashMap.put("expiryDate", getExpiryDate().toString());
-        hashMap.put("parentalRating", getParentalRating());
-
-        return hashMap;
-    }*/
 }
