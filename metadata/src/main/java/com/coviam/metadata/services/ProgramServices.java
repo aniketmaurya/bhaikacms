@@ -2,6 +2,7 @@ package com.coviam.metadata.services;
 
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.ProgramRequest;
+import com.coviam.metadata.dto.response.EmailResponse;
 import com.coviam.metadata.entity.Program;
 import org.springframework.data.domain.Page;
 
@@ -23,7 +24,7 @@ public interface ProgramServices {
 
     Page<Program> getAllMultiVideoProgram(Integer pageNumber, Integer pageSize);
 
-//    List<EmailResponse> sendExpiredToEmail();
+    List<EmailResponse> sendExpiredToEmail();
 
 
 }

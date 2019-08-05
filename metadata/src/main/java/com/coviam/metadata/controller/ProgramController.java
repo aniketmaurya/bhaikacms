@@ -2,12 +2,15 @@ package com.coviam.metadata.controller;
 
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.ProgramRequest;
+import com.coviam.metadata.dto.response.EmailResponse;
 import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.services.ProgramServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -68,8 +71,8 @@ public class ProgramController {
                 .getAllMultiVideoProgram(pageNumber, pageSize));
     }
 
-//    @GetMapping(value = "/getExpiredVideoList")
-//    public ResponseEntity<List<EmailResponse>> getExpiredVideos(@RequestBody EmailResponse emailResponse) {
-//        return ResponseEntity.ok(programServices.sendExpiredToEmail());
-//    }
+    @GetMapping(value = "/getExpiredVideoList")
+    public ResponseEntity<List<EmailResponse>> getExpiredVideos(@RequestBody EmailResponse emailResponse) {
+        return ResponseEntity.ok(programServices.sendExpiredToEmail());
+    }
 }
