@@ -3,10 +3,10 @@ package com.coviam.metadata.services.impl;
 import com.coviam.metadata.entity.Category;
 import com.coviam.metadata.repository.CategoryRepository;
 import com.coviam.metadata.services.CategoryServices;
+import com.coviam.metadata.utility.SubCategories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,59 +16,89 @@ public class CategoryServiceImpl implements CategoryServices {
     @Autowired
     private CategoryRepository categoryRepository;
 
-
     @Override
-    public Boolean addCategory(String categoryName) {
+    public Category addCategory(String categoryName,String parentName) {
+
         Category category = new Category();
-        category.setName(categoryName);
+
+        if(parentName == null){
+            category.setParent(null);
+            category.setCategoryName(categoryName);
+            categoryRepository.save(category);
+            return category;
+        }
+
+        Category parentCategory = categoryRepository.findCategoryByCategoryName(parentName);
+        category.setCategoryName(categoryName);
+        category.setParent(parentCategory);
         categoryRepository.save(category);
-        return Boolean.TRUE;
+        return category;
     }
 
-    @Transactional
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public boolean deleteCategoryById(String categoryId) {
+        boolean isChildDeleted= deleteRec(categoryId);
+        if(isChildDeleted){
+            categoryRepository.deleteById(categoryId);
+            return true;
+        }
+        return false;
     }
 
-    @Transactional
-    @Override
-    public Optional<Category> getCategoryById(String id) {
-        return categoryRepository.findById(id);
+    private boolean deleteRec(String categoryId){
+
+        boolean ifDeleted=false;
+
+        List<Category> childList=categoryRepository.findChildByCategoryId(categoryId);
+
+        if(childList.isEmpty()){
+            Optional<Category> category=categoryRepository.findById(categoryId);
+            category.ifPresent(value -> categoryRepository.delete(value));
+            ifDeleted=true;
+        }
+        for (Category category:childList) {
+            ifDeleted=deleteRec(category.getId());
+//            System.out.println("category deleted : "+category.getCategoryName()+" "+ifDeleted);
+        }
+        return  ifDeleted;
     }
 
-
-    @Transactional
     @Override
-    public void updateCategory(Category category, String name) {
-        category.setName(name);
-        categoryRepository.save(category);
+    public List<Category> getAllSubCategory(String parentCategoryName) {
+
+        Category parentCategory=categoryRepository.findCategoryByCategoryName(parentCategoryName);
+        String parentId=parentCategory.getId();
+        return categoryRepository.findChildByCategoryId(parentId);
     }
 
-    @Transactional
     @Override
-    public void deleteCategory(Category category) {
-        categoryRepository.delete(category);
+    public SubCategories getAllSubCategoryTree(String parentCategoryName) {
+        return getAllSubCategoryTree(parentCategoryName,new ArrayList<SubCategories>());
     }
 
-    @Transactional
-    @Override
-    public boolean isChildCategory(Category category, Category parent) {
-        return category.getParent().equals(parent);
+    private SubCategories getAllSubCategoryTree(String parentCategoryName,ArrayList<SubCategories> subCategories){
+        Category parentCategory= categoryRepository.findCategoryByCategoryName(parentCategoryName);
+
+        if(parentCategory == null){
+
+            return null;
+        }
+
+        String parentId=parentCategory.getId();
+        for (Category child: categoryRepository.findChildByCategoryId(parentId)) {
+            subCategories.add(getAllSubCategoryTree(child.getCategoryName(),new ArrayList<>()));
+        }
+        return new SubCategories(parentCategoryName,parentId,subCategories);
     }
 
-    @Transactional
     @Override
-    public void addChildCategory(Category category, Category parent) {
-        category.setParent(parent);
-        categoryRepository.save(category);
-    }
-
-    @Transactional
-    @Override
-    public void removeChildCategory(Category category, Category parent) {
-        category.setParent(null);
-        categoryRepository.save(category);
+    public List<SubCategories> getCompleteTree() {
+        List<Category> allParents = categoryRepository.findAllParents();
+        List<SubCategories> completeTree = new ArrayList<>();
+        for (Category parent: allParents) {
+            completeTree.add(getAllSubCategoryTree(parent.getCategoryName(),new ArrayList<>()));
+        }
+        return completeTree;
     }
 
 }

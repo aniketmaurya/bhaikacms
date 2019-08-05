@@ -1,15 +1,14 @@
 package com.coviam.metadata.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
+
 @Entity
-@Data
+@Setter
+@Getter
 @Table(name = Category.TABLE_NAME)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,10 +23,10 @@ public class Category implements Serializable {
     @Column(name = Category.ID_COLUMN)
     private String id;
 
-    private String name;
-
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @ManyToOne()
+    @JoinColumn(name = "parent_id",nullable = true)
     private Category parent;
+
+    private String categoryName;
 
 }
