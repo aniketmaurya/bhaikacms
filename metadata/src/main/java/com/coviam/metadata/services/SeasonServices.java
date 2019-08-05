@@ -22,5 +22,4 @@ public interface SeasonServices {
     Page<Season> getAllMultiVideo(Integer pageNumber, Integer pageSize);
 
 
-
 }

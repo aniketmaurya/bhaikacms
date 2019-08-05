@@ -12,19 +12,20 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/admin")
 public class CategoryController {
 
     @Autowired
     private CategoryServices categoryService;
 
     @PostMapping("/addCategory")
-    public Category addCategory(@RequestParam String categoryName,
-                                @RequestParam(required = false) String parentName){
-        return categoryService.addCategory(categoryName,parentName);
+    public Category addCategory(@RequestParam(name = "categoryName") String categoryName,
+                                @RequestParam(name = "parentName", required = false) String parentName) {
+        return categoryService.addCategory(categoryName, parentName);
     }
 
     @DeleteMapping("/deleteCategory")
-    public boolean deleteCategory(@RequestParam String categoryId){
+    public boolean deleteCategory(@RequestParam String categoryId) {
 
         return categoryService.deleteCategoryById(categoryId);
     }

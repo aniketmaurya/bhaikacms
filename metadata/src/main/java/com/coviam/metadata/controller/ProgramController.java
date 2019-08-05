@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -53,6 +54,8 @@ public class ProgramController {
                 .getAllSingleVideoProgram(pageNumber, pageSize));
     }
 
+    // todo optimise getAll{ProgramType}
+
     @GetMapping(value = "/getAllSeasonalVideoProgram")
     public ResponseEntity<Page<Program>> getAllSeasonalVideoProgram(
             @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
@@ -72,7 +75,7 @@ public class ProgramController {
     }
 
     @GetMapping(value = "/getExpiredVideoList")
-    public ResponseEntity<List<EmailResponse>> getExpiredVideos(@RequestBody EmailResponse emailResponse) {
-        return ResponseEntity.ok(programServices.sendExpiredToEmail());
+    public ResponseEntity<Optional<List<EmailResponse>>> getExpiredVideos() {
+        return ResponseEntity.ok(Optional.of(programServices.sendExpiredToEmail()));
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/admin")
 @RestController
-public class AdminController {
+public class LanguageController {
 
     @Autowired
     private CategoryServices categoryServices;
