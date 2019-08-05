@@ -12,7 +12,6 @@ public class UserAdminResponseDto {
 
     private String email;
     private String name;
-    //private String password;
     private int roleId;
     private boolean isActive;
 }

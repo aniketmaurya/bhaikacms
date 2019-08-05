@@ -42,9 +42,6 @@ public class UserAdminController {
             userAdminAddResponseDto.setMessage("User Not Created");
         } else {
             userAdminAddResponseDto = userAdminService.addUser(userAdminDetailsDto);
-            userAdminAddResponseDto.setAdded(true);
-            userAdminAddResponseDto.setMessage("User Created");
-
         }
 
         return new ResponseEntity<>(userAdminAddResponseDto, HttpStatus.OK);

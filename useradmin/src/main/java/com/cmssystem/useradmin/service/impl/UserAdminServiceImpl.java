@@ -103,21 +103,20 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     @Override
     public UserDeleteResponseDto deleteUser(String idDelete, String id) {
-        UserAdmin userAdmin2;
         UserAdmin userAdmin = userAdminRepository.findById(idDelete).get();
         UserAdmin userAdmin1 = userAdminRepository.findById(id).get();
         UserDeleteResponseDto userDeleteResponseDto = new UserDeleteResponseDto();
         if (userAdmin != null && (userAdmin1.getRoleId()) == 1 && (userAdmin.isActive() != false)) {
             userAdmin.setActive(false);
             userDeleteResponseDto.setDeleted(true);
-            userAdmin2=userAdminRepository.save(userAdmin);
+            userAdminRepository.save(userAdmin);
             AuditUtility auditUtility = new AuditUtility();
             auditUtility.deleteAudit(userAdmin.getId(),userAdmin1.getId(),userAdmin.getName(),userAdmin1.getName());
             return userDeleteResponseDto;
         } else {
             userAdmin.setActive(true);
             userDeleteResponseDto.setDeleted(false);
-            userAdmin2=userAdminRepository.save(userAdmin);
+            userAdminRepository.save(userAdmin);
             return userDeleteResponseDto;
         }
 
@@ -164,10 +163,19 @@ public class UserAdminServiceImpl implements UserAdminService {
         log.warn("Time" + System.currentTimeMillis());
         log.warn(userLoginResponseDto.getMessage());
 
-
-        if (Math.abs(System.currentTimeMillis() - userLoginResponseDto.getLoginTime()) >= 600000) {
-            userAdminTokenRepository.deleteById(userAdmin.getId());
-        }
+        log.warn("Before timer");
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        log.warn("Inside timer");
+                        userAdminTokenRepository.deleteById(userAdmin.getId());
+                        log.warn("timer executed");
+                    }
+                },
+                600000
+        );
+        log.warn("After timer exec");
         return userLoginResponseDto;
 
     }
