@@ -21,13 +21,13 @@ public class Audit {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String auditId;
-    private String contentId;
-    private String contentName;
-    private String oldContent;
-    private String newContent;
-    private String actionName;
-    private Long actionTime;
-    private String actionBy;
+    private String asset;
+    private String assetId;
+    private String action;
+    private String modifier;
+    private String oldValue;
+    private String newValue;
+    private long actionTime;
 
 }
 

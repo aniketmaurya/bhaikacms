@@ -1,7 +1,8 @@
 package com.cmssystem.audit.controller;
 
-import com.cmssystem.audit.dto.AuditDto;
-import com.cmssystem.audit.dto.AuditRequestDto;
+import com.cmssystem.audit.dto.AddAuditRequestDto;
+import com.cmssystem.audit.dto.AuditFilterDto;
+import com.cmssystem.audit.dto.GetAuditResponseDto;
 import com.cmssystem.audit.services.AuditService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,22 +20,30 @@ public class AuditController {
     private AuditService auditService;
 
     /**
-     * @param auditDto entry for audit table
+     * @param addAuditRequestDto entry for audit table
      * @return boolean added,string message
      */
     @RequestMapping(method = RequestMethod.POST, value = "/addAudit")
-    public ResponseEntity<Boolean> addAudit(@RequestBody AuditDto auditDto) {
-
-        return ResponseEntity.ok(auditService.addAudits(auditDto));
+    public ResponseEntity<Boolean> addAudit(@RequestBody AddAuditRequestDto addAuditRequestDto) {
+        return ResponseEntity.ok(auditService.addAudit(addAuditRequestDto));
     }
 
     /**
-     * @param auditRequestDto pagenumber and count in page
+     * @param auditFilterDto pagenumber and count in page and other filters
      * @return auditdto audit data to be displayed
      */
     @RequestMapping(method = RequestMethod.POST, value = "/getAudits")
-    public ResponseEntity<Page<AuditDto>> getAllAudits(@RequestBody AuditRequestDto auditRequestDto) {
-        return ResponseEntity.ok(auditService.getAudits(auditRequestDto));
+    public ResponseEntity<Page<GetAuditResponseDto>> getAudits(@RequestBody AuditFilterDto auditFilterDto) {
+        return ResponseEntity.ok(auditService.getAudits(auditFilterDto));
+    }
+
+    /**
+     * @param contentId pagenumber and count in page and other filters
+     * @return auditdto audit data to be displayed
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/getRecent")
+    public ResponseEntity<String> getRecentModifier(@RequestParam(value = "contentId") String contentId) {
+        return ResponseEntity.ok(auditService.getRecentModifier(contentId));
     }
 
 }
