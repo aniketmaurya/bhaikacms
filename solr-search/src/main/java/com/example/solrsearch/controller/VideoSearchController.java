@@ -1,17 +1,15 @@
 package com.example.solrsearch.controller;
 
-import com.example.solrsearch.dto.VideoDto;
+import com.example.solrsearch.dto.ProgramDto;
 import com.example.solrsearch.entity.Video;
 import com.example.solrsearch.service.VideoSearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -25,37 +23,9 @@ public class VideoSearchController {
     VideoSearchService videoSearchService;
 
     @RequestMapping(method = RequestMethod.POST,value="/addVideos")
-    public ResponseEntity<?> addVideos(@RequestBody List<VideoDto> videoDtos) {
-
-        List<Video> videos = new ArrayList<>();
-
-        for (VideoDto videoDto : videoDtos) {
-            Video video = new Video();
-            videos.add(Video.builder()
-                    .categoriesList(videoDto.getCategoriesList())
-                    .crewList(videoDto.getCrewList())
-                    .keywords(videoDto.getKeywords())
-                    .languages(videoDto.getLanguages())
-                    .programDescription(videoDto.getProgramDescription())
-                    .programId(videoDto.getProgramId())
-                    .programName(videoDto.getProgramName())
-                    .videoType(videoDto.getVideoType())
-                    .videoUrl(videoDto.getVideoUrl()).build());
-        }
-
-//        videoDtos.stream().map(videoDto -> {
-//
-//        })
-
-
-        try {
-            boolean check = videoSearchService.addVideos(videos);
-            return new ResponseEntity<Boolean>(check, HttpStatus.OK);
-        } catch (NullPointerException e) {
-            e.getStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.OK);
-        }
-    }//interceptor
+    public ResponseEntity<Video> addVideos(@RequestBody ProgramDto programDtos) {
+        return ResponseEntity.of(Optional.of(videoSearchService.addVideos(programDtos)));
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getAllVideos")
     public ResponseEntity<Page<Video>> getAllVideos(@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
@@ -71,16 +41,17 @@ public class VideoSearchController {
     @RequestMapping(method = RequestMethod.GET, value = "/search")
     public Page<Video> searchVideos(@RequestParam(value = "searchTerm") String searchTerm,
                                     @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
-                                    @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
+                                    @RequestParam(value = "pageSize", defaultValue = "5") int pageSize
+    ) {
         return videoSearchService.search(searchTerm, pageNumber, pageSize);
     }
 
-//    @RequestMapping(method = RequestMethod.GET, value = "/searchBYProgramName")
-//    public Page<Video> searchContaining(@RequestParam(value = "searchTerm") String searchTerm,
-//                                        @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
-//                                        @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
-//        return videoSearchService.searchContaining(searchTerm, pageNumber, pageSize);
-//    }
+    @RequestMapping(method = RequestMethod.GET, value = "/autoComplete")
+    public Page<Video> autoSuggest(@RequestParam(value = "word") String word,
+                                   @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                                   @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
+        return videoSearchService.autoSuggest(word, pageNumber, pageSize);
+    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/findByProgramId")
     public Video getByProgramId(@RequestParam String programId) {
@@ -95,3 +66,4 @@ public class VideoSearchController {
 
 
 }
+// server start : ./bin/solr -c

@@ -11,4 +11,6 @@ public interface CustomRepository {
 
     //Page<Video> searchContaining(String searchterm, Pageable var);
     Page<Video> getAllVideos(Pageable var);
+
+    Page<Video> autoSuggest(String searchTerm, int pageNumber, int pageSize);
 }

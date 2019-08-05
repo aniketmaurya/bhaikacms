@@ -21,26 +21,29 @@ import java.util.Map;
 public class Video {
 
     @Indexed(stored = true, searchable = true, type = "keywords")
-    List<String> keywords;
+    private List<String> keywords;
     @Indexed(stored = true, searchable = true, type = "text_general")
-    String videoUrl;
+    private String videoUrl;
     @Dynamic
     @Indexed(value = "crewList_*", copyTo = "crewListCopy", type = "programName")
-    Map<String, String> crewList;
+    private Map<String, String> crewList;
     @Indexed(stored = true, searchable = true, type = "languages")
-    List<String> languages;
+    private List<String> languages;
     @Indexed(stored = true, searchable = true, type = "programDescription")
-    String programDescription;
+    private String programDescription;
     @Indexed(stored = true, searchable = true, type = "videotype")
-    String videoType;
+    private String videoType;
     @Id
     @Indexed(stored = true)
     private String programId;
     @Indexed(stored = true, searchable = true, type = "programName")
     private String programName;
     @Indexed(stored = true, searchable = true, type = "categoryList")
-    private List<Categories> categoriesList;
+    private List<String> categoriesList;
     @Indexed(stored = true, searchable = true, type = "programName")
-    private String crewListCopy;
+    private List<String> crewListCopy;
+    @Indexed(stored = true, searchable = true, type = "autocomp")
+    private List<String> autoComp;
 
 }
+//./server/scripts/cloud-scripts/zkcli.sh -zkhost 127.0.0.1:9983 -cmd upconfig -confname video_config2 -confdir server/solr/configsets/_default/conf
