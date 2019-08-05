@@ -23,7 +23,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ImageUploadResponse uploadImage(MultipartFile multipartFile, String fileType, String type) {
 
-        log.warn("File: {} filetype: {} and type: {}", multipartFile, fileType, type);
+        log.debug("File: {} filetype: {} and type: {}", multipartFile, fileType, type);
         try {
             Credentials credentials = GoogleCredentials
                     .fromStream(new FileInputStream("src/chatwithexperts-88760-a26f3f484a87.json"));
@@ -39,7 +39,7 @@ public class ImageServiceImpl implements ImageService {
 
             return new ImageUploadResponse(multipartFile.getOriginalFilename()+ " Uploaded!", blobInfo.getMediaLink());
         } catch (Exception e) {
-            log.warn("Error: {}", e.getMessage());
+            log.error("Error in image service: {}", e.getMessage());
             return new ImageUploadResponse("Error: "+e.getMessage(), "");
         }
     }

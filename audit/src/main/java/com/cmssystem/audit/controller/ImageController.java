@@ -52,8 +52,7 @@ public class ImageController {
     public ResponseEntity<ImageUploadResponse> uploadFile(@RequestParam(value = "file") MultipartFile multipartFile,
                                                           @RequestParam(value = "filetype") String fileType,
                                                           @RequestParam(value = "type") String type) {
-
-
+        log.debug("uploadFile Data:: File: {} filetype: {} type: {}", multipartFile, fileType, type);
         try {
             if (multipartFile == null)
                 return ResponseEntity.ok(new ImageUploadResponse("File Not Received", ""));
@@ -66,6 +65,7 @@ public class ImageController {
             }
             return ResponseEntity.ok(imageService.uploadImage(multipartFile, fileType, type));
         } catch (Exception e) {
+            log.error("Error in controller catch:: {}", e.getMessage());
             return ResponseEntity.ok(new ImageUploadResponse("Error: " + e.getMessage(), ""));
         }
 
