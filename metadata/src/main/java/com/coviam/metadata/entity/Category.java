@@ -27,7 +27,6 @@ public class Category implements Serializable {
     @JoinColumn(name = "parent_id",nullable = true)
     private Category parent;
 
-
     private String categoryName;
 
 }

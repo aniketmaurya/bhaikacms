@@ -1,5 +1,6 @@
 package com.coviam.metadata.services.impl;
 
+import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.repository.EpisodeRepository;
 import com.coviam.metadata.repository.SeasonRepository;
@@ -25,35 +26,38 @@ public class SeasonServiceImpl implements SeasonServices {
 
 
     @Override
-    public Optional<Season> addSeason(Season season) {
-        return Optional.of(seasonRepository.save(season));
+    public Season addSeason(Season season) {
+
+        season.setCreationDate(System.currentTimeMillis());
+        return Optional.of(seasonRepository.save(season)).orElse(new Season());
     }
 
     @Transactional
     @Override
-    public Boolean deleteSeasonById(String seasonId) {
-        episodeRepository.deleteAllBySeasonId(seasonId);
-        seasonRepository.deleteById(seasonId);
+    public Boolean deleteSeasonById(DeleteRequest deleteRequest) {
+        seasonRepository.deleteById(deleteRequest.getId());
         return Boolean.TRUE;
     }
 
     @Override
-    public Optional<Season> getSeasonById(String seasonId) {
-        return seasonRepository.findById(seasonId);
+    public Season getSeasonById(String seasonId) {
+        return seasonRepository.findById(seasonId).orElse(new Season());
     }
 
     // todo change the log error
     @Override
-    public Page<Season> getSeasonsByProgramId(String programId, Integer page, Integer size) {
-        return seasonRepository.findByProgramId(programId, PageRequest.of(page, size));
-        /*try {
-            return seasonRepository.findByProgramId(programId, PageRequest.of(page, size));
-        } catch (Exception exception) {
-            log.error("exception : {} while getting seasons by programId : {}",
-                    exception.getMessage(), programId);
-            return Page.empty();
-        }*/
+    public Page<Season> getSeasonsByProgramId(String programId, Integer pageNumber, Integer size) {
+        return seasonRepository.findByProgramId(programId, PageRequest.of(pageNumber, size));
     }
 
+    @Override
+    public Page<Season> getAllSeasons(Integer pageNumber, Integer pageSize) {
+        return seasonRepository.findAll(PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Season> getAllMultiVideo(Integer pageNumber, Integer pageSize) {
+        return seasonRepository.findBySeasonNumber(0, PageRequest.of(pageNumber, pageSize));
+    }
 
 }

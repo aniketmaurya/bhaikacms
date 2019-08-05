@@ -26,7 +26,7 @@ public class SingleVideo {
 
     @OneToOne
     @JoinColumn(name = "program_id")
-    private Program programId;
+    private Program program;
 
     private String videoTitle;
 
