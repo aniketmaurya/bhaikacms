@@ -9,6 +9,7 @@ import com.coviam.metadata.repository.SeasonRepository;
 import com.coviam.metadata.services.ProgramServices;
 import com.coviam.metadata.services.SeasonServices;
 import com.coviam.metadata.utility.AuditUtility;
+import com.coviam.metadata.utility.SearchUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,12 +44,16 @@ public class ProgramServiceImpl implements ProgramServices {
         BeanUtils.copyProperties(programRequest, program);
 
         log.info("Adding program programName: {}", program.getName());
-//        AuditUtility.programAudit(new Program(), program, ADD, programRequest.getUserId());
         AuditUtility.addAudit("", "ADDED A NEW PROGRAM",
                 programRequest.getUserId(), "PROGRAM");
 
         program.setCreationDate(System.currentTimeMillis());
-        return Optional.of(programRepository.save(program)).orElse(new Program());
+        Program program1 = Optional.of(programRepository.save(program)).orElse(new Program());
+
+        SearchUtility.addToSearch(program1);
+
+
+        return program1;
     }
 
     @Override
@@ -105,10 +111,10 @@ public class ProgramServiceImpl implements ProgramServices {
                 PageRequest.of(pageNumber, pageSize));
     }
 
-    //added by apoorv
+    //added by apoorv singh
     @Override
     public List<EmailResponse> sendExpiredToEmail() {
-        List<EmailResponse> expiredResponse = null;
+        List<EmailResponse> expiredResponse = new ArrayList<>();
         long currentTime = System.currentTimeMillis();
         Page<Program> expired = programRepository.findByStartDateLessThan(currentTime, new PageRequest(0, 10));
         for (Program temp : expired) {

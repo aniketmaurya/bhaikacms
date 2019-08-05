@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CategoryServices {
 
-    Category addCategory(String categoryName,String parentName);
+    Category addCategory(String categoryName, String parentName);
 
     boolean deleteCategoryById(String categoryId);
 
