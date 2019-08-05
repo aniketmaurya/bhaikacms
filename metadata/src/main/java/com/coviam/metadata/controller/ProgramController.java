@@ -70,7 +70,7 @@ public class ProgramController {
                 .getAllMultiVideoProgram(pageNumber, pageSize));
     }
 
-    @GetMapping(value = "/getExpiredVideoList")
+    @PostMapping(value = "/getExpiredVideoList")
     public ResponseEntity<List<EmailResponse>> getExpiredVideos(@RequestBody EmailResponse emailResponse) {
         return ResponseEntity.ok(programServices.sendExpiredToEmail());
     }
