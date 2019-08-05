@@ -43,7 +43,7 @@ public class Video {
     @Indexed(stored = true, searchable = true, type = "programName")
     private List<String> crewListCopy;
     @Indexed(stored = true, searchable = true, type = "autocomp")
-    private List<String> autoComp;
+    private List<String> autocomp;
 
 }
 //./server/scripts/cloud-scripts/zkcli.sh -zkhost 127.0.0.1:9983 -cmd upconfig -confname video_config2 -confdir server/solr/configsets/_default/conf

@@ -24,6 +24,7 @@ public class VideoSearchServiceImp implements VideoSearchService {
 
     @Override
     public Video addVideos(ProgramDto programDto) {
+        log.debug("Video is getting added");
         Video video = Video.builder()
                 .crewList(programDto.getCrewList())
                 .keywords(programDto.getKeywords())
@@ -37,43 +38,46 @@ public class VideoSearchServiceImp implements VideoSearchService {
 
         Category category = programDto.getCategory();
 
-        while (category.getParent() != null) {
-            video.getCategoriesList().add(programDto.getCategory().getCategoryName());
-            category = category.getParent();
+        if (category != null) {
+            do {
+                video.getCategoriesList().add(category.getCategoryName());
+                category = category.getParent();
+            } while (null != category);
         }
+
         return videoRepository.save(video);
     }
 
     @Override
     public Page<Video> getAllVideos(int pageNumber, int pageSize) {
-        log.warn("Got all videos");
+        log.debug("Got all videos");
         return videoRepository.getAllVideos(PageRequest.of(pageNumber, pageSize));
     }
 
     @Override
     public boolean deleteAll() {
-        log.warn("Deleted");
+        log.debug("Deleted");
         videoRepository.deleteAll();
         return true;
     }
 
     @Override
     public Page<Video> search(String searchTerm, int pageNumber, int pageSize) {
-        log.warn("Searched");
+        log.debug("Searched");
         return videoRepository.search(searchTerm, PageRequest.of(pageNumber, pageSize));
     }
 
     @Override
     public Page<Video> autoSuggest(String word, int pageNumber, int pageSize) {
-        log.warn("Auto suggest");
+        log.debug("Auto suggest");
         return videoRepository.autoSuggest(word, pageNumber, pageSize);
     }
 
     @Override
     public Video update(Video video) {
-        //String video = video.getProgramId();
-        log.warn("Updated");
-        return null;
+
+        log.debug("Updated");
+        return videoRepository.save(video);
 
     }
 
