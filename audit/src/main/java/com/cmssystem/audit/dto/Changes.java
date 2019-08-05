@@ -1,0 +1,16 @@
+package com.cmssystem.audit.dto;
+
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Changes {
+
+    String fieldChanged;
+    String oldValue;
+    String newValue;
+}
