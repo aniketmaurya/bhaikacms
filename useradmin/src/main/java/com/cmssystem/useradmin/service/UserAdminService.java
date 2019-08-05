@@ -23,4 +23,6 @@ public interface UserAdminService {
     boolean logOut(LogOutDto logOutDto);
 
     UserEmailDto getUserEmailId(String id);
+
+    boolean validateLogin(String userId);
 }

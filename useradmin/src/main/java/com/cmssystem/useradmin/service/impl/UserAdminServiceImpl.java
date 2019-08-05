@@ -10,6 +10,8 @@ import com.cmssystem.useradmin.utility.AuditUtility;
 import com.cmssystem.useradmin.utility.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,7 +47,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         userAdmin.setRoleId(userAdminDetailsDto.getRoleId());
         // boolean result = userAdminRepository.findByEmail(userAdminDetailsDto.getEmail());
         boolean result = userAdminRepository.existsByEmail(userAdminDetailsDto.getEmail());
-        log.warn("result : " + result);
+        log.debug("result : " + result);
         UserAdminAddResponseDto userAdminAddResponseDto = new UserAdminAddResponseDto();
 
         if (result) {
@@ -53,7 +55,7 @@ public class UserAdminServiceImpl implements UserAdminService {
             userAdminAddResponseDto.setMessage("User Already exists !!");
         } else {
             userAdmin1 = userAdminRepository.save(userAdmin);
-            log.warn("userID:: {}", userAdmin1.getId());
+            log.debug("userID:: {}", userAdmin1.getId());
             userAdminAddResponseDto.setAdded(true);
             userAdminAddResponseDto.setMessage("Created");
             userAdminAddResponseDto.setUserId(userAdmin.getId());
@@ -77,8 +79,8 @@ public class UserAdminServiceImpl implements UserAdminService {
         userAdminResponseDto.setName(name);
         userAdminResponseDto.setRoleId(userAdmin.getRoleId());
         userAdminResponseDto.setActive(userAdmin.isActive());
-        log.warn("details: {}", userAdminResponseDto.toString());
-        log.warn("Gave details for {}", name);
+        log.debug("details: {}", userAdminResponseDto.toString());
+        log.debug("Gave details for {}", name);
 
         return userAdminResponseDto;
 
@@ -122,7 +124,7 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     }
 
-    @Cacheable(value = "token", key = "#email", cacheManager = "redisCacheManager")
+    @CachePut(value = "token", key = "#email", cacheManager = "redisCacheManager")
     @Override
     public UserLoginResponseDto authenticateLoginUser(String email, String password) {
         UserAdmin userAdmin = userAdminRepository.findByEmail(email);
@@ -133,7 +135,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         if (userAdmin == null) {
             userLoginResponseDto.setLogin(false);
             userLoginResponseDto.setMessage("User Doesn't Exist");
-            log.warn(userLoginResponseDto.getMessage());
+            log.debug(userLoginResponseDto.getMessage());
             return userLoginResponseDto;
         }
         UtilityClass utilityClass = new UtilityClass();
@@ -160,50 +162,44 @@ public class UserAdminServiceImpl implements UserAdminService {
         userLoginResponseDto.setUserId(userAdmin.getId());
         userLoginResponseDto.setRoleId(userAdmin.getRoleId());
         userLoginResponseDto.setLoginTime(System.currentTimeMillis());
-        log.warn("Time" + System.currentTimeMillis());
-        log.warn(userLoginResponseDto.getMessage());
+        log.debug("Time" + System.currentTimeMillis());
+        log.debug(userLoginResponseDto.getMessage());
 
-        log.warn("Before timer");
+        log.debug("Before timer");
         new java.util.Timer().schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
-                        log.warn("Inside timer");
+                        log.debug("Inside timer");
                         userAdminTokenRepository.deleteById(userAdmin.getId());
-                        log.warn("timer executed");
+                        log.debug("timer executed");
                     }
                 },
-                600000
+                7200000
         );
-        log.warn("After timer exec");
+        log.debug("After timer exec");
         return userLoginResponseDto;
 
     }
 
 
-   /* @Override
-    public boolean validateLogin(String userId, UUID token) {
+    @Cacheable(value = "token", key = "#email", cacheManager = "redisCacheManager")
+    public boolean validateLogin(String userId) {
 
-        log.warn("UserId: " + userId + "Token: " + token);
-        boolean checkUserLogin = userAdminTokenRepository.exists(token);
+        log.debug("UserId: " + userId);
+        boolean checkUserLogin = userAdminRepository.existsById(userId);
 
         if(checkUserLogin){
-            log.warn("Token exist in the db.");
-            UserAdminToken userAdminToken = userAdminTokenRepository.findOne(token);
-            System.out.println("User Email: " + userAdminToken.getUserAdmin().getEmail());
-            if(userAdminToken.getUserAdmin().getId().equals(userId)) {
-                System.out.println("Email id and token match");
-                //email id and token match
+            log.debug("Token exist in the db.");
                 checkUserLogin =  true;
             }
             else {
-                log.warn("Email id and token didn't match");
+                log.debug("No match for id");
                 checkUserLogin =  false;
             }
-        }
 
         return checkUserLogin;
-    }*/
+    }
 
     @Override
     public boolean logOut(LogOutDto logOutDto) {

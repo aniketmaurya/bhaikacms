@@ -1,4 +1,4 @@
-/*package com.cmssystem.useradmin.dto;
+package com.cmssystem.useradmin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,5 +11,4 @@ import java.util.UUID;
 @NoArgsConstructor
 public class LoginValidateDto {
     private String userId;
-    private UUID token;
-}*/
+}

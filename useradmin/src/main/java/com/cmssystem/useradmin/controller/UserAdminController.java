@@ -85,22 +85,21 @@ public class UserAdminController {
         return new ResponseEntity<>(userLoginResponseDto, HttpStatus.OK);
     }
 
-
-  /*  @PostMapping(path = "/validateLogin")
+    @PostMapping(path = "/validateLogin")
     public ResponseEntity<?> validateLogin(@RequestBody LoginValidateDto loginValidateDTO){
 
         boolean serviceResponse = false;
 
-        if(loginValidateDTO.getUserId()==null|| loginValidateDTO.getToken()==null || loginValidateDTO.getUserId().equals("") || loginValidateDTO.getToken().equals("")) {
+        if(loginValidateDTO.getUserId()==null || loginValidateDTO.getUserId().equals("")) {
             System.out.println("Not logged in");
             return new ResponseEntity<>(serviceResponse, HttpStatus.OK);
         }
 
-        serviceResponse = userAdminService.validateLogin(loginValidateDTO.getUserId(),loginValidateDTO.getToken());
+        serviceResponse = userAdminService.validateLogin(loginValidateDTO.getUserId());
 
         log.warn("User is  Granted Login" + serviceResponse);
         return new ResponseEntity<>(serviceResponse, HttpStatus.OK);
-    }*/
+    }
 
     @PostMapping(value = "/logout")
     public ResponseEntity<?> logout(@RequestBody LogOutDto logOutDto) {
