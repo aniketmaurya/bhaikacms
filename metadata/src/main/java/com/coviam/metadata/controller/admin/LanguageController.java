@@ -1,9 +1,6 @@
 package com.coviam.metadata.controller.admin;
 
-import com.coviam.metadata.entity.Crew;
 import com.coviam.metadata.entity.Language;
-import com.coviam.metadata.services.CategoryServices;
-import com.coviam.metadata.services.CrewServices;
 import com.coviam.metadata.services.LanguageServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +31,5 @@ public class LanguageController {
     public ResponseEntity<List<Language>> getAllLanguage() {
         return ResponseEntity.ok(languageServices.getAllLanguage());
     }
-
     //update language
-
-
 }

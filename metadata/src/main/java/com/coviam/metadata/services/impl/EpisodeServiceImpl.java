@@ -23,7 +23,6 @@ public class EpisodeServiceImpl implements EpisodeServices {
     public List<Episode> addEpisodes(List<Episode> episodes) {
 
         episodes.forEach(episode -> episode.setCreationDate(System.currentTimeMillis()));
-        String userId = "", modification = "ADDED/UPDATED/DELETED";
         episodeRepository.saveAll(episodes);
         log.info("Adding episodes");
         return episodes;

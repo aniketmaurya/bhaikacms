@@ -33,7 +33,7 @@ public class SearchUtility {
         ProgramSearchResponse programSearchResponse = new ProgramSearchResponse();
         BeanUtils.copyProperties(program, programSearchResponse);
 
-        programSearchResponse.setKeywords(Arrays.asList(program.getKeywords().split(" ")));
+        programSearchResponse.setKeywords(Arrays.asList(program.getKeywords()));
         programSearchResponse.setLanguages(Arrays.asList(program.getLanguages().split(" ")));
 
 

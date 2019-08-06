@@ -32,9 +32,11 @@ public class Program implements Serializable {
     private String type;
 
     @NotNull(message = "description may not be null")
+    //@Size(min = 10)
     private String description;
 
-    @NotNull(message = "description may not be null")
+    @NotNull(message = "name may not be null")
+    // @Size(min = 2)
     private String name;
 
     @NotNull(message = "parentalRating may not be null")
@@ -45,7 +47,7 @@ public class Program implements Serializable {
     private String keywords;
 
     // We will languages as space separated values
-    @NotNull(message = "parentalRating may not be null")
+    @NotNull(message = "languages may not be null")
     private String languages;
 
     @NotNull
