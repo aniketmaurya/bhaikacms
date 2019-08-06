@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -223,9 +224,17 @@ public class ProgramServiceImpl implements ProgramServices {
                     Program program = addProgram(programRequest);
                     programList.add(program);
                 }
+                RestTemplate restTemplate= new RestTemplate();
+                String successURL="http:172.16.20.3:8083/email/sendSuccessEmail";
+                boolean response= restTemplate.getForObject(successURL, boolean.class);
+
             }
         } catch (Exception e) {
+            RestTemplate restTemplate= new RestTemplate();
+            String failureURL="http:172.16.20.3:8083/email/sendFailureEmail";
+            boolean response= restTemplate.getForObject(failureURL, boolean.class);
             log.debug("Error while uploading program :" + e.getMessage());
+
         }
         return programList;
     }
