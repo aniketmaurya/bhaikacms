@@ -33,5 +33,15 @@ public class CrewServiceImpl implements CrewServices {
         return Boolean.TRUE;
     }
 
-    //update Crew
+
+    public Boolean updateCrew(String id, String role){
+
+        if (!crewRepository.existsById(id))
+            return Boolean.FALSE;
+
+        Crew crew = crewRepository.findById(id).get();
+        crew.setRole(role);
+        crewRepository.save(crew);
+        return Boolean.TRUE;
+    }
 }

@@ -25,4 +25,5 @@ public interface CategoryRepository extends CrudRepository<Category, String> {
     // shivam
     @Query(value = "SELECT * FROM public.category WHERE category_name = ?1", nativeQuery = true)
     Category getCategoryByCategoryName(String categoryName);
+
 }

@@ -21,8 +21,8 @@ public class CategoryServiceImpl implements CategoryServices {
     @Override
     public Category addCategory(String categoryName, String parentName) {
 
-        if(categoryRepository.findCategoryByCategoryName(categoryName)!=null){
-            return null;
+        if (categoryRepository.findCategoryByCategoryName(categoryName)!=null){
+            return  null;
         }
 
         Category category = new Category();

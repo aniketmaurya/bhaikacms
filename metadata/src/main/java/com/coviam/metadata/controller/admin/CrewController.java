@@ -5,9 +5,6 @@ import com.coviam.metadata.services.CrewServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,5 +31,9 @@ public class CrewController {
     }
 
     //update crew
+    @PutMapping("/updateCrewRole")
+    public ResponseEntity<Boolean> updateCrewRole(@RequestParam(name = "id") String crewId,@RequestParam(name = "role") String role){
+        return ResponseEntity.ok(crewServices.updateCrew(crewId,role));
+    }
 
 }
