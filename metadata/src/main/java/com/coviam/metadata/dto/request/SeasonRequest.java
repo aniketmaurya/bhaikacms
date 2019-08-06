@@ -1,26 +1,35 @@
 package com.coviam.metadata.dto.request;
 
 import com.coviam.metadata.entity.Program;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
+@Getter
+@Setter
 public class SeasonRequest {
 
-    String id;
+    private String id;
 
-    Program programId;
+    private Program program;
 
-    Integer seasonNumber;
+    private String seasonName;
 
-    String seasonDescription;
+    private Integer seasonNumber;
 
-    // todo multiple urls: Done
+    private String seasonDescription;
+
     private Map<String, String> seasonImgUrls = new HashMap<>();
 
+    private Long creationDate;
 
-    // todo update it: Done
-    private Map<String, String> crewList = new HashMap<>();
+    private String userEmail;
+
+    private String userId;
 
 
 }

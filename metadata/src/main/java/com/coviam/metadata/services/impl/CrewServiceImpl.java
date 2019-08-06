@@ -5,6 +5,7 @@ import com.coviam.metadata.repository.CrewRepository;
 import com.coviam.metadata.services.CrewServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class CrewServiceImpl implements CrewServices {
 
     @Override
     public Page<Crew> getAllCrew(Integer pageNumber, Integer pageSize) {
-        return null;
+        return crewRepository.findAll(PageRequest.of(pageNumber, pageSize));
     }
 
     @Override

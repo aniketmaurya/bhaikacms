@@ -1,9 +1,6 @@
 package com.coviam.metadata.controller.admin;
 
-import com.coviam.metadata.entity.Crew;
 import com.coviam.metadata.entity.Language;
-import com.coviam.metadata.services.CategoryServices;
-import com.coviam.metadata.services.CrewServices;
 import com.coviam.metadata.services.LanguageServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,21 +11,15 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/admin")
 @RestController
-public class AdminController {
-
-    @Autowired
-    private CategoryServices categoryServices;
+public class LanguageController {
 
     @Autowired
     private LanguageServices languageServices;
 
-    @Autowired
-    private CrewServices crewServices;
-
     // todo add edit language methods
     @PutMapping("/addLanguage")
-    public ResponseEntity<Language> addLanguage(@RequestBody Language language) {
-        return ResponseEntity.ok(languageServices.addLanguage(language));
+    public ResponseEntity<List<Language>> addLanguage(@RequestBody List<Language> languages) {
+        return ResponseEntity.ok(languageServices.addLanguage(languages));
     }
 
     @DeleteMapping("/deleteLanguageByName")
@@ -40,10 +31,5 @@ public class AdminController {
     public ResponseEntity<List<Language>> getAllLanguage() {
         return ResponseEntity.ok(languageServices.getAllLanguage());
     }
-
-    @PutMapping("/addCrew")
-    public ResponseEntity<Boolean> addCrew(@RequestBody List<Crew> crewList) {
-        return ResponseEntity.ok(crewServices.addCrew(crewList));
-    }
-
+    //update language
 }
