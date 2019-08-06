@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,17 +29,27 @@ public class Program implements Serializable {
 
     // 1->single video, 2->multi 3->seasonal
     private String type;
+
+    @NotNull(message = "description may not be null")
     private String description;
+
+    @NotNull(message = "description may not be null")
     private String name;
+
+    @NotNull(message = "parentalRating may not be null")
     private String parentalRating;
 
     // we will store keywords as space separated values
     private String keywords;
 
     // We will languages as space separated values
+    @NotNull(message = "parentalRating may not be null")
     private String languages;
+
     private Long startDate;
+
     private Long expiryDate;
+
     private Boolean isAlive;
 
     // to store which user has uploaded this file

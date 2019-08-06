@@ -31,18 +31,22 @@ public class CategoryController {
     }
 
     @GetMapping("/getAllSubCategory")
-    public List<CategoryInfo> getAllSuCategory(@RequestParam(value = "parentName") String parentCategoryName){
+    public List<CategoryInfo> getAllSubCategory(@RequestParam(value = "parentName") String parentCategoryName) {
         return categoryService.getAllSubCategory(parentCategoryName);
     }
 
     @GetMapping("/getAllSubCategoryTree")
-    public SubCategories getAllSuCategoryTree(@RequestParam(value = "parentName") String parentCategoryName){
+    public SubCategories getAllSubCategoryTree(@RequestParam(value = "parentName") String parentCategoryName) {
         return categoryService.getAllSubCategoryTree(parentCategoryName);
     }
 
     @GetMapping("/getCompleteTree")
-    public List<SubCategories> getCompleteTree(){ return categoryService.getCompleteTree(); }
+    public List<SubCategories> getCompleteTree() {
+        return categoryService.getCompleteTree();
+    }
 
     @GetMapping("/getAllParents")
-    public List<CategoryInfo> getAllParents(){return categoryService.getAllParents();}
+    public List<CategoryInfo> getAllParents() {
+        return categoryService.getAllParents();
+    }
 }
