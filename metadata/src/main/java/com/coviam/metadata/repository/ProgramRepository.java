@@ -33,4 +33,7 @@ public interface ProgramRepository extends CrudRepository<Program, String> {
     Page<Program> findByLanguagesOrderByNameAsc(String type, Pageable page);
 
 
+    Long countByTypeIgnoreCaseStartsWith(String type);
+
+
 }

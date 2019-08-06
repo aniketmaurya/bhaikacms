@@ -345,5 +345,12 @@ public class ProgramServiceImpl implements ProgramServices {
         return programRepository.findByLanguagesOrderByNameAsc(languages, PageRequest.of(pageNumber, pageSize));
     }
 
+    @Override
+    public Long countByType(String type) {
+        if (type == null)
+            return programRepository.count();
+        return programRepository.countByTypeIgnoreCaseStartsWith(type);
+    }
+
 
 }

@@ -68,5 +68,7 @@ public interface ProgramServices {
 
     Page<Program> filterByProgramLanguage(Integer pageNumber, Integer pageSize, String languages);
 
+    Long countByType(String type);
+
 
 }

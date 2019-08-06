@@ -97,4 +97,12 @@ public class ProgramController {
         List<Program> programList = programServices.addProgramByBulkUpload(file);
         return ResponseEntity.ok(programList);
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<?> count(
+            @RequestParam(name = "programType", required = false) String type) {
+
+        log.info("Count for Program type : {} ", type);
+        return ResponseEntity.ok(programServices.countByType(type));
+    }
 }
