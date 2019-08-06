@@ -91,8 +91,6 @@ public class EpisodeServiceImpl implements EpisodeServices {
         } catch (Exception e) {
             log.debug("Error while uploading episode: {}" + e.getMessage());
         }
-        List<Episode> episodeList1 = addEpisodes(episodeList);
-        System.out.println(episodeList1);
-        return episodeList1;
+        return addEpisodes(episodeList);
     }
 }
