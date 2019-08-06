@@ -23,30 +23,12 @@ public class ImageController {
 
     private static final double MAX_IMAGE_SIZE = 5 * Math.pow(1024, 2);
     private static final double MAX_VIDEO_SIZE = 5 * Math.pow(1024, 3);
-    private static final List<String> ALLOWED_RES = Arrays.asList("780*780","1000*10000", "1200*1200");
+    private static final List<String> ALLOWED_AVATAR_RES = Arrays.asList("300*211", "780*780", "1000*10000", "1200*1200");
+    private static final List<String> ALLOWED_THUMB_RES = Arrays.asList("300*211", "780*780", "1000*10000", "1200*1200");
     private static final List<String> ALLOWED_IMAGE_EXT = Arrays.asList("jpg", "jpeg", "png");
     private static final List<String> ALLOWED_VIDEO_EXT = Arrays.asList("mp4", "3gp", "webm", "mpeg4");
     @Autowired
     private ImageService imageService;
-
-    @RequestMapping(method = RequestMethod.POST, value = "/uploadImage")
-    public ResponseEntity<ImageUploadResponse> uploadImage(@RequestParam(value = "image") MultipartFile multipartFile,
-                                                           @RequestParam(value = "type") String type) {
-
-        String fileName = multipartFile == null ? "" : multipartFile.getOriginalFilename();
-        String extension = fileName != null ? fileName.substring(fileName.lastIndexOf('.') + 1) : "";
-        List<String> allowedExt = Arrays.asList("jpg", "jpeg", "png");
-
-        if (allowedExt.contains(extension)) {
-            try {
-                return ResponseEntity.ok(imageService.uploadImage(multipartFile, "image", type));
-            } catch (Exception e) {
-                log.error("Error: {}", e.getMessage());
-                return ResponseEntity.ok(new ImageUploadResponse(fileName, ""));
-            }
-        }
-        return ResponseEntity.ok(new ImageUploadResponse(fileName, ""));
-    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/upload")
     public ResponseEntity<ImageUploadResponse> uploadFile(@RequestParam(value = "file") MultipartFile multipartFile,
@@ -60,9 +42,9 @@ public class ImageController {
                 return ResponseEntity.ok(new ImageUploadResponse("File Type Not Supported", ""));
             } else if (!checkForSize(multipartFile, fileType)) {
                 return ResponseEntity.ok(new ImageUploadResponse("File Size Exceeded", ""));
-            } else if (fileType.equalsIgnoreCase("image") && !checkForResolution(multipartFile)) {
-                return ResponseEntity.ok(new ImageUploadResponse("Image Resolution Incorrect", ""));
-            }
+            } //else if (fileType.equalsIgnoreCase("image") && !checkForResolution(multipartFile,type)) {
+//                return ResponseEntity.ok(new ImageUploadResponse("Image Resolution Incorrect", ""));
+//            }
             return ResponseEntity.ok(imageService.uploadImage(multipartFile, fileType, type));
         } catch (Exception e) {
             log.error("Error in controller catch:: {}", e.getMessage());
@@ -77,16 +59,20 @@ public class ImageController {
         return multipartFile.getSize() <= MAX_VIDEO_SIZE;
     }
 
-    private boolean checkForResolution(MultipartFile multipartFile) throws IOException {
+    private boolean checkForResolution(MultipartFile multipartFile, String type) throws IOException {
 
         BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(multipartFile.getBytes()));
 
         int height = originalImage.getHeight();
         int width = originalImage.getWidth();
 
-        log.warn("Height:: {} WIDTH:: {}", height, width);
+        log.debug("Height:: {} WIDTH:: {}", height, width);
 
-        return ALLOWED_RES.contains(height + "*" + width);
+        if (type.equalsIgnoreCase("avatar"))
+            return ALLOWED_AVATAR_RES.contains(height + "*" + width);
+        else if (type.equalsIgnoreCase("thumbnail"))
+            return ALLOWED_THUMB_RES.contains(height + "*" + width);
+        return false;
     }
 
     private boolean checkForExtension(MultipartFile multipartFile, String fileType) {

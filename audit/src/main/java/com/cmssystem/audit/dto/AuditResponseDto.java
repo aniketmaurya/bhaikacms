@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GetAuditResponseDto {
+public class AuditResponseDto {
 
     private String auditId;
     private String asset;
     private String action;
-    private long actionTime;
+    private Long actionTime;
     private String modifier;
     private String oldValue;
     private String newValue;

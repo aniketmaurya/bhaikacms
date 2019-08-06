@@ -24,10 +24,10 @@ public class Audit {
     private String asset;
     private String assetId;
     private String action;
+    private Long actionTime;
     private String modifier;
     private String oldValue;
     private String newValue;
-    private long actionTime;
-
+    private Integer flag; //0->metadata 1->user
 }
 
