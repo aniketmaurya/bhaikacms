@@ -78,4 +78,8 @@ public class ProgramController {
     public ResponseEntity<Optional<List<EmailResponse>>> getExpiredVideos() {
         return ResponseEntity.ok(Optional.of(programServices.sendExpiredToEmail()));
     }
+    @GetMapping(value = "/getAboutToExpire")
+    public ResponseEntity<Optional<List<EmailResponse>>> getAboutToExpire() {
+        return ResponseEntity.ok(Optional.of(programServices.sendAboutToExpire()));
+    }
 }

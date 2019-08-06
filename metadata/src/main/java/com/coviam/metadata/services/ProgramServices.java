@@ -26,5 +26,7 @@ public interface ProgramServices {
 
     List<EmailResponse> sendExpiredToEmail();
 
+    List<EmailResponse> sendAboutToExpire();
+
 
 }

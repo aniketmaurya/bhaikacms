@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class EmailResponse {
     private String id;
+    private String userId;
     private Long startDate;
     private Long expiryDate;
 

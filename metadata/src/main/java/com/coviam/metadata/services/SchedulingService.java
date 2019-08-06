@@ -57,4 +57,11 @@ public class SchedulingService {
         programRepository.saveAll(startTimeList);//todo save as a list
         return "Program Started";
     }
+
+//    //about to expire
+//    public String aboutToExpire(){
+//        long currentTime= System.currentTimeMillis();
+//        long check=(LocalDate.now().plusDays(2)).toDate().getTime();
+//
+//    }
 }

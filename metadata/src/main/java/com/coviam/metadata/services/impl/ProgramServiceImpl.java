@@ -11,6 +11,7 @@ import com.coviam.metadata.services.SeasonServices;
 import com.coviam.metadata.utility.AuditUtility;
 import com.coviam.metadata.utility.SearchUtility;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.LocalDate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -122,8 +123,27 @@ public class ProgramServiceImpl implements ProgramServices {
             emailResponse.setExpiryDate(temp.getExpiryDate());
             emailResponse.setId(temp.getUserId());
             emailResponse.setStartDate(temp.getStartDate());
+            emailResponse.setId(temp.getId());
             expiredResponse.add(emailResponse);
         }
         return expiredResponse;
+    }
+
+    @Override
+    public List<EmailResponse> sendAboutToExpire() {
+        List<EmailResponse> aboutToExpire= new ArrayList<>();
+        long toExpire= (LocalDate.now().plusDays(2)).toDate().getTime();
+        Page<Program> allList= programRepository.findByExpiryDateLessThan(toExpire, new PageRequest(0,10));
+        for(Program temp: allList)
+        {
+            EmailResponse emailResponse= new EmailResponse();
+            emailResponse.setExpiryDate(temp.getExpiryDate());
+            emailResponse.setId(temp.getUserId());
+            emailResponse.setStartDate(temp.getStartDate());
+            emailResponse.setId(temp.getId());
+            aboutToExpire.add(emailResponse);
+
+        }
+        return aboutToExpire;
     }
 }
