@@ -21,6 +21,10 @@ public class CategoryServiceImpl implements CategoryServices {
     @Override
     public Category addCategory(String categoryName, String parentName) {
 
+        if (categoryRepository.findCategoryByCategoryName(categoryName)!=null){
+            return  null;
+        }
+
         Category category = new Category();
 
         if (parentName == null) {
@@ -126,5 +130,14 @@ public class CategoryServiceImpl implements CategoryServices {
         }
         return categoryInfos;
     }
+
+    @Override
+    public Category updateCategory(String categoryName,String newCategoryName) {
+        Category category=categoryRepository.findCategoryByCategoryName(categoryName);
+        category.setCategoryName(newCategoryName);
+        categoryRepository.save(category);
+        return category;
+    }
+
 
 }
