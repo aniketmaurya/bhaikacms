@@ -26,10 +26,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -193,13 +190,18 @@ public class ProgramServiceImpl implements ProgramServices {
             BufferedReader br = new BufferedReader(file);
             line = br.readLine();
             String[] headers = line.split(csvSplitBy);
-            if (headers[0].equalsIgnoreCase("Program Type") && headers[1].equalsIgnoreCase("Description")
-                    && headers[2].equalsIgnoreCase("Program Name") && headers[3].equalsIgnoreCase("Parental Rating")
-                    && headers[4].equalsIgnoreCase("Keywords") && headers[5].equalsIgnoreCase("Languages")
-                    && headers[6].equalsIgnoreCase("Start Date") && headers[7].equalsIgnoreCase("Expiry Date")
-                    && headers[8].equalsIgnoreCase("Category") && headers[9].equalsIgnoreCase("Thumbnail Image Url")
-                    && headers[10].equalsIgnoreCase("Avatar Image Url")
-                    && headers[11].equalsIgnoreCase("userId")) {
+
+            String[] defaultHeaders = {"Program Type", "Description", "Program Name", "Parental Rating", "Keywords", "Languages"
+                    , "Start Date", "Expiry Date", "Category", "Thumbnail Image Url", "Avatar Image Url", "userId", "userEmail"};
+
+//            if (headers[0].equalsIgnoreCase("Program Type") && headers[1].equalsIgnoreCase("Description")
+//                    && headers[2].equalsIgnoreCase("Program Name") && headers[3].equalsIgnoreCase("Parental Rating")
+//                    && headers[4].equalsIgnoreCase("Keywords") && headers[5].equalsIgnoreCase("Languages")
+//                    && headers[6].equalsIgnoreCase("Start Date") && headers[7].equalsIgnoreCase("Expiry Date")
+//                    && headers[8].equalsIgnoreCase("Category") && headers[9].equalsIgnoreCase("Thumbnail Image Url")
+//                    && headers[10].equalsIgnoreCase("Avatar Image Url") && headers[11].equalsIgnoreCase("userId")) {
+
+            if (Arrays.equals(headers, defaultHeaders)) {
                 while ((line = br.readLine()) != null) {
                     String[] records = line.split(csvSplitBy);
                     HashMap<String, String> images = new HashMap<>();
@@ -213,13 +215,13 @@ public class ProgramServiceImpl implements ProgramServices {
                             .keywords(records[4])
                             .languages(records[5])
                             .category(categoryRepository.getCategoryByCategoryName(records[8]))
-                            .isAlive(Boolean.TRUE)
+                            .isAlive((System.currentTimeMillis() < (new Date(records[6])).getTime()) ? Boolean.FALSE : Boolean.TRUE)
                             .imgUrls(images)
                             .startDate((new SimpleDateFormat("dd/MM/yyyy").parse(records[6])).getTime())
                             .expiryDate((new SimpleDateFormat("dd/MM/yyyy").parse(records[7])).getTime())
                             .userId(records[11])
+                            .userEmail(records[12])
                             .build();
-                    System.out.println(programRequest);
                     Program program = addProgram(programRequest);
                     programList.add(program);
                 }
