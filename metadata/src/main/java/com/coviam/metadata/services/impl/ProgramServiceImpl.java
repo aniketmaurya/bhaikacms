@@ -191,17 +191,17 @@ public class ProgramServiceImpl implements ProgramServices {
             line = br.readLine();
             String[] headers = line.split(csvSplitBy);
 
-            String[] defaultHeaders = {"Program Type", "Description", "Program Name", "Parental Rating", "Keywords", "Languages"
-                    , "Start Date", "Expiry Date", "Category", "Thumbnail Image Url", "Avatar Image Url", "userId", "userEmail"};
+//            String[] defaultHeaders = {"Program Type", "Description", "Program Name", "Parental Rating", "Keywords", "Languages"
+//                    , "Start Date", "Expiry Date", "Category", "Thumbnail Image Url", "Avatar Image Url", "userId", "userEmail"};
 
-//            if (headers[0].equalsIgnoreCase("Program Type") && headers[1].equalsIgnoreCase("Description")
-//                    && headers[2].equalsIgnoreCase("Program Name") && headers[3].equalsIgnoreCase("Parental Rating")
-//                    && headers[4].equalsIgnoreCase("Keywords") && headers[5].equalsIgnoreCase("Languages")
-//                    && headers[6].equalsIgnoreCase("Start Date") && headers[7].equalsIgnoreCase("Expiry Date")
-//                    && headers[8].equalsIgnoreCase("Category") && headers[9].equalsIgnoreCase("Thumbnail Image Url")
-//                    && headers[10].equalsIgnoreCase("Avatar Image Url") && headers[11].equalsIgnoreCase("userId")) {
+            if (headers[0].equalsIgnoreCase("Program Type") && headers[1].equalsIgnoreCase("Description")
+                    && headers[2].equalsIgnoreCase("Program Name") && headers[3].equalsIgnoreCase("Parental Rating")
+                    && headers[4].equalsIgnoreCase("Keywords") && headers[5].equalsIgnoreCase("Languages")
+                    && headers[6].equalsIgnoreCase("Start Date") && headers[7].equalsIgnoreCase("Expiry Date")
+                    && headers[8].equalsIgnoreCase("Category") && headers[9].equalsIgnoreCase("Thumbnail Image Url")
+                    && headers[10].equalsIgnoreCase("Avatar Image Url") && headers[11].equalsIgnoreCase("userId")) {
 
-            if (Arrays.equals(headers, defaultHeaders)) {
+//            if (Arrays.equals(headers, defaultHeaders)) {
                 while ((line = br.readLine()) != null) {
                     String[] records = line.split(csvSplitBy);
                     HashMap<String, String> images = new HashMap<>();

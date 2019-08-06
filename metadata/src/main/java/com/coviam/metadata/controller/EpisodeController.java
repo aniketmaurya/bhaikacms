@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -33,5 +36,15 @@ public class EpisodeController {
                                                         @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
                                                         @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(episodeService.getEpisodesBySeasonId(seasonId, pageNumber, pageSize));
+    }
+
+    @RequestMapping(path = "/addEpisodeByBulk", method = RequestMethod.POST)
+    public ResponseEntity<List<Episode>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+        String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
+        File file = new File(uploadingDir + multipartFile.getOriginalFilename());
+        multipartFile.transferTo(file);
+        List<Episode> episodeList = episodeService.addEpisodeByBulkUpload(file);
+        //file.delete();
+        return ResponseEntity.ok(episodeList);
     }
 }

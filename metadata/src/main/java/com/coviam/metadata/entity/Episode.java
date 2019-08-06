@@ -1,6 +1,7 @@
 package com.coviam.metadata.entity;
 
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLHStoreType;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 @Entity
 @Data
+@Builder
 @Table(name = Episode.TABLE_NAME)
 @TypeDef(name = "hstore", typeClass = PostgreSQLHStoreType.class)
 public class Episode implements Serializable {

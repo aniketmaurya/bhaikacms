@@ -16,6 +16,4 @@ public interface ProgramRepository extends CrudRepository<Program, String> {
 
 
     Page<Program> findByStartDateLessThan(Long currentDate, Pageable page);// to
-
-
 }

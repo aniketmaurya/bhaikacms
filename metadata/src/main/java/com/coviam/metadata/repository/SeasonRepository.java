@@ -3,6 +3,7 @@ package com.coviam.metadata.repository;
 import com.coviam.metadata.entity.Season;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,5 +21,8 @@ public interface SeasonRepository extends CrudRepository<Season, String> {
 
     Optional<List<Season>> findByProgramId(String programId);
 
+    Optional<Season> findById(String seasonId);
 
+    @Query(value = "SELECT program_id FROM public.season where season_name = ?1", nativeQuery = true)
+    String findProgramIdBySeasonName(String seasonName);
 }
