@@ -1,19 +1,15 @@
 package com.cmssystem.useradmin.dto;
 
-
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class UserAdminResponseDto {
+public class Change {
+    private String fieldChanged;
+    private String oldValue;
+    private String newValue;
 
-    private String email;
-    private String name;
-    private int roleId;
-    private boolean isActive;
 }

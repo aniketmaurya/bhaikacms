@@ -10,13 +10,13 @@ import com.cmssystem.useradmin.utility.AuditUtility;
 import com.cmssystem.useradmin.utility.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 //import com.cmssystem.useradmin.dto.UserAdminResponseDto;
@@ -61,7 +61,7 @@ public class UserAdminServiceImpl implements UserAdminService {
             userAdminAddResponseDto.setUserId(userAdmin.getId());
 
             AuditUtility auditUtility = new AuditUtility();
-            auditUtility.addAudit(userAdmin1.getId(),userAdmin1.getName());
+            auditUtility.addAudit(userAdmin1.getName(), userAdmin1.getEmail(), userAdmin1.getEmail(), new ArrayList<Change>());
 
         }
         return userAdminAddResponseDto;
@@ -70,25 +70,26 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
     @Override
-    public UserAdminResponseDto searchUser(String name) {
+    public Page<UserAdminResponseDto> searchUser(String input, Integer pageNumber, Integer pageSize) {
 
-        UserAdmin userAdmin = userAdminRepository.findByName(name);
+        Page<UserAdmin> pageNew = userAdminRepository
+                .findByNameIgnoreCaseStartingWithOrEmailStartingWith(input, input, PageRequest.of(pageNumber, pageSize));
+        return pageNew.map(this::convertToDtoNew);
 
-        UserAdminResponseDto userAdminResponseDto = new UserAdminResponseDto();
-        userAdminResponseDto.setEmail(userAdmin.getEmail());
-        userAdminResponseDto.setName(name);
-        userAdminResponseDto.setRoleId(userAdmin.getRoleId());
-        userAdminResponseDto.setActive(userAdmin.isActive());
-        log.debug("details: {}", userAdminResponseDto.toString());
-        log.debug("Gave details for {}", name);
+    }
 
-        return userAdminResponseDto;
-
-
+    private UserAdminResponseDto convertToDtoNew(UserAdmin userAdmin) {
+        return UserAdminResponseDto.builder()
+                .email(userAdmin.getEmail())
+                .name(userAdmin.getName())
+                .roleId(userAdmin.getRoleId())
+                .isActive(userAdmin.isActive())
+                .build();
     }
 
     @Override
     public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
+
         Page<UserAdmin> page = userAdminRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return page.map(this::convertToDto);
     }
@@ -108,16 +109,19 @@ public class UserAdminServiceImpl implements UserAdminService {
         UserAdmin userAdmin = userAdminRepository.findById(idDelete).get();
         UserAdmin userAdmin1 = userAdminRepository.findById(id).get();
         UserDeleteResponseDto userDeleteResponseDto = new UserDeleteResponseDto();
-        if (userAdmin != null && (userAdmin1.getRoleId()) == 1 && (userAdmin.isActive() != false)) {
-            userAdmin.setActive(false);
+        if (userAdmin != null && (userAdmin1.getRoleId()) == 1) {
+            userAdmin.setActive(!userAdmin.isActive());
             userDeleteResponseDto.setDeleted(true);
+            userDeleteResponseDto.setMessage(userAdmin.getName() + " got disabled " + "by " + userAdmin1.getName());
             userAdminRepository.save(userAdmin);
             AuditUtility auditUtility = new AuditUtility();
-            auditUtility.deleteAudit(userAdmin.getId(),userAdmin1.getId(),userAdmin.getName(),userAdmin1.getName());
+            auditUtility.deleteAudit(userAdmin.getName(), userAdmin.getEmail(), userAdmin1.getEmail(), new ArrayList<Change>());
+
             return userDeleteResponseDto;
         } else {
             userAdmin.setActive(true);
             userDeleteResponseDto.setDeleted(false);
+            userDeleteResponseDto.setMessage("Can't Delete");
             userAdminRepository.save(userAdmin);
             return userDeleteResponseDto;
         }
@@ -161,6 +165,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         userLoginResponseDto.setMessage("Logged in Successfully !!");
         userLoginResponseDto.setUserId(userAdmin.getId());
         userLoginResponseDto.setRoleId(userAdmin.getRoleId());
+        userLoginResponseDto.setUserEmail(userAdmin.getEmail());
         userLoginResponseDto.setLoginTime(System.currentTimeMillis());
         log.debug("Time" + System.currentTimeMillis());
         log.debug(userLoginResponseDto.getMessage());
@@ -189,17 +194,61 @@ public class UserAdminServiceImpl implements UserAdminService {
         log.debug("UserId: " + userId);
         boolean checkUserLogin = userAdminRepository.existsById(userId);
 
-        if(checkUserLogin){
+        if (checkUserLogin) {
             log.debug("Token exist in the db.");
-                checkUserLogin =  true;
-            }
-            else {
-                log.debug("No match for id");
-                checkUserLogin =  false;
-            }
+            checkUserLogin = true;
+        } else {
+            log.debug("No match for id");
+            checkUserLogin = false;
+        }
 
         return checkUserLogin;
     }
+
+    @Override
+    public Long countUser(Integer roleId) {
+        Long countUser = userAdminRepository.countByRoleId(roleId);
+        return countUser;
+    }
+
+    @Override
+    public Boolean editChanges(EditDetailsDto editDetailsDto) {
+        Change change = new Change();
+        String fieldChanged;
+        String oldValue;
+        String newValue;
+        Boolean response = userAdminRepository.existsById(editDetailsDto.getId());
+        UserAdmin userAdmin = userAdminRepository.findById(editDetailsDto.getId()).get();
+        if (editDetailsDto.getName() != null) {
+            fieldChanged = "Name";
+            oldValue = userAdmin.getName();
+            newValue = editDetailsDto.getName();
+            userAdmin.setName(editDetailsDto.getName());
+            userAdminRepository.save(userAdmin);
+        }
+        if (editDetailsDto.getRoleId() != null) {
+            fieldChanged = "RoleId";
+            oldValue = Integer.toString(userAdmin.getRoleId());
+            newValue = Integer.toString(editDetailsDto.getRoleId());
+            userAdmin.setRoleId(editDetailsDto.getRoleId());
+            userAdminRepository.save(userAdmin);
+        }
+        if (editDetailsDto.getIsActive() != null) {
+            fieldChanged = "Active Status";
+            oldValue = Boolean.toString(userAdmin.isActive());
+            newValue = Boolean.toString(editDetailsDto.getIsActive());
+            userAdmin.setActive(!userAdmin.isActive());
+            userAdminRepository.save(userAdmin);
+        }
+
+        AuditUtility auditUtility = new AuditUtility();
+
+
+        auditUtility.deleteAudit(userAdmin.getName(), userAdmin.getEmail(), userAdmin.getEmail(), new ArrayList<Change>());
+
+        return response;
+    }
+
 
     @Override
     public boolean logOut(LogOutDto logOutDto) {

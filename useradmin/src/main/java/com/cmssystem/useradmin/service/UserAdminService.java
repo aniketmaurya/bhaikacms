@@ -9,7 +9,8 @@ public interface UserAdminService {
 
     UserAdminAddResponseDto addUser(UserAdminDetailsDto userAdminDetailsDto);
 
-    UserAdminResponseDto searchUser(String name);
+
+    Page<UserAdminResponseDto> searchUser(String input, Integer pageNumber, Integer pageSize);
 
 
     Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize);
@@ -25,4 +26,8 @@ public interface UserAdminService {
     UserEmailDto getUserEmailId(String id);
 
     boolean validateLogin(String userId);
+
+    Long countUser(Integer roleId);
+
+    Boolean editChanges(EditDetailsDto editDetailsDto);
 }

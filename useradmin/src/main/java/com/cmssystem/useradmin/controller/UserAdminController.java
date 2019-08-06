@@ -33,7 +33,7 @@ public class UserAdminController {
         String response = "";
         UserAdminAddResponseDto userAdminAddResponseDto = new UserAdminAddResponseDto();
 
-        log.warn("USERADMIN DETAIL:  {}",userAdminDetailsDto);
+        log.warn("USERADMIN DETAIL:  {}", userAdminDetailsDto);
 
 
         if (userAdminDetailsDto.getName() == null || userAdminDetailsDto.getPassword() == null ||
@@ -49,8 +49,8 @@ public class UserAdminController {
 
 
     @GetMapping(value = "/searchUser")
-    public ResponseEntity<?> searchUser(@RequestParam(value = "name") String name) {
-        UserAdminResponseDto userAdminResponseDto = userAdminService.searchUser(name);
+    public ResponseEntity<?> searchUser(@RequestParam(value = "input") String input, @RequestParam(value = "pageNumber") Integer pageNumber, @RequestParam(value = "pageSize") Integer pageSize) {
+        Page<UserAdminResponseDto> userAdminResponseDto = userAdminService.searchUser(input, pageNumber, pageSize);
         return new ResponseEntity<>(userAdminResponseDto, HttpStatus.OK);
     }
 
@@ -86,11 +86,11 @@ public class UserAdminController {
     }
 
     @PostMapping(path = "/validateLogin")
-    public ResponseEntity<?> validateLogin(@RequestBody LoginValidateDto loginValidateDTO){
+    public ResponseEntity<?> validateLogin(@RequestBody LoginValidateDto loginValidateDTO) {
 
         boolean serviceResponse = false;
 
-        if(loginValidateDTO.getUserId()==null || loginValidateDTO.getUserId().equals("")) {
+        if (loginValidateDTO.getUserId() == null || loginValidateDTO.getUserId().equals("")) {
             System.out.println("Not logged in");
             return new ResponseEntity<>(serviceResponse, HttpStatus.OK);
         }
@@ -111,6 +111,18 @@ public class UserAdminController {
     public ResponseEntity<?> getUserEmailId(@RequestParam(value = "id") String id) {
         UserEmailDto userEmailDto = userAdminService.getUserEmailId(id);
         return new ResponseEntity<>(userEmailDto, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/countUser")
+    public ResponseEntity countUser(Integer roleId) {
+        Long userCount = userAdminService.countUser(roleId);
+        return new ResponseEntity<>(userCount, HttpStatus.OK);
+    }
+
+    @PostMapping("/editCredentials")
+    public ResponseEntity<?> editCredentials(@RequestBody EditDetailsDto editDetailsDto) {
+        Boolean response = userAdminService.editChanges(editDetailsDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

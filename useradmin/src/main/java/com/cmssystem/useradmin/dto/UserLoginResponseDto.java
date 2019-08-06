@@ -18,5 +18,6 @@ public class UserLoginResponseDto implements Serializable {
     private String userId;
     private int roleId;
     private long loginTime;
+    private String userEmail;
 
 }

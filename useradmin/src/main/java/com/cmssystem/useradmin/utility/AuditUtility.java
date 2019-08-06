@@ -1,13 +1,11 @@
 package com.cmssystem.useradmin.utility;
 
 import com.cmssystem.useradmin.dto.AuditRequestDto;
-import com.cmssystem.useradmin.entity.UserAdmin;
-import com.cmssystem.useradmin.repository.UserAdminRepository;
+import com.cmssystem.useradmin.dto.Change;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Optional;
+import java.util.List;
 
 
 @Slf4j
@@ -20,31 +18,28 @@ public class AuditUtility {
         Boolean response = restTemplate.postForObject(auditServiceUrl + "/audit/addAudit", auditRequest, Boolean.class);
     }
 
-    public void addAudit(String userId,String userName) {
+    public void addAudit(String userName, String userEmail, String modifierEmail, List<Change> changes) {
 
-           log.warn("Id is : {} and name: {}", userId,userName);
+        Change change = new Change();
+        AuditRequestDto auditRequestDto = AuditRequestDto.builder()
+                .asset(userName)
+                .assetId(userEmail)
+                .action("ADDED")
+                .modifier(modifierEmail)
+                .changes(changes).build();
 
-
-            AuditRequestDto auditRequestDto = AuditRequestDto.builder()
-                    .contentId(userId)
-                    .contentName("User Added")
-                    .newContent("User Added")
-                    .actionName(userName)
-                    .actionTime(System.currentTimeMillis())
-                    .actionBy(userName).build();
-
-            callAudit(auditRequestDto);
+        callAudit(auditRequestDto);
     }
 
-    public void deleteAudit(String userId,String userId1,String userName,String userName1) {
+    public void deleteAudit(String userName, String userEmail, String modifierEmail, List<Change> changes) {
 
+        Change change = new Change();
         AuditRequestDto auditRequestDto = AuditRequestDto.builder()
-                .contentId(userId1)
-                .contentName("User Deleted")
-                .newContent("User Deleted")
-                .actionName(userName +" got deleted")
-                .actionTime(System.currentTimeMillis())
-                .actionBy(userName1).build();
+                .asset(userName)
+                .assetId(userEmail)
+                .action("DELETED")
+                .modifier(modifierEmail)
+                .changes(changes).build();
 
         callAudit(auditRequestDto);
     }

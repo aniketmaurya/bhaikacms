@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDeleteResponseDto {
     boolean isDeleted;
+    String message;
 }
