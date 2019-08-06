@@ -28,7 +28,10 @@ public class CrewServiceImpl implements CrewServices {
     }
 
     @Override
-    public Boolean deleteCrew(String role, String name) {
-        return null;
+    public Boolean deleteCrew(String crewId) {
+        crewRepository.deleteById(crewId);
+        return Boolean.TRUE;
     }
+
+    //update Crew
 }

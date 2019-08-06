@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = Program.TABLE_NAME)
+@Table(name = Language.TABLE_NAME)
 @TypeDef(name = "hstore", typeClass = PostgreSQLHStoreType.class)
 public class Language implements Serializable {
 
@@ -21,7 +21,7 @@ public class Language implements Serializable {
     @Id
     @GeneratedValue(generator = "ep_generator")
     @GenericGenerator(name = "ep_generator", strategy = "uuid2")
-    @Column(name = Program.ID_COLUMN)
+    @Column(name = Language.ID_COLUMN)
     private String id;
 
     private String name;

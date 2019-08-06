@@ -71,7 +71,7 @@ public class ProgramServiceImpl implements ProgramServices {
 
         log.info("Adding program programName: {}", program.getName());
 
-        searchUtility.addToSearch(program1);
+//        searchUtility.addToSearch(program1);
 
 
         return program1;

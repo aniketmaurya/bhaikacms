@@ -11,5 +11,5 @@ public interface CrewServices {
 
     Page<Crew> getAllCrew(Integer pageNumber, Integer pageSize);
 
-    Boolean deleteCrew(String role, String name);
+    Boolean deleteCrew(String crewId);
 }
