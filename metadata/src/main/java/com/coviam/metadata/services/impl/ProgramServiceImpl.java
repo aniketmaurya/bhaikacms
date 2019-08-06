@@ -116,8 +116,8 @@ public class ProgramServiceImpl implements ProgramServices {
     @Override
     public List<EmailResponse> sendExpiredToEmail() {
         List<EmailResponse> expiredResponse = new ArrayList<>();
-        long currentTime = System.currentTimeMillis();
-        Page<Program> expired = programRepository.findByStartDateLessThan(currentTime, new PageRequest(0, 10));
+        Long currentTime = System.currentTimeMillis();
+        Page<Program> expired = programRepository.findByStartDateLessThan(currentTime,  PageRequest.of(0, 10));
         for (Program temp : expired) {
             EmailResponse emailResponse = new EmailResponse();
             emailResponse.setExpiryDate(temp.getExpiryDate());
@@ -132,8 +132,8 @@ public class ProgramServiceImpl implements ProgramServices {
     @Override
     public List<EmailResponse> sendAboutToExpire() {
         List<EmailResponse> aboutToExpire= new ArrayList<>();
-        long toExpire= (LocalDate.now().plusDays(2)).toDate().getTime();
-        Page<Program> allList= programRepository.findByExpiryDateLessThan(toExpire, new PageRequest(0,10));
+        Long toExpire= (LocalDate.now().plusDays(2)).toDate().getTime();
+        Page<Program> allList= programRepository.findByExpiryDateLessThan(toExpire,  PageRequest.of(0,10));
         for(Program temp: allList)
         {
             EmailResponse emailResponse= new EmailResponse();
