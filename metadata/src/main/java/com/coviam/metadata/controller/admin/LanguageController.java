@@ -17,13 +17,7 @@ import java.util.List;
 public class LanguageController {
 
     @Autowired
-    private CategoryServices categoryServices;
-
-    @Autowired
     private LanguageServices languageServices;
-
-    @Autowired
-    private CrewServices crewServices;
 
     // todo add edit language methods
     @PutMapping("/addLanguage")
@@ -41,9 +35,7 @@ public class LanguageController {
         return ResponseEntity.ok(languageServices.getAllLanguage());
     }
 
-    @PutMapping("/addCrew")
-    public ResponseEntity<Boolean> addCrew(@RequestBody List<Crew> crewList) {
-        return ResponseEntity.ok(crewServices.addCrew(crewList));
-    }
+    //update language
+
 
 }

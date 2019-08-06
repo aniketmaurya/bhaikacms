@@ -45,4 +45,6 @@ public class CategoryController {
 
     @GetMapping("/getAllParents")
     public List<CategoryInfo> getAllParents(){return categoryService.getAllParents();}
+
+    //update category
 }
