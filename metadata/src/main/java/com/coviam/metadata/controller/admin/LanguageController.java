@@ -17,8 +17,8 @@ public class LanguageController {
     private LanguageServices languageServices;
 
     // todo add edit language methods
-    @PutMapping("/addLanguage")
-    public ResponseEntity<List<Language>> addLanguage(@RequestBody List<Language> languages) {
+    @PostMapping("/addLanguage")
+    public ResponseEntity<Boolean> addLanguage(@RequestBody List<Language> languages) {
         return ResponseEntity.ok(languageServices.addLanguage(languages));
     }
 
@@ -32,4 +32,11 @@ public class LanguageController {
         return ResponseEntity.ok(languageServices.getAllLanguage());
     }
     //update language
+    @PutMapping("/editLanguage")
+    public ResponseEntity<?> editName(
+            @RequestParam(name = "id") String id,
+            @RequestParam(name = "newName") String newName) {
+
+        return ResponseEntity.ok(languageServices.updateLanguage(id, newName));
+    }
 }

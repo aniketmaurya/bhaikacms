@@ -17,8 +17,15 @@ public class LanguageServiceImpl implements LanguageServices {
     private LanguageRepository languageRepository;
 
     @Override
-    public List<Language> addLanguage(List<Language> language) {
-        return (List<Language>) languageRepository.saveAll(language);
+    public Boolean addLanguage(List<Language> languages) {
+
+        for (Language language : languages) {
+            if (languageRepository.findByNameIgnoreCaseContaining(language.getName()).size() > 0) {
+                return Boolean.FALSE;
+            }
+        }
+        languageRepository.saveAll(languages);
+        return Boolean.TRUE;
     }
 
     @Transactional
@@ -32,4 +39,17 @@ public class LanguageServiceImpl implements LanguageServices {
     public List<Language> getAllLanguage() {
         return languageRepository.findAll();
     }
+
+    @Override
+    public Boolean updateLanguage(String id, String newName) {
+
+        if (!languageRepository.existsById(id))
+            return Boolean.FALSE;
+
+        Language language = languageRepository.findById(id).get();
+        language.setName(newName);
+        languageRepository.save(language);
+        return Boolean.TRUE;
+    }
+
 }

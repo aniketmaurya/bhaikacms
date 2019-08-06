@@ -12,4 +12,8 @@ public interface LanguageRepository extends CrudRepository<Language, String> {
     List<Language> findAll();
 
 
+    List<Language> findByNameIgnoreCaseContaining(String name);
+
+
+
 }

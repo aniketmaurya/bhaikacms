@@ -35,9 +35,6 @@ import java.util.Optional;
 @Slf4j
 public class ProgramServiceImpl implements ProgramServices {
 
-    private final String ADD = "ADD";
-    private final String UPDATE = "UPDATE";
-    private final String DELETE = "DELETE";
     @Autowired
     private ProgramRepository programRepository;
     @Autowired
@@ -82,6 +79,7 @@ public class ProgramServiceImpl implements ProgramServices {
 
         return program1;
     }
+
 
     @Transactional
     @Override
