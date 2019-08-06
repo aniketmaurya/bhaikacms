@@ -15,7 +15,7 @@ public interface ProgramRepository extends CrudRepository<Program, String> {
     Page<Program> findByExpiryDateLessThan(long expiryDate, Pageable page);//todo make it paginated
 
     //@Query(value = "update test set is_alive=true where start_date<?1 ", nativeQuery = true)
-    Page<Program> findByStartDateLessThan(long currentDate, Pageable page);// to
+    Page<Program> findByStartDateLessThan(long currentDate, Pageable page);
 
 
 }

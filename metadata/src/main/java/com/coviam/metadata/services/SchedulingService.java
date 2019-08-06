@@ -24,20 +24,20 @@ public class SchedulingService {
     //for soft delete
     @Scheduled(fixedRate = 1000)
     public String expiryDetection() {
-//        log.error("running expiryDetection");
-        long date = System.currentTimeMillis();
-        List<Program> expired = null;
-        expired = programRepository.findByExpiryDateLessThan(date, new PageRequest(0, 100)).getContent();
-        List<Program> softDelete = new ArrayList<>();
-        for (Program temp : expired) {
-            temp.setIsAlive(false);
-            softDelete.add(temp);
-        }
-        programRepository.saveAll(softDelete);
-
-        long check = (LocalDate.now().minusDays(30)).toDate().getTime();
-        List<Program> hardDelete = programRepository.findByExpiryDateLessThan(check, new PageRequest(0, 10)).getContent();
-        programRepository.deleteAll(hardDelete);
+////        log.error("running expiryDetection");
+//        long date = System.currentTimeMillis();
+//        List<Program> expired = null;
+//        expired = programRepository.findByExpiryDateLessThan(date, new PageRequest(0, 100)).getContent();
+//        List<Program> softDelete = new ArrayList<>();
+//        for (Program temp : expired) {
+//            temp.setIsAlive(false);
+//            softDelete.add(temp);
+//        }
+//        programRepository.saveAll(softDelete);
+//
+//        long check = (LocalDate.now().minusDays(30)).toDate().getTime();
+//        List<Program> hardDelete = programRepository.findByExpiryDateLessThan(check, new PageRequest(0, 10)).getContent();
+//        programRepository.deleteAll(hardDelete);
 
         return "Successfully deleted";
 
@@ -47,15 +47,15 @@ public class SchedulingService {
     @Scheduled(fixedRate = 5000)
     public String startProgram() {
 //        log.error("Apoorv ka service start");
-        long currentTime = System.currentTimeMillis();
-        Page<Program> startTimeList = programRepository.findByStartDateLessThan(currentTime, new PageRequest(0, 10));
-        for (Program temp : startTimeList) {
-            temp.setIsAlive(false);
-            if (temp.getExpiryDate() > temp.getStartDate()) {
-                temp.setIsAlive(true);
-            }
-        }
-        programRepository.saveAll(startTimeList);//todo save as a list
+//        long currentTime = System.currentTimeMillis();
+//        Page<Program> startTimeList = programRepository.findByStartDateLessThan(currentTime, new PageRequest(0, 10));
+//        for (Program temp : startTimeList) {
+//            temp.setIsAlive(false);
+//            if (temp.getExpiryDate() > temp.getStartDate()) {
+//                temp.setIsAlive(true);
+//            }
+//        }
+//        programRepository.saveAll(startTimeList);//todo save as a list
         return "Program Started";
     }
 }

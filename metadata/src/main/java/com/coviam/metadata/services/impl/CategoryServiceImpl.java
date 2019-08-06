@@ -39,7 +39,9 @@ public class CategoryServiceImpl implements CategoryServices {
 
     @Override
     public boolean deleteCategoryById(String categoryId) {
+
         List<Category> childList = categoryRepository.findChildByCategoryId(categoryId);
+
         if (childList.isEmpty()) {
             categoryRepository.deleteById(categoryId);
             return true;

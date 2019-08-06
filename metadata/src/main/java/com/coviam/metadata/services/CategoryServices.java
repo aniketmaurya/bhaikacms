@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface CategoryServices {
 
+    //give error if category already exists
     Category addCategory(String categoryName, String parentName);
 
     boolean deleteCategoryById(String categoryId);
