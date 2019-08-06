@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,21 +27,39 @@ public class Program implements Serializable {
     @Column(name = Program.ID_COLUMN)
     private String id;
 
+    // 1->single video, 2->multi 3->seasonal
+    @NotNull
     private String type;
+
+    @NotNull(message = "description may not be null")
+    //@Size(min = 10)
     private String description;
+
+    @NotNull(message = "name may not be null")
+    // @Size(min = 2)
     private String name;
+
+    @NotNull(message = "parentalRating may not be null")
     private String parentalRating;
 
     // we will store keywords as space separated values
+    @NotNull
     private String keywords;
 
     // We will languages as space separated values
+    @NotNull(message = "languages may not be null")
     private String languages;
+
+    @NotNull
     private Long startDate;
+
+    @NotNull
     private Long expiryDate;
+
     private Boolean isAlive;
 
     // to store which user has uploaded this file
+    @NotNull
     private String userId;
 
     //    private String author;
@@ -51,6 +70,9 @@ public class Program implements Serializable {
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
     private Map<String, String> imgUrls = new HashMap<>();
+
+
+    private Long creationDate;
 
 
     @Override
@@ -71,18 +93,4 @@ public class Program implements Serializable {
                 ", imgUrls=" + imgUrls +
                 '}';
     }
-/*
-    public Map<String, String> toMap() {
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("name", getName());
-        hashMap.put("type", getType());
-        hashMap.put("description", getDescription());
-        hashMap.put("keywords", getKeywords());
-        hashMap.put("languages", getLanguages());
-        hashMap.put("startDate", getStartDate().toString());
-        hashMap.put("expiryDate", getExpiryDate().toString());
-        hashMap.put("parentalRating", getParentalRating());
-
-        return hashMap;
-    }*/
 }

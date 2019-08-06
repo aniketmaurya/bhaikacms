@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,21 +30,28 @@ public class Episode implements Serializable {
     @JoinColumn(name = "season_id", nullable = false)
     private Season season;
 
+    @NotNull
     private Integer episodeNumber;
 
+    @NotNull
     private String episodeTitle;
 
+    @NotNull
     private String episodeDescription;
 
     private String episodeVideoUrl;
 
+    private Long creationDate;
+
     // todo multiple imgs: Done
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
-    private Map<String, String> episodeImageUrls = new HashMap<>();
+    @NotNull
+    private Map<String, String> episodeImgUrls = new HashMap<>();
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
+    @NotNull
     private Map<String, String> crewList = new HashMap<>();
 
     @Override
@@ -55,7 +63,7 @@ public class Episode implements Serializable {
                 ", episodeTitle='" + episodeTitle + '\'' +
                 ", episodeDescription='" + episodeDescription + '\'' +
                 ", episodeVideoUrl='" + episodeVideoUrl + '\'' +
-                ", episodeImageUrls=" + episodeImageUrls +
+                ", episodeImageUrls=" + episodeImgUrls +
                 ", crewList=" + crewList +
                 '}';
     }

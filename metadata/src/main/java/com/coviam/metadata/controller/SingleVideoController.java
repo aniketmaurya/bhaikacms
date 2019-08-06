@@ -21,7 +21,7 @@ public class SingleVideoController {
         return ResponseEntity.ok(singleVideoServices.addEpisodes(singleVideo));
     }
 
-    @GetMapping("/deleteSingleVideo")
+    @PostMapping("/deleteSingleVideo")
     public ResponseEntity<Boolean> deleteSingleVideo(@RequestParam(name = "id") String singleVideoId) {
         return ResponseEntity.ok(singleVideoServices.deleteEpisode(singleVideoId));
     }

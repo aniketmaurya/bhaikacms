@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,15 +29,20 @@ public class Season {
     @JoinColumn(name = "program_id", nullable = false)
     private Program program;
 
+    @NotNull
     private String seasonName;
 
+    @NotNull
     private Integer seasonNumber;
 
+    @NotNull
     private String seasonDescription;
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
     private Map<String, String> seasonImgUrls = new HashMap<>();
+
+    private Long creationDate;
 
 
     @Override
