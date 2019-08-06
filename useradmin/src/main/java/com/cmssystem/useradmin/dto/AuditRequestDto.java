@@ -19,6 +19,6 @@ public class AuditRequestDto {
     private String action; //(ADDED/DELETED/MODIFIED)
     private String modifier; //(email id of user/admin who performed the change)
     private List<Change> changes; //(Changes=>fieldChanged, oldValue, newValue)
-
+    private Integer flag=1;
 
 }

@@ -5,6 +5,7 @@ import com.cmssystem.useradmin.dto.Change;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,7 +21,6 @@ public class AuditUtility {
 
     public void addAudit(String userName, String userEmail, String modifierEmail, List<Change> changes) {
 
-        Change change = new Change();
         AuditRequestDto auditRequestDto = AuditRequestDto.builder()
                 .asset(userName)
                 .assetId(userEmail)
@@ -33,7 +33,6 @@ public class AuditUtility {
 
     public void deleteAudit(String userName, String userEmail, String modifierEmail, List<Change> changes) {
 
-        Change change = new Change();
         AuditRequestDto auditRequestDto = AuditRequestDto.builder()
                 .asset(userName)
                 .assetId(userEmail)
@@ -45,4 +44,15 @@ public class AuditUtility {
     }
 
 
+    public void editAudit(String userName, String userEmail, String modifierEmail, List<Change> changes) {
+        AuditRequestDto auditRequestDto = AuditRequestDto.builder()
+                .asset(userName)
+                .assetId(userEmail)
+                .action("EDITED")
+                .modifier(modifierEmail)
+                .changes(changes).build();
+
+        callAudit(auditRequestDto);
+
+    }
 }

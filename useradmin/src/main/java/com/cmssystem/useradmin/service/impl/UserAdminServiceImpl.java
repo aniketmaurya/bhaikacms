@@ -14,9 +14,13 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 //import com.cmssystem.useradmin.dto.UserAdminResponseDto;
@@ -90,7 +94,9 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Override
     public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
 
-        Page<UserAdmin> page = userAdminRepository.findAll(PageRequest.of(pageNumber, pageSize));
+        Page<UserAdmin> page = userAdminRepository.findAll(PageRequest.of(pageNumber, pageSize,
+                Sort.by(Arrays.asList(new Sort.Order(Sort.Direction.ASC,"name"),
+                        new Sort.Order(Sort.Direction.ASC,"isActive")))));
         return page.map(this::convertToDto);
     }
 
@@ -219,11 +225,13 @@ public class UserAdminServiceImpl implements UserAdminService {
         String newValue;
         Boolean response = userAdminRepository.existsById(editDetailsDto.getId());
         UserAdmin userAdmin = userAdminRepository.findById(editDetailsDto.getId()).get();
+        List<Change> changes = new ArrayList<>();
         if (editDetailsDto.getName() != null) {
             fieldChanged = "Name";
             oldValue = userAdmin.getName();
             newValue = editDetailsDto.getName();
             userAdmin.setName(editDetailsDto.getName());
+            changes.add(new Change(fieldChanged, oldValue, newValue));
             userAdminRepository.save(userAdmin);
         }
         if (editDetailsDto.getRoleId() != null) {
@@ -231,20 +239,20 @@ public class UserAdminServiceImpl implements UserAdminService {
             oldValue = Integer.toString(userAdmin.getRoleId());
             newValue = Integer.toString(editDetailsDto.getRoleId());
             userAdmin.setRoleId(editDetailsDto.getRoleId());
+            changes.add(new Change(fieldChanged, oldValue, newValue));
             userAdminRepository.save(userAdmin);
         }
         if (editDetailsDto.getIsActive() != null) {
             fieldChanged = "Active Status";
             oldValue = Boolean.toString(userAdmin.isActive());
             newValue = Boolean.toString(editDetailsDto.getIsActive());
+            changes.add(new Change(fieldChanged, oldValue, newValue));
             userAdmin.setActive(!userAdmin.isActive());
             userAdminRepository.save(userAdmin);
         }
 
         AuditUtility auditUtility = new AuditUtility();
-
-
-        auditUtility.deleteAudit(userAdmin.getName(), userAdmin.getEmail(), userAdmin.getEmail(), new ArrayList<Change>());
+        auditUtility.editAudit(userAdmin.getName(), userAdmin.getEmail(), userAdmin.getEmail(), changes);
 
         return response;
     }
