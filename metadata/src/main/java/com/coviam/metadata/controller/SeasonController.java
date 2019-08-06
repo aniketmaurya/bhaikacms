@@ -1,57 +1,70 @@
 package com.coviam.metadata.controller;
 
+import com.coviam.metadata.dto.request.DeleteRequest;
+import com.coviam.metadata.dto.request.SeasonRequest;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.services.SeasonServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
+@RequestMapping("/metadata")
 @CrossOrigin
 public class SeasonController {
 
     @Autowired
     private SeasonServices seasonServices;
 
-    @PostMapping(value = "/addSeason")
-    public ResponseEntity<Optional<Season>> addSeason(@RequestBody Season season) {
-        return new ResponseEntity<>(seasonServices.addSeason(season), HttpStatus.OK);
-
+    @PutMapping(value = "/addSeason")
+    public ResponseEntity<Season> addSeason(@RequestBody SeasonRequest seasonRequest) {
+        return ResponseEntity.ok(seasonServices.addSeason(seasonRequest));
     }
 
-    @DeleteMapping(value = "/deleteSeasonById")
-    public ResponseEntity<Boolean> deleteSeasonById(@RequestParam(name = "seasonId") String seasonId) {
+    @PostMapping(value = "/deleteSeasonById")
+    public ResponseEntity<Boolean> deleteSeasonById(@RequestBody DeleteRequest deleteRequest) {
 
-        return new ResponseEntity<>(seasonServices.deleteSeasonById(seasonId), HttpStatus.OK);
+        return ResponseEntity.ok(seasonServices.deleteSeasonById(deleteRequest));
     }
 
     @GetMapping(value = "/getSeasonById")
     public ResponseEntity<?> getSeasonById(@RequestParam(name = "seasonId") String seasonId) {
 
-        Optional<Season> seasonOptional = seasonServices.getSeasonById(seasonId);
-
-        return seasonOptional.map(season -> new ResponseEntity<>(season, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(new Season(), HttpStatus.NO_CONTENT));
-
+        Season season = seasonServices.getSeasonById(seasonId);
+        return ResponseEntity.ok(season);
     }
 
 
+    // todo fix this
     @GetMapping(value = "/getSeasonsByProgramId")
-    public ResponseEntity<?> getSeasonByProgramId(@RequestParam(name = "programId") String programId,
-                                                  @RequestParam(name = "page", defaultValue = "0") int page,
-                                                  @RequestParam(name = "size", defaultValue = "10") int size) {
+    public ResponseEntity<?> getSeasonByProgramId(
+            @RequestParam(name = "programId") String programId,
+            @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
 
-        Page<Season> seasonPage = seasonServices.getSeasonsByProgramId(programId, page, size);
+        Page<Season> seasonPage = seasonServices.getSeasonsByProgramId(programId, pageNumber, pageSize);
 
+        return ResponseEntity.ok(seasonPage);
+//        if (seasonPage.isEmpty()) {
+//            return new ResponseEntity<Page<Season>>(seasonPage, HttpStatus.OK);
+//        }
+//
+//        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
 
-        if (seasonPage.isEmpty()) {
-            return new ResponseEntity<Page<Season>>(seasonPage, HttpStatus.OK);
-        }
+    @GetMapping("/getAllSeasonalVideo")
+    public ResponseEntity<Page<Season>> getAllSeasonalVideo(
+            @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        return ResponseEntity.ok(seasonServices.getAllSeasons(pageNumber, pageSize));
+    }
 
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    @GetMapping("/getAllMultiVideo")
+    public ResponseEntity<Page<Season>> getAllMultiVideo(
+            @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
+        return ResponseEntity.ok(seasonServices.getAllMultiVideo(pageNumber, pageSize));
     }
 }

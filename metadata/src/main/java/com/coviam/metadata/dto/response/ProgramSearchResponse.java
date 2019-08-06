@@ -1,23 +1,18 @@
-package com.coviam.metadata.dto.request;
+package com.coviam.metadata.dto.response;
 
 import com.coviam.metadata.entity.Category;
-import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
-import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
-@Slf4j
 @Getter
 @Setter
-@Builder
-public class ProgramRequest implements Serializable {
-
+public class ProgramSearchResponse {
     private String id;
 
     // 1->single video, 2->multi 3->seasonal
@@ -30,27 +25,19 @@ public class ProgramRequest implements Serializable {
     private String parentalRating;
 
     // we will store keywords as space separated values
-    private String keywords;
+    private List<String> keywords;
 
     // We will languages as space separated values
-    private String languages;
+    private List<String> languages;
 
     private Long startDate;
 
     private Long expiryDate;
 
-    private Boolean isAlive;
-
-    // to store which user has uploaded this file
-    private String userId;
-
     private Category category;
 
     private Map<String, String> imgUrls = new HashMap<>();
 
-
     private Long creationDate;
-
-    private String userEmail;
 
 }
