@@ -46,7 +46,9 @@ public class CategoryController {
     }
 
     @GetMapping("/getAllParents")
-    public List<CategoryInfo> getAllParents(){return categoryService.getAllParents();}
+    public List<CategoryInfo> getAllParents() {
+        return categoryService.getAllParents();
+    }
 
     @PutMapping("/updateCategory")
     public Category updateCategory(@RequestParam(name = "categoryName") String categoryName,

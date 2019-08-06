@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface LanguageServices {
 
-    List<Language> addLanguage(List<Language> language);
+    Boolean addLanguage(List<Language> languages);
 
     Boolean deleteLanguageByName(String name);
 
     List<Language> getAllLanguage();
+
+    Boolean updateLanguage(String id, String newName);
 }

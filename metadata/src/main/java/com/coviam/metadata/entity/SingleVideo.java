@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,10 +29,13 @@ public class SingleVideo {
     @JoinColumn(name = "program_id")
     private Program program;
 
+    @NotNull
     private String videoTitle;
 
+    @NotNull
     private String videoUrl;
 
+    @NotNull
     private String description;
 
     @Type(type = "hstore")

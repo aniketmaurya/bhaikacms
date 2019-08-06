@@ -4,9 +4,12 @@ package com.coviam.metadata.entity;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLHStoreType;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -24,5 +27,8 @@ public class Language implements Serializable {
     @Column(name = Language.ID_COLUMN)
     private String id;
 
+    @NotNull
+    @NaturalId
+    @Size(min = 3)
     private String name;
 }

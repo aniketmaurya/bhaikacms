@@ -20,7 +20,9 @@ public class AuditResponse {
     private String modifier; //email Id
     private List<Change> changes;
 
+    private Integer flag;
 }
+
 
 /*
 
