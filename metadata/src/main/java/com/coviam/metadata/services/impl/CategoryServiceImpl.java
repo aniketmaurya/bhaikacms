@@ -39,10 +39,16 @@ public class CategoryServiceImpl implements CategoryServices {
 
     @Override
     public boolean deleteCategoryById(String categoryId) {
-        boolean isChildDeleted = deleteRec(categoryId);
-        if (isChildDeleted) {
+        List<Category> childList = categoryRepository.findChildByCategoryId(categoryId);
+        if (childList.isEmpty()) {
             categoryRepository.deleteById(categoryId);
             return true;
+        } else {
+            boolean isChildDeleted = deleteRec(categoryId);
+            if (isChildDeleted) {
+                categoryRepository.deleteById(categoryId);
+                return true;
+            }
         }
         return false;
     }
@@ -67,17 +73,14 @@ public class CategoryServiceImpl implements CategoryServices {
 
     @Override
     public List<CategoryInfo> getAllSubCategory(String parentCategoryName) {
-
-        Category parentCategory=categoryRepository.findCategoryByCategoryName(parentCategoryName);
-        String parentId=parentCategory.getId();
-        List<Category> categoryList=categoryRepository.findChildByCategoryId(parentId);
+        Category parentCategory = categoryRepository.findCategoryByCategoryName(parentCategoryName);
+        String parentId = parentCategory.getId();
+        List<Category> categoryList = categoryRepository.findChildByCategoryId(parentId);
         List<CategoryInfo> categoryInfoList = new ArrayList<>();
-
-        for (Category category:categoryList) {
-            CategoryInfo categoryInfo = new CategoryInfo(category.getId(),category.getCategoryName());
+        for (Category category : categoryList) {
+            CategoryInfo categoryInfo = new CategoryInfo(category.getId(), category.getCategoryName());
             categoryInfoList.add(categoryInfo);
         }
-
         return categoryInfoList;
     }
 
@@ -113,14 +116,12 @@ public class CategoryServiceImpl implements CategoryServices {
 
     @Override
     public List<CategoryInfo> getAllParents() {
-        List<Category> categories= categoryRepository.findAllParents();
-        List<CategoryInfo> categoryInfos=new ArrayList<>();
-
-        for (Category category:categories) {
-            CategoryInfo categoryInfo = new CategoryInfo(category.getId(),category.getCategoryName());
+        List<Category> categories = categoryRepository.findAllParents();
+        List<CategoryInfo> categoryInfos = new ArrayList<>();
+        for (Category category : categories) {
+            CategoryInfo categoryInfo = new CategoryInfo(category.getId(), category.getCategoryName());
             categoryInfos.add(categoryInfo);
         }
-
         return categoryInfos;
     }
 

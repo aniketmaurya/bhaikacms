@@ -1,6 +1,7 @@
 package com.coviam.metadata.controller;
 
 import com.coviam.metadata.dto.request.DeleteRequest;
+import com.coviam.metadata.dto.request.SeasonRequest;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.services.SeasonServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class SeasonController {
     private SeasonServices seasonServices;
 
     @PutMapping(value = "/addSeason")
-    public ResponseEntity<Season> addSeason(@RequestBody Season season) {
-        return ResponseEntity.ok(seasonServices.addSeason(season));
+    public ResponseEntity<Season> addSeason(@RequestBody SeasonRequest seasonRequest) {
+        return ResponseEntity.ok(seasonServices.addSeason(seasonRequest));
     }
 
     @PostMapping(value = "/deleteSeasonById")
