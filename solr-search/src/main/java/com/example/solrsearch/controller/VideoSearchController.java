@@ -39,8 +39,8 @@ public class VideoSearchController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/search")
-    public Page<Video> searchVideos(@RequestParam(value = "searchTerm") String searchTerm,
-                                    @RequestParam(value = "categoryFilter") String categoryFilter,
+    public Page<Video> searchVideos(@RequestParam(value = "searchTerm", defaultValue = "*:*") String searchTerm,
+                                    @RequestParam(value = "categoryFilter", defaultValue = "home") String categoryFilter,
                                     @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
                                     @RequestParam(value = "pageSize", defaultValue = "5") int pageSize
     ) {
@@ -54,15 +54,21 @@ public class VideoSearchController {
         return videoSearchService.autoSuggest(word, pageNumber, pageSize);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/findByProgramId")
-    public Video getByProgramId(@RequestParam String programId) {
-        return videoSearchService.getByProgramId(programId);
-    }
+//    @RequestMapping(method = RequestMethod.GET, value = "/findByProgramId")
+//    public Video getByProgramId(@RequestParam String programId) {
+//        return videoSearchService.getByProgramId(programId);
+//    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/update")
     public Video update(@RequestBody Video video) {
         return videoSearchService.update(video);
     }
+
+    @DeleteMapping(value = "/deleteById")
+    public boolean deleteAllVideos(@RequestParam(value = "id") String id) {
+        return videoSearchService.deleteById(id);
+    }
+
 
 
 

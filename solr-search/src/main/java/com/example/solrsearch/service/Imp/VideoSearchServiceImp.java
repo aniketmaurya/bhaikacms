@@ -30,14 +30,19 @@ public class VideoSearchServiceImp implements VideoSearchService {
                 .crewList(programDto.getCrewList())
                 .keywords(programDto.getKeywords())
                 .languages(programDto.getLanguages())
-                .programDescription(programDto.getProgramDescription())
-                .programId(programDto.getProgramId())
-                .programName(programDto.getProgramName())
-                .videoType(programDto.getVideoType())
-                .videoUrl(programDto.getVideoUrl())
+                .description(programDto.getDescription())
+                .id(programDto.getId())
+                .name(programDto.getName())
+                .type(programDto.getType())
+                .imgUrls(programDto.getImgUrls())
+                .startDate(programDto.getStartDate())
+                .expiryDate(programDto.getExpiryDate())
+                .creationDate(programDto.getCreationDate())
+                .parentalRating(programDto.getParentalRating())
                 .categoriesList(new ArrayList<>()).build();
 
         Category category = programDto.getCategory();
+
 
         if (category != null) {
             do {
@@ -46,11 +51,13 @@ public class VideoSearchServiceImp implements VideoSearchService {
             } while (null != category);
         }
         StringBuilder pathVariable = new StringBuilder();
+        pathVariable.append("home/");
         Collections.reverse(video.getCategoriesList());
         for (String s : video.getCategoriesList()) {
             pathVariable.append(s + "/");
         }
         video.setPath(pathVariable.toString());
+        video.getCategoriesList().add("home");
 
 
         return videoRepository.save(video);
@@ -88,9 +95,15 @@ public class VideoSearchServiceImp implements VideoSearchService {
         return videoRepository.save(video);
 
     }
-
     @Override
-    public Video getByProgramId(String programId) {
-        return videoRepository.findByProgramId(programId);
+    public boolean deleteById(String id) {
+        videoRepository.deleteById(id);
+        return true;
     }
+
+
+//    @Override
+//    public Video getByProgramId(String programId) {
+//        return videoRepository.findByProgramId(programId);
+//    }
 }

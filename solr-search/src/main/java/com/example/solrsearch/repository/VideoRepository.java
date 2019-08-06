@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VideoRepository extends CustomRepository, SolrCrudRepository<Video, String> {
 
-    Video findByProgramId(String programId);
+    // Video findByProgramId(String programId);
 }

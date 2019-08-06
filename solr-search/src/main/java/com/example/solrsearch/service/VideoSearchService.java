@@ -15,7 +15,10 @@ public interface VideoSearchService {
 
     Video update(Video video);
 
-    Video getByProgramId(String programId);
+    //Video getByProgramId(String programId);
 
     Page<Video> autoSuggest(String word, int pageNumber, int pageSize);
+
+    boolean deleteById(String id);
+
 }

@@ -27,7 +27,7 @@ public class CustomRepositoryImpl implements CustomRepository {
     @Override
     public Page<Video> search(String searchTerm, String categoryFilter, Pageable var1) {
         SimpleQuery solrQuery = new SimpleQuery(searchTerm)
-                .addFilterQuery(new SimpleFilterQuery(new Criteria("path").is(categoryFilter)))
+                .addFilterQuery(new SimpleFilterQuery(new Criteria("categoriesList").is(categoryFilter)))
                 .setPageRequest(PageRequest.of(var1.getPageNumber(), var1.getPageSize()));
         solrQuery.setRequestHandler("/videoSearch");
 

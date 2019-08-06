@@ -16,13 +16,17 @@ import java.util.Map;
 public class ProgramDto {
 
     private List<String> keywords;
-    private String videoUrl;
     private Map<String, String> crewList;
     private List<String> languages;
-    private String programDescription;
-    private String videoType;
-    private String programId;
-    private String programName;
+    private String description;
+    private String type;
+    private String id;
+    private String name;
     private Category category;
+    private String parentalRating;
+    private Long startDate;
+    private Long expiryDate;
+    private Long creationDate;
+    private Map<String, String> imgUrls;
 
 }
