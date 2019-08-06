@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.core.query.Criteria;
+import org.springframework.data.solr.core.query.SimpleFilterQuery;
 import org.springframework.data.solr.core.query.SimpleQuery;
 import org.springframework.stereotype.Repository;
 
@@ -23,8 +25,9 @@ public class CustomRepositoryImpl implements CustomRepository {
     private SolrClient solrClient;
 
     @Override
-    public Page<Video> search(String searchTerm, Pageable var1) {
+    public Page<Video> search(String searchTerm, String categoryFilter, Pageable var1) {
         SimpleQuery solrQuery = new SimpleQuery(searchTerm)
+                .addFilterQuery(new SimpleFilterQuery(new Criteria("path").is(categoryFilter)))
                 .setPageRequest(PageRequest.of(var1.getPageNumber(), var1.getPageSize()));
         solrQuery.setRequestHandler("/videoSearch");
 

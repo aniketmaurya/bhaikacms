@@ -11,7 +11,7 @@ public interface VideoSearchService {
 
     boolean deleteAll();
 
-    Page<Video> search(String searchTerm, int pageNumber, int pageSize);
+    Page<Video> search(String searchTerm, String categoryFilter, int pageNumber, int pageSize);
 
     Video update(Video video);
 

@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 @Slf4j
 @Service
@@ -44,6 +45,13 @@ public class VideoSearchServiceImp implements VideoSearchService {
                 category = category.getParent();
             } while (null != category);
         }
+        StringBuilder pathVariable = new StringBuilder();
+        Collections.reverse(video.getCategoriesList());
+        for (String s : video.getCategoriesList()) {
+            pathVariable.append(s + "/");
+        }
+        video.setPath(pathVariable.toString());
+
 
         return videoRepository.save(video);
     }
@@ -62,9 +70,9 @@ public class VideoSearchServiceImp implements VideoSearchService {
     }
 
     @Override
-    public Page<Video> search(String searchTerm, int pageNumber, int pageSize) {
+    public Page<Video> search(String searchTerm, String categoryFilter, int pageNumber, int pageSize) {
         log.debug("Searched");
-        return videoRepository.search(searchTerm, PageRequest.of(pageNumber, pageSize));
+        return videoRepository.search(searchTerm, categoryFilter, PageRequest.of(pageNumber, pageSize));
     }
 
     @Override

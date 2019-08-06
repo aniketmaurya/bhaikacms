@@ -40,10 +40,11 @@ public class VideoSearchController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/search")
     public Page<Video> searchVideos(@RequestParam(value = "searchTerm") String searchTerm,
+                                    @RequestParam(value = "categoryFilter") String categoryFilter,
                                     @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
                                     @RequestParam(value = "pageSize", defaultValue = "5") int pageSize
     ) {
-        return videoSearchService.search(searchTerm, pageNumber, pageSize);
+        return videoSearchService.search(searchTerm, categoryFilter, pageNumber, pageSize);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/autoComplete")
