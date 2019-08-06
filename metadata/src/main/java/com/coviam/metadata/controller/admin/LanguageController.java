@@ -31,6 +31,7 @@ public class LanguageController {
     public ResponseEntity<List<Language>> getAllLanguage() {
         return ResponseEntity.ok(languageServices.getAllLanguage());
     }
+
     //update language
     @PutMapping("/editLanguage")
     public ResponseEntity<?> editName(
