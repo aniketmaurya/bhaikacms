@@ -1,6 +1,7 @@
 package com.coviam.metadata.dto.request;
 
 import com.coviam.metadata.entity.Category;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.Map;
 @Slf4j
 @Getter
 @Setter
+@Builder
 public class ProgramRequest implements Serializable {
 
     private String id;
@@ -50,4 +52,5 @@ public class ProgramRequest implements Serializable {
     private Long creationDate;
 
     private String userEmail;
+
 }

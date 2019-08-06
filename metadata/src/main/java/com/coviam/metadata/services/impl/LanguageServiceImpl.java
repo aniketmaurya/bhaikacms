@@ -5,6 +5,7 @@ import com.coviam.metadata.repository.LanguageRepository;
 import com.coviam.metadata.services.LanguageServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class LanguageServiceImpl implements LanguageServices {
         return (List<Language>) languageRepository.saveAll(language);
     }
 
+    @Transactional
     @Override
     public Boolean deleteLanguageByName(String name) {
         languageRepository.deleteByName(name);

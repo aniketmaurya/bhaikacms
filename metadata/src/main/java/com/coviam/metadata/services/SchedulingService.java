@@ -26,7 +26,7 @@ public class SchedulingService {
         log.debug("running expiryDetection");
         Long date = System.currentTimeMillis();
 
-        List<Program>expired = programRepository.findByExpiryDateLessThan(date,  PageRequest.of(0,10)).getContent();
+        List<Program> expired = programRepository.findByExpiryDateLessThan(date, PageRequest.of(0, 10)).getContent();
         List<Program> softDelete = new ArrayList<>();
         for (Program temp : expired) {
             temp.setIsAlive(false);
@@ -34,8 +34,8 @@ public class SchedulingService {
         }
         programRepository.saveAll(softDelete);
 
-        Long  check = (LocalDate.now().minusDays(30)).toDate().getTime();
-        List<Program> hardDelete = programRepository.findByExpiryDateLessThan(check,  PageRequest.of(0, 10)).getContent();
+        Long check = (LocalDate.now().minusDays(30)).toDate().getTime();
+        List<Program> hardDelete = programRepository.findByExpiryDateLessThan(check, PageRequest.of(0, 10)).getContent();
         programRepository.deleteAll(hardDelete);
 
         return "Successfully deleted";

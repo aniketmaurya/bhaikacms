@@ -5,15 +5,19 @@ import com.coviam.metadata.dto.request.ProgramRequest;
 import com.coviam.metadata.dto.response.EmailResponse;
 import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.services.ProgramServices;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/metadata")
 @CrossOrigin
@@ -78,8 +82,20 @@ public class ProgramController {
     public ResponseEntity<Optional<List<EmailResponse>>> getExpiredVideos() {
         return ResponseEntity.ok(Optional.of(programServices.sendExpiredToEmail()));
     }
+
     @GetMapping(value = "/getAboutToExpire")
     public ResponseEntity<Optional<List<EmailResponse>>> getAboutToExpire() {
         return ResponseEntity.ok(Optional.of(programServices.sendAboutToExpire()));
+    }
+
+    @RequestMapping(path = "/addProgramByBulk", method = RequestMethod.POST)
+    public ResponseEntity<List<Program>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+        String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
+        log.error(multipartFile.getOriginalFilename());
+        log.info(multipartFile.getOriginalFilename());
+        File file = new File(uploadingDir + multipartFile.getOriginalFilename());
+        multipartFile.transferTo(file);
+        List<Program> programList = programServices.addProgramByBulkUpload(file);
+        return ResponseEntity.ok(programList);
     }
 }

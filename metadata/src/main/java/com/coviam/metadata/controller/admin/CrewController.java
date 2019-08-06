@@ -21,8 +21,8 @@ public class CrewController {
     }
 
 
-    public ResponseEntity<Page<Crew>> getAllCrewRoles(Integer pageNumber, Integer pageSize){
-        return ResponseEntity.ok(crewServices.getAllCrew(pageNumber,pageSize));
+    public ResponseEntity<Page<Crew>> getAllCrewRoles(Integer pageNumber, Integer pageSize) {
+        return ResponseEntity.ok(crewServices.getAllCrew(pageNumber, pageSize));
     }
 
     //delete crew

@@ -22,7 +22,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -177,12 +182,61 @@ public class ProgramServiceImpl implements ProgramServices {
                 PageRequest.of(pageNumber, pageSize));
     }
 
+
+    @Override
+    public List<Program> addProgramByBulkUpload(File csvFile) {
+        String line = "";
+        String csvSplitBy = ",";
+        List<Program> programList = new ArrayList<>();
+        try {
+            FileReader file = new FileReader(csvFile);
+            BufferedReader br = new BufferedReader(file);
+            line = br.readLine();
+            String[] headers = line.split(csvSplitBy);
+            if (headers[0].equalsIgnoreCase("Program Type") && headers[1].equalsIgnoreCase("Description")
+                    && headers[2].equalsIgnoreCase("Program Name") && headers[3].equalsIgnoreCase("Parental Rating")
+                    && headers[4].equalsIgnoreCase("Keywords") && headers[5].equalsIgnoreCase("Languages")
+                    && headers[6].equalsIgnoreCase("Start Date") && headers[7].equalsIgnoreCase("Expiry Date")
+                    && headers[8].equalsIgnoreCase("Category") && headers[9].equalsIgnoreCase("Thumbnail Image Url")
+                    && headers[10].equalsIgnoreCase("Avatar Image Url")
+                    && headers[11].equalsIgnoreCase("userId")) {
+                while ((line = br.readLine()) != null) {
+                    String[] records = line.split(csvSplitBy);
+                    HashMap<String, String> images = new HashMap<>();
+                    images.put("Thumbnail", records[9]);
+                    images.put("Avatar", records[10]);
+                    ProgramRequest programRequest = ProgramRequest.builder()
+                            .type(records[0])
+                            .description(records[1])
+                            .name(records[2])
+                            .parentalRating(records[3])
+                            .keywords(records[4])
+                            .languages(records[5])
+                            .category(categoryRepository.getCategoryByCategoryName(records[8]))
+                            .isAlive(Boolean.TRUE)
+                            .imgUrls(images)
+                            .startDate((new SimpleDateFormat("dd/MM/yyyy").parse(records[6])).getTime())
+                            .expiryDate((new SimpleDateFormat("dd/MM/yyyy").parse(records[7])).getTime())
+                            .userId(records[11])
+                            .build();
+                    System.out.println(programRequest);
+                    Program program = addProgram(programRequest);
+                    programList.add(program);
+                }
+            }
+        } catch (Exception e) {
+            log.debug("Error while uploading program :" + e.getMessage());
+        }
+        return programList;
+    }
+
+
     //added by apoorv singh
     @Override
     public List<EmailResponse> sendExpiredToEmail() {
         List<EmailResponse> expiredResponse = new ArrayList<>();
         Long currentTime = System.currentTimeMillis();
-        Page<Program> expired = programRepository.findByStartDateLessThan(currentTime,  PageRequest.of(0, 10));
+        Page<Program> expired = programRepository.findByStartDateLessThan(currentTime, PageRequest.of(0, 10));
         for (Program temp : expired) {
             EmailResponse emailResponse = new EmailResponse();
             emailResponse.setExpiryDate(temp.getExpiryDate());
@@ -197,12 +251,11 @@ public class ProgramServiceImpl implements ProgramServices {
 
     @Override
     public List<EmailResponse> sendAboutToExpire() {
-        List<EmailResponse> aboutToExpire= new ArrayList<>();
-        Long toExpire= (LocalDate.now().plusDays(2)).toDate().getTime();
-        Page<Program> allList= programRepository.findByExpiryDateLessThan(toExpire,  PageRequest.of(0,10));
-        for(Program temp: allList)
-        {
-            EmailResponse emailResponse= new EmailResponse();
+        List<EmailResponse> aboutToExpire = new ArrayList<>();
+        Long toExpire = (LocalDate.now().plusDays(2)).toDate().getTime();
+        Page<Program> allList = programRepository.findByExpiryDateLessThan(toExpire, PageRequest.of(0, 10));
+        for (Program temp : allList) {
+            EmailResponse emailResponse = new EmailResponse();
             emailResponse.setExpiryDate(temp.getExpiryDate());
             emailResponse.setId(temp.getUserId());
             emailResponse.setStartDate(temp.getStartDate());

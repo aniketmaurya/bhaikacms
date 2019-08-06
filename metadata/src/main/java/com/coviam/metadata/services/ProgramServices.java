@@ -6,6 +6,7 @@ import com.coviam.metadata.dto.response.EmailResponse;
 import com.coviam.metadata.entity.Program;
 import org.springframework.data.domain.Page;
 
+import java.io.File;
 import java.util.List;
 
 public interface ProgramServices {
@@ -27,6 +28,9 @@ public interface ProgramServices {
     List<EmailResponse> sendExpiredToEmail();
 
     List<EmailResponse> sendAboutToExpire();
+
+
+    List<Program> addProgramByBulkUpload(File csvFile);
 
 
 }

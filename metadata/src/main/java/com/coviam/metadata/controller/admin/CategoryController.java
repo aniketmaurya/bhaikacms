@@ -8,7 +8,6 @@ import com.coviam.metadata.utility.SubCategories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @CrossOrigin
@@ -47,7 +46,9 @@ public class CategoryController {
     }
 
     @GetMapping("/getAllParents")
-    public List<CategoryInfo> getAllParents(){return categoryService.getAllParents();}
+    public List<CategoryInfo> getAllParents() {
+        return categoryService.getAllParents();
+    }
 
     //update category
 }
