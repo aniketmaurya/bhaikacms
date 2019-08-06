@@ -39,10 +39,16 @@ public class CategoryServiceImpl implements CategoryServices {
 
     @Override
     public boolean deleteCategoryById(String categoryId) {
-        boolean isChildDeleted = deleteRec(categoryId);
-        if (isChildDeleted) {
+        List<Category> childList = categoryRepository.findChildByCategoryId(categoryId);
+        if (childList.isEmpty()) {
             categoryRepository.deleteById(categoryId);
             return true;
+        } else {
+            boolean isChildDeleted = deleteRec(categoryId);
+            if (isChildDeleted) {
+                categoryRepository.deleteById(categoryId);
+                return true;
+            }
         }
         return false;
     }
@@ -66,11 +72,16 @@ public class CategoryServiceImpl implements CategoryServices {
     }
 
     @Override
-    public List<Category> getAllSubCategory(String parentCategoryName) {
-
+    public List<CategoryInfo> getAllSubCategory(String parentCategoryName) {
         Category parentCategory = categoryRepository.findCategoryByCategoryName(parentCategoryName);
         String parentId = parentCategory.getId();
-        return categoryRepository.findChildByCategoryId(parentId);
+        List<Category> categoryList = categoryRepository.findChildByCategoryId(parentId);
+        List<CategoryInfo> categoryInfoList = new ArrayList<>();
+        for (Category category : categoryList) {
+            CategoryInfo categoryInfo = new CategoryInfo(category.getId(), category.getCategoryName());
+            categoryInfoList.add(categoryInfo);
+        }
+        return categoryInfoList;
     }
 
     @Override
@@ -105,7 +116,13 @@ public class CategoryServiceImpl implements CategoryServices {
 
     @Override
     public List<CategoryInfo> getAllParents() {
-        return null;
+        List<Category> categories = categoryRepository.findAllParents();
+        List<CategoryInfo> categoryInfos = new ArrayList<>();
+        for (Category category : categories) {
+            CategoryInfo categoryInfo = new CategoryInfo(category.getId(), category.getCategoryName());
+            categoryInfos.add(categoryInfo);
+        }
+        return categoryInfos;
     }
 
 }

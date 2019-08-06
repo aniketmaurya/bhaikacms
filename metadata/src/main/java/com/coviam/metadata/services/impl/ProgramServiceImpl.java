@@ -1,9 +1,12 @@
 package com.coviam.metadata.services.impl;
 
+import com.coviam.metadata.dto.request.Change;
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.ProgramRequest;
 import com.coviam.metadata.dto.response.EmailResponse;
+import com.coviam.metadata.entity.Category;
 import com.coviam.metadata.entity.Program;
+import com.coviam.metadata.repository.CategoryRepository;
 import com.coviam.metadata.repository.ProgramRepository;
 import com.coviam.metadata.repository.SeasonRepository;
 import com.coviam.metadata.services.ProgramServices;
@@ -35,6 +38,14 @@ public class ProgramServiceImpl implements ProgramServices {
     private SeasonRepository seasonRepository;
     @Autowired
     private SeasonServices seasonServices;
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private SearchUtility searchUtility;
+
+    @Autowired
+    private AuditUtility auditUtility;
 
     @Transactional
     @Override
@@ -42,20 +53,31 @@ public class ProgramServiceImpl implements ProgramServices {
 
         Program program = new Program();
         BeanUtils.copyProperties(programRequest, program);
+        Category category = categoryRepository.findById(programRequest.getCategory().getId()).orElse(new Category());
+/*
+        String assetId,
+        String assest,
+        String userEmail,
+        List<Change> changes*/
 
-        log.info("Adding program programName: {}", program.getName());
-        AuditUtility.addAudit("", "ADDED A NEW PROGRAM",
-                programRequest.getUserId(), "PROGRAM");
-
+        program.setCategory(category);
         program.setCreationDate(System.currentTimeMillis());
         Program program1 = Optional.of(programRepository.save(program)).orElse(new Program());
 
-        SearchUtility.addToSearch(program1);
+        auditUtility.addAudit(program1.getId(),
+                program1.getName(),
+                programRequest.getUserEmail(),
+                new ArrayList<Change>());
+
+        log.info("Adding program programName: {}", program.getName());
+
+        searchUtility.addToSearch(program1);
 
 
         return program1;
     }
 
+    @Transactional
     @Override
     public Boolean editProgram(ProgramRequest programRequest) {
         if (!programRepository.existsById(programRequest.getId())) {
@@ -63,12 +85,54 @@ public class ProgramServiceImpl implements ProgramServices {
         }
         Program program = programRepository.findById(programRequest.getId()).get();
 
-        AuditUtility.editAudit(program.toString(), programRequest.toString(),
-                programRequest.getUserId(), "PROGRAM");
+        List<Change> changes = new ArrayList<>();
+        String fieldChanged = "";
+        String oldValue = "";
+        String newValue = "";
+        if (!program.getName().equals(programRequest.getName())) {
+            fieldChanged = "Name";
+            oldValue = program.getName();
+            newValue = programRequest.getName();
+            changes.add(new Change(fieldChanged, oldValue, newValue));
+        }
+        if (!program.getDescription().equals(programRequest.getDescription())) {
+            fieldChanged = "Description";
+            oldValue = program.getName();
+            newValue = programRequest.getName();
+            changes.add(new Change(fieldChanged, oldValue, newValue));
+        }
+        if (!program.getParentalRating().equals(programRequest.getParentalRating())) {
+            fieldChanged = "Parental rating";
+            oldValue = program.getParentalRating();
+            newValue = programRequest.getParentalRating();
+            changes.add(new Change(fieldChanged, oldValue, newValue));
+        }
+        if (!program.getType().equals(programRequest.getType())) {
+            fieldChanged = "Type";
+            oldValue = program.getType();
+            newValue = programRequest.getType();
+            changes.add(new Change(fieldChanged, oldValue, newValue));
+        }
+        if (!program.getStartDate().equals(programRequest.getStartDate())) {
+            fieldChanged = "Start Date";
+            oldValue = program.getStartDate().toString();
+            newValue = programRequest.getStartDate().toString();
+            changes.add(new Change(fieldChanged, oldValue, newValue));
+        }
+        if (!program.getExpiryDate().equals(programRequest.getExpiryDate())) {
+            fieldChanged = "Expiry Date";
+            oldValue = program.getExpiryDate().toString();
+            newValue = programRequest.getExpiryDate().toString();
+            changes.add(new Change(fieldChanged, oldValue, newValue));
+        }
 
         BeanUtils.copyProperties(programRequest, program);
         programRepository.save(program);
         log.info("Program update programId: {} ", programRequest.getId());
+        auditUtility.editAudit(program.getId(),
+                program.getName(),
+                programRequest.getUserEmail(),
+                changes);
 
         return Boolean.TRUE;
     }
@@ -79,12 +143,13 @@ public class ProgramServiceImpl implements ProgramServices {
     public Boolean deleteProgramById(DeleteRequest deleteRequest) {
         String programId = deleteRequest.getId();
         Program program = programRepository.findById(programId).orElse(new Program());
-//        AuditUtility.programAudit(program, program, DELETE, deleteRequest.getUseId());
-        AuditUtility.deleteAudit(program.toString(), "",
-                deleteRequest.getUserId(), "PROGRAM");
 
         programRepository.deleteById(programId);
         log.warn("Cascade delete action will be performed for programId: {}", programId);
+        auditUtility.deleteAudit(program.getId(),
+                program.getName(),
+                deleteRequest.getUserEmail(),
+                new ArrayList<Change>());
         return Boolean.TRUE;
     }
 

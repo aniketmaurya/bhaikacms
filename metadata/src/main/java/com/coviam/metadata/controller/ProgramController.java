@@ -44,6 +44,7 @@ public class ProgramController {
         return ResponseEntity.ok(programServices.getProgramById(programId));
     }
 
+    // todo optimise getAll{ProgramType}
 
     @GetMapping(value = "/getAllSingleVideoProgram")
     public ResponseEntity<Page<Program>> getAllSingleVideoProgram(
@@ -54,7 +55,6 @@ public class ProgramController {
                 .getAllSingleVideoProgram(pageNumber, pageSize));
     }
 
-    // todo optimise getAll{ProgramType}
 
     @GetMapping(value = "/getAllSeasonalVideoProgram")
     public ResponseEntity<Page<Program>> getAllSeasonalVideoProgram(

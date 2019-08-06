@@ -15,11 +15,16 @@ import java.util.Map;
 @Getter
 @Setter
 public class ProgramRequest implements Serializable {
+
     private String id;
 
+    // 1->single video, 2->multi 3->seasonal
     private String type;
+
     private String description;
+
     private String name;
+
     private String parentalRating;
 
     // we will store keywords as space separated values
@@ -27,15 +32,22 @@ public class ProgramRequest implements Serializable {
 
     // We will languages as space separated values
     private String languages;
+
     private Long startDate;
+
     private Long expiryDate;
+
     private Boolean isAlive;
 
     // to store which user has uploaded this file
     private String userId;
 
-    //    private String author;
     private Category category;
 
     private Map<String, String> imgUrls = new HashMap<>();
+
+
+    private Long creationDate;
+
+    private String userEmail;
 }
