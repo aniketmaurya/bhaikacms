@@ -8,4 +8,5 @@ import lombok.Data;
 public class DeleteRequest {
     private String id;
     private String userId;
+    private String userEmail;
 }

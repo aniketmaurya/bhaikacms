@@ -21,8 +21,8 @@ public class LanguageController {
 
     // todo add edit language methods
     @PutMapping("/addLanguage")
-    public ResponseEntity<Language> addLanguage(@RequestBody Language language) {
-        return ResponseEntity.ok(languageServices.addLanguage(language));
+    public ResponseEntity<List<Language>> addLanguage(@RequestBody List<Language> languages) {
+        return ResponseEntity.ok(languageServices.addLanguage(languages));
     }
 
     @DeleteMapping("/deleteLanguageByName")

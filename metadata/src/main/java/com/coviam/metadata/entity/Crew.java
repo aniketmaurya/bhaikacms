@@ -17,5 +17,4 @@ public class Crew {
     @GenericGenerator(name = "generator", strategy = "uuid2")
     private String id;
     private String role;
-    private String name;
 }

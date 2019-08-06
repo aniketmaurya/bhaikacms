@@ -38,4 +38,6 @@ public class ProgramRequest implements Serializable {
     private Category category;
 
     private Map<String, String> imgUrls = new HashMap<>();
+
+    private String userEmail;
 }
