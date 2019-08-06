@@ -1,4 +1,4 @@
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
 	name:'Login',
 	data() {
@@ -11,7 +11,7 @@ export default {
 	},
 	methods: {
 		...mapActions([
-			'signIn'
+			'signIn',
 		]),
 		handleSubmit() {
            this.signIn(this.user).then( (resp) => {
@@ -19,14 +19,14 @@ export default {
 				    this.$swal('',resp.message,'success')
 					this.$session.set('userId',resp.userId)
 					this.$session.set('roleId',resp.roleId)
-					this.$store.commit('setRoleId',resp.roleId)
+					this.$session.set('email',resp.email)
 					localStorage.setItem('isLoggedIn', 'true')
-				    this.$session.set('token',resp.token)
-					 this.$router.push('/'),
-					 this.$store.commit('setUsetDetails', {
-						status: true,
-						...res.body.data
-					 })
+					this.$session.set('token',resp.token)
+					this.$store.commit('setUsetDetails', {
+						status:true,
+						...resp
+					})
+					this.$router.push('/')
 			    } else {
 				    this.$swal(resp.message)
 				}

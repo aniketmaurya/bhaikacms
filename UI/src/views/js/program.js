@@ -19,14 +19,15 @@ export default {
                     thumbnail: "",
                     avatar: "",
                 },
-                userId:null
+                userId:null,
+                userEmail:""
             }
         }
     },
     methods: {
         ...mapActions([
             'addProgram',
-            'imageUpload'
+            'imageUpload',
         ]),
         init() {
             if (this.$route.params.name == "singleVideo") {
@@ -44,7 +45,8 @@ export default {
             this.program.startDate = this.convertDateToLong(new Date(this.program.startDate))
             this.program.expiryDate = this.convertDateToLong(new Date(this.program.expiryDate))
             this.program.userId = this.$session.get('userId')
-             
+            this.program.userEmail = this.$session.get('email')
+
             //adding program to database 
             this.addProgram(this.program).then( (resp) => {
                 this.$swal('','Successfully added','success')
@@ -66,23 +68,26 @@ export default {
             return date.getTime()
         },
         processFile(event,type) {
+            debugger
             if (type=='Thumbnail') {
                 let formData = new FormData()
-                formData.append('image', event.target.files[0])
+                formData.append('file', event.target.files[0])
+                formData.append('filetype','image')
                 formData.append('type','Thumbnail')
                 this.imageUpload(formData).then( (resp) => {
-                    if(resp.uploadLink=="") {
+                    if(resp.uploadLink!="") {
                         this.program.imgUrls.thumbnail = resp.uploadLink
                     } else {
-                        this.$swal('File type not supported')
+                        this.$swal(resp.message)
                     }
                 }).catch( (err) => {
                     console.log(err)
                 })
             } else {
                 let formData = new FormData()
-                formData.append('image', event.target.files[0])
-                formData.append('type','avatar')
+                formData.append('file', event.target.files[0])
+                formData.append('filetype','image')
+                formData.append('type','Avatar')
                 this.imageUpload(formData).then( (resp) => {
                     if(resp.uploadLink) {
                         this.program.imgUrls.avatar = resp.uploadLink

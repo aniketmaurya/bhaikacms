@@ -15,8 +15,10 @@ export default {
                 startDate:null,
                 endDate:null,
                 pageNumber:0,
-                pageSize:5,
-                userId:null
+                pageSize:10,
+                userId:null,
+                sortBy:null,
+                sortOrder:0
             }
         }
     },
@@ -32,19 +34,19 @@ export default {
         },
         changeDate(date) {
             let d = new Date(date) 
-            return d.toDateString();
+            return d.toDateString() + d.toTimeString();
         },
         prvPage() {
             if(this.page.pageNumber != 0 ) {
                 this.page.pageNumber = this.page.pageNumber-1
-                this.page.size=5
+                this.page.size=10
                 this.getAllAudits(this.page)
             }
         },
         nextPage() {
             if(!this.allAudits.last) {
                 this.page.pageNumber = this.page.pageNumber+1
-                this.page.size=5
+                this.page.size=10
                 this.getAllAudits(this.page)
             }
         }

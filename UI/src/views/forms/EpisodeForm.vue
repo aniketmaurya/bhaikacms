@@ -44,11 +44,10 @@ export default {
     name:'EpisodeForm',
     data() {
         return {
+            // getSeason: {},
             episodes:[
                 {
-                    season: {
-                        id: ""
-                    },
+                    season: {},
                     episodeNumber:"",
                     episodeTitle:"",
                     episodeDescription:"",
@@ -74,9 +73,7 @@ export default {
         ]),
         addNewEmployeeForm(){
             this.episodes.push({
-                season: {
-                        id: ""
-                    },
+                season: {},
                     episodeNumber:"",
                     episodeTitle:"",
                     episodeDescription:"",
@@ -94,7 +91,7 @@ export default {
         handleSubmit() {
             let counter = 1;
             for(let i in this.episodes) {
-                this.episodes[i].season.id = this.season.id
+                this.episodes[i].season = this.season
                 this.episodes[i].episodeNumber = counter++
             }
             this.addEpisodes(this.episodes).then( (resp) => {
@@ -111,7 +108,8 @@ export default {
         processFile(event,type,index) {
             if (type=='Thumbnail') {
                 let formData = new FormData()
-                formData.append('image', event.target.files[0])
+                formData.append('file', event.target.files[0])
+                formData.append('filetype','image')
                 formData.append('type','Thumbnail')
                 this.imageUpload(formData).then( (resp) => {
                     if(resp.uploadLink) {
@@ -124,8 +122,9 @@ export default {
                 })
             } else {
                 let formData = new FormData()
-                formData.append('image', event.target.files[0])
-                formData.append('type','avatar')
+                formData.append('file', event.target.files[0])
+                formData.append('filetype','image')
+                formData.append('type','Avatar')
                 this.imageUpload(formData).then( (resp) => {
                     if(resp.uploadLink) {
                         this.episodes[index].episodesImageUrls.avatar = resp.uploadLink
@@ -136,7 +135,13 @@ export default {
                     console.log(err)
                 })
             }  
+        },
+        init() {
+            console.log()
         }
+    },
+    mounted() {
+        this.init()
     }
 }
 </script>

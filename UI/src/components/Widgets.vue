@@ -1,11 +1,37 @@
 <template>
 <div class="content-area">
-    <div class="count-users">TOTAL USERS<div id="user-nos">20</div></div>
+    <div class="count-users">TOTAL USERS<div id="user-nos">{{ this.userCount }}</div></div>
     <div class="count-videos">TOTAL VIDEOS<div id="video-nos">50</div></div>
-    <div class="count-admin">TOTAL ADMINS<div id="admin-nos">10</div></div>
+    <div class="count-admin">TOTAL ADMINS<div id="admin-nos">{{ this.adminCount }}</div></div>
     <div class="count-activities">RECENT ACTIVITIES<span id="activities-nos"></span></div>
 </div>
 </template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex';
+export default {
+    name:'Widgets',
+    computed: {
+        ...mapGetters([
+            'userCount',
+            'adminCount'
+        ])
+    },
+    methods: {
+        ...mapActions([
+            'getCount'
+        ]),
+        init() {
+            this.getCount()
+        } 
+    },
+    mounted() {
+        this.init()
+    }
+}
+</script>
+
+
 
 <style>
 .content-area{

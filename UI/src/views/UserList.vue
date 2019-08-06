@@ -16,32 +16,59 @@
                         <table class="table table-striped table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th>User Name <i class="fa fa-sort"></i></th>
-                                    <th>User Email</th>
-                                    <th>Role<i class="fa fa-sort"></i></th>
-                                    <th>Is Active</th>
+                                    <th style="cursor:pointer;" @click="sort('name')">User Name <i class="fa fa-sort"></i></th>
+                                    <th style="cursor:pointer;" @click="sort('email')">User Email</th>
+                                    <th style="cursor:pointer;" @click="sort('roleId')">Role<i class="fa fa-sort"></i></th>
+                                    <th style="cursor:pointer;" @click="sort('isActive')">Is Active</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="user in userList.content" :key="user.name">
-                                    <td>{{ user.name }}</td>
+                                <tr v-for="user in userList.content" :key="user.id">
+                                     <td>
+                                        <div v-if="!editing">
+                                            <span class='text' @click="enableEditing(user.name)">{{user.name}}</span>
+                                        </div>
+                                        <div v-if="editing">
+                                            <input v-model="user.name" class="input"/>
+                                            <button @click="disableEditing"> Cancel </button>
+                                            <button @click="saveEdit"> Save </button>
+                                        </div>
+                                    </td>
+                                    <!-- <td><div class="editable-text">{{ user.name }}</div></td> -->
                                     <td>{{ user.email }}</td>
-                                    <td>{{ chanegRoleName(user.roleId) }}</td>
+                                    <td>
+                                        <div v-if="!editing">
+                                            <span class='text' @click="enableEditing">{{chanegRoleName(user.roleId)}}</span>
+                                        </div>
+                                        <div v-if="editing">
+                
+                                            <select @change="checkToggleValue($event)">
+                                                <option :value="user.roleId" @click="saveEdit" selected>{{chanegRoleName(user.roleId)}}</option>
+                                                <option :value="toggleRoleId(user.role)">{{ toggleRoleName(user.roleId) }}</option>
+                                            </select>
+                                        </div>
+                                    </td>
                                     <td>{{ changeIsActive(user.active) }}</td>
-                                    <td><button @click="handleDelete(user.id)" class="btn btn-danger">Remove</button></td>
+                                    <td v-if="user.active==1"><button @click="handleDelete(user.id)" class="btn btn-danger">Deactivae</button></td>
+                                    <td v-if="user.active==0"><button @click="handleActivate(user.id)" class="btn btn-success">Activate</button></td>
                                 </tr>
                             </tbody>
                         </table>
                 </div>    
             </div>
+            <div v-if="userList.totalElements!=0">
             <div class="clearfix">
+                <div class="hint-text">Showing <b><span v-if="userList.number!=(userList.totalPages-1)">{{((page.pageNumber+1)*userList.numberOfElements)}}</span>
+                    <span v-else>{{((userList.number*userList.size)+userList.numberOfElements)}}</span></b> out of <b>{{ userList.totalElements }}</b> entries</div>
                 <!-- <div class="hint-text">Showing <b>{{ allAudits.size }}</b> out of <b>{{ allAudits.totalElements }}</b> entries</div> -->
                 <ul class="pagination">
-                    <button  @click="prvPage()"   class="btn btn-primary">Previous page</button>
-                    <button  @click="nextPage()" style="margin:10px;" class="btn btn-primary">Next page</button>
+                    <button v-if="page.pageNumber!=0" @click="prvPage()"   class="btn btn-primary">Prev</button>
+                    <span> {{page.pageNumber+1}} Out of {{userList.totalPages}}</span>
+                    <button v-if="page.pageNumber!=(userList.totalPages-1)" @click="nextPage()" style="margin:10px;" class="btn btn-primary">Next</button>
                 </ul>
             </div>
+        </div>
         </div>
     <!-- </div> -->
 </template>

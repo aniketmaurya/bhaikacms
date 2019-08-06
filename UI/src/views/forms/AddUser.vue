@@ -15,11 +15,14 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label>Password</label>
-                <input v-model="user.password"  type="password" class="form-control " required>
+                <input v-model="user.password"  type="password" class="form-control" required>
             </div>
             <div class="form-group col-md-6">
                 <label >Role Id</label>
-                <input v-model="user.roleId" type="text" class="form-control" required>
+                <select  class="form-control" v-bind="user.roleId">
+                    <option value="0">User</option>
+                    <option value="1">Admin</option>
+                </select> 
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
@@ -50,6 +53,10 @@ export default {
             this.addUser(this.user).then( (resp) => {
                 if(resp.added) {
                     this.$swal('',resp.message,'success')
+                    this.user.name=""
+                    this.user.password=""
+                    this.user.email=""
+                    this.user.roleId=""
                 }
                 else {
                     this.$swal(resp.message)

@@ -1,6 +1,22 @@
 <template>
 <div class="card-wrapper">
-<center><router-link :to="'/program/singleVideo'"><button class="btn btn-success">Upload new program</button></router-link></center>
+    <div class="row">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <form @submit.prevent="handleSubmit()">
+                <div class="col-md-8">
+                    <input v-model="searchText"  class="form-control" type="text" placeholder="Search here">
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-primary">Search</button> 
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <router-link :to="'/program/singleVideo'"><button class="btn btn-success">Upload new program</button></router-link>
+        </div>
+    </div>
+    </div>
 <div  v-for="program in singleVideos.content" :key="program.id"  class="card">
     <div class="row ">
         <div class="col-md-4">
@@ -29,11 +45,17 @@
         </div>
     </div>
 </div>   
-<div class="col-md-12">
+<div v-if="singleVideos.content!=0"  class="col-md-12">
+    <div class="clearfix">
+        <div class="hint-text">Showing <b><span v-if="singleVideos.number!=(singleVideos.totalPages-1)">{{((page.pageNumber+1)*singleVideos.numberOfElements)}}</span>
+            <span v-else>{{((singleVideos.number*singleVideos.size)+singleVideos.numberOfElements)}}</span></b> out of <b>{{ singleVideos.totalElements }}</b> entries</div>
+        <!-- <div class="hint-text">Showing <b>{{ allAudits.size }}</b> out of <b>{{ allAudits.totalElements }}</b> entries</div> -->
         <ul class="pagination">
-            <button  @click="prvPage()"   class="btn btn-primary">Previous page</button>
-            <button  @click="nextPage()" style="margin:10px;" class="btn btn-primary">Next page</button>
+            <button v-if="page.pageNumber!=0" @click="prvPage()"   class="btn btn-primary">Prev</button>
+            <span> {{page.pageNumber+1}} Out of {{singleVideos.totalPages}}</span>
+            <button v-if="page.pageNumber!=(singleVideos.totalPages-1)" @click="nextPage()" style="margin:10px;" class="btn btn-primary">Next</button>
         </ul>
+    </div>
 </div> 
 </div>
 </template>
@@ -50,4 +72,41 @@
     margin:10px;
     padding:10px;
 }
+  .pagination {
+        float: right;
+        margin: 0 0 5px;
+    }
+    .pagination li a {
+        border: none;
+        font-size: 95%;
+        width: 30px;
+        height: 30px;
+        color: #999;
+        margin: 0 2px;
+        line-height: 30px;
+        border-radius: 30px !important;
+        text-align: center;
+        padding: 0;
+    }
+    .pagination li a:hover {
+        color: #666;
+    }   
+    .pagination li.active a {
+        background: #03A9F4;
+    }
+    .pagination li.active a:hover {        
+        background: #0397d6;
+    }
+    .pagination li.disabled i {
+        color: #ccc;
+    }
+    .pagination li i {
+        font-size: 16px;
+        padding-top: 6px
+    }
+    .hint-text {
+        float: left;
+        margin-top: 6px;
+        font-size: 95%;
+    }  
 </style>

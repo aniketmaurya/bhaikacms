@@ -19,7 +19,15 @@ export default new Vuex.Store({
     multiVideos: {},
     seasonalVideos: {},
     seasons:{},
-    episodes:{}
+    episodes:{},
+    userCount:0,
+    adminCount:0,
+    // VK
+    userListEdit:{
+      editable: false,
+    },
+    languages:{},
+    
   },
   
   mutations: {
@@ -55,6 +63,22 @@ export default new Vuex.Store({
     },
     setRoleId(state,payload) {
       state.roleId = payload
+    },
+    setUsetDetails(state,payload) {
+      state.userDetails = payload
+    },
+    setLanguages(state,payload) {
+      state.languages = payload
+    },
+    // VK
+    setUserListEdit(state,payload){
+      state.userList = payload
+    },
+    setUserCount(state,payload) {
+      state.userCount = payload
+    },
+    setAdminCount(state,payload) {
+      state.adminCount = payload
     }
   },
 
@@ -64,7 +88,7 @@ export default new Vuex.Store({
     signIn: ({commit},payload) => {
       return new Promise( (resolve,reject) => {
         let header = {
-          'Content-Type': 'application/json',
+          'Content-Type':'application/json',
           'Accept': 'application/json',
         };
         Vue.http.post("http://172.16.20.78:8080/useradmin/authenticate",JSON.stringify(payload),
@@ -78,7 +102,7 @@ export default new Vuex.Store({
       })
     },
     getUserList : ({commit},payload) => {
-      Vue.http.get("http://172.16.20.78:8080/useradmin/getAllUsers?pageNumber="+payload.pageNumber+"&pageSize="+payload.pageSize).then( (resp) => {
+      Vue.http.get("http://172.16.20.78:8080/useradmin/getAllUsers?pageNumber="+payload.pageNumber+"&pageSize="+payload.pageSize+"&sortBy="+payload.sortBy+"&order="+payload.order).then( (resp) => {
         commit('setUserList',resp.body)
       }).catch( (err) => {
       console.log(err)
@@ -106,7 +130,6 @@ export default new Vuex.Store({
         })
       })
     },
-
     logout : ({commit},payload) => {
       return new Promise( (resolve,reject) => {
         Vue.http.post("http://172.16.20.78:8080/useradmin/logout",JSON.stringify(payload)).then( (resp) => {
@@ -116,6 +139,20 @@ export default new Vuex.Store({
           reject(false)
       })
       }) 
+    },
+    getCount: ({commit}) => {
+      Vue.http.get("http://172.16.20.78:8080/useradmin/countUser?roleId=1").then( (resp) => {
+        commit('setUserCount',resp.body)
+        Vue.http.get("http://172.16.20.78:8080/useradmin/countUser?roleId=0").then( (resp) => {
+          commit('setAdminCount',resp.body)
+          }).catch( (err) => {
+            console.log(err)
+            reject(false)
+          }) 
+      }).catch( (err) => {
+      console.log(err)
+      reject(false)
+    })
     },
 
     /*---------------------------Metadata Service--------------------------------*/
@@ -165,7 +202,6 @@ export default new Vuex.Store({
     getSingleVideoPrograms: ({commit},payload) => {
       Vue.http.get("http://172.16.20.95:8081/metadata/getAllSingleVideoProgram?pageSize="+payload.pageSize+"&pageNumber="+payload.pageNumber).then( (resp) => {
         console.log(resp)
-        debugger
         commit('setSingleVideos',resp.body)
       }).catch( (err) => {
         console.log(err)
@@ -196,7 +232,6 @@ export default new Vuex.Store({
     getEpisodesBySeason: ({commit},payload) => {
       Vue.http.get("http://172.16.20.95:8081/metadata/getEpisodesBySeasonId?seasonId="+payload.seasonId+"&pageNumber="+payload.pageNumber+"&pageSize="+payload.pageSize).then( (resp) => {
         console.log(resp)
-        debugger
         commit('setEpisodes',resp.body)
       }).catch( (err) => {
         console.log(err)
@@ -236,12 +271,40 @@ export default new Vuex.Store({
     },
     addLanguage: ({commit},payload) => {
       return new Promise((resolve,reject) => {
-        console.log(payload)
-        Vue.http.put("http://172.16.20.95:8081/admin/addLanguage",JSON.stringify(payload)).then( (resp) => {
+        Vue.http.post("http://172.16.20.95:8081/admin/addLanguage",JSON.stringify(payload)).then( (resp) => {
+          // console.log(resp.body)
           resolve(resp.body)
         }).catch( (err) => {
           console.log(err)
           reject(false)
+        })
+      })
+    },
+    getLanguages: ({commit}) => {
+      Vue.http.get("http://172.16.20.95:8081/admin/getAllLanguages").then((resp) => {
+          commit('setLanguages',resp.body)
+      }).catch((err) => {
+          console.log(err)
+      })
+    },
+    deleteLanguageByName: ({commit},payload) => {
+      return new Promise((resolve,reject) => {
+        Vue.http.delete("http://172.16.20.95:8081/admin/deleteLanguageByName?languageName="+payload.name).then((resp) => {
+          console.log(resp)
+          resolve(resp.body)
+        }).catch((err) => {
+          console.log(err)
+          reject(resp.body)
+        })
+      })
+    },
+    editLanguage: (payload) => {
+      return new Promise((resolve,reject) => {
+        Vue.http.put("http://172.16.20.95:8081/admin/editLanguage?newName="+payload.name).then((resp) => {
+          resolve(resp.body)
+        }).catch((err) => {
+          console.log(err)
+          reject(resp.body)
         })
       })
     },
@@ -265,7 +328,7 @@ export default new Vuex.Store({
     /*---------------------------Other Services--------------------------------*/
     imageUpload: ({commit},payload) => {
       return new Promise((resolve,reject) => {
-        Vue.http.post("http://172.16.20.83:8082/image/uploadImage",payload).then( (resp) => {
+        Vue.http.post("http://172.16.20.83:8082/image/upload",payload).then( (resp) => {
           resolve(resp.body)
         }).catch( (err) => {
           console.log(err)
@@ -279,11 +342,14 @@ export default new Vuex.Store({
 
     //Testing Phase
     searchInVideo : ({commit},payload) => { 
-      Vue.http.get("http://172.16.20.101:8080/solrSearch/search?searchTerm=ipl&pageNumber=0&pageSize=5").then( (resp) => {
+      return new Promise((resolve,reject) => {
+        Vue.http.get("http://172.16.20.101:8080/solrSearch/search?searchTerm="+payload+"&pageNumber=0&pageSize=5").then( (resp) => {
+          commit('setSingleVideos',resp.body)
           console.log(resp.body)
         }).catch( (err) => {
           console.log(err)
         })
+      })
     },  
      
     
@@ -292,8 +358,14 @@ export default new Vuex.Store({
     allAudits (state) {
       return state.allAudits
     },
+    adminCount (state) {
+      return state.adminCount
+    },
     episode (state) {
       return state.episode
+    },
+    languages (state) {
+      return state.languages
     },
     isLoggedIn (state) {
       return state.userDetails.status
@@ -321,6 +393,15 @@ export default new Vuex.Store({
     },
     episodes(state) {
       return state.episodes
+    },
+    userDetails(state) {
+      return state.userDetails
+    },
+    userListEdit(state) {
+      return state.userListEdit
+    },
+    userCount(state) {
+      return state.userCount
     }
   }
 })

@@ -156,6 +156,14 @@ let router = new Router({
       meta: {
         authentication: 'required'
       }
+    },
+    {
+      path: '/addCategory',
+      name: 'addCategory',
+      component: () => import('./views/Category.vue'),
+      meta: {
+        authentication: 'required'
+      }
     }
   ]
 })

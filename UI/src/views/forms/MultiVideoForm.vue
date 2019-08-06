@@ -73,7 +73,8 @@ export default {
          processFile(event,type) {
             if (type=='Thumbnail') {
                 let formData = new FormData()
-                formData.append('image', event.target.files[0])
+                formData.append('file', event.target.files[0])
+                formData.append('filetype','image')
                 formData.append('type','Thumbnail')
                 this.imageUpload(formData).then( (resp) => {
                     if(resp.uploadLink) {
@@ -86,8 +87,9 @@ export default {
                 })
             } else {
                 let formData = new FormData()
-                formData.append('image', event.target.files[0])
-                formData.append('type','avatar')
+                formData.append('file', event.target.files[0])
+                formData.append('filetype','image')
+                formData.append('type','Avatar')
                 this.imageUpload(formData).then( (resp) => {
                     if(resp.uploadLink) {
                         this.multiVideo.seasonImgUrls.avatar = resp.uploadLink

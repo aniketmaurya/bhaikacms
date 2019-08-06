@@ -19,6 +19,9 @@ export default {
             this.logout(this.user).then( (resp) => {
             this.$session.destroy()
             localStorage.setItem('isLoggedIn', 'false')
+            this.$store.commit('setUsetDetails',{
+                status:false
+            })
             this.$swal('','Successfully logout','success')
             this.$router.push('/login')
 

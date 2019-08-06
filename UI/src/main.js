@@ -5,8 +5,10 @@ import store from './store/index'
 import VueSession from 'vue-session'
 import VueSwal from 'vue-swal'
 
+
 Vue.use(VueSession)
 Vue.use(VueSwal)
+
 
 Vue.config.productionTip = false
 

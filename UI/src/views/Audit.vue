@@ -17,37 +17,47 @@
                             <thead>
                                 <tr>
                                     
-                                    <th>Content Id <i class="fa fa-sort"></i></th>
-                                    <th>Content Name</th>
+                                    <th>Asset <i class="fa fa-sort"></i></th>
                                     <th>Action <i class="fa fa-sort"></i></th>
                                     <th>Timestamp</th>
-                                    <th>User Id <i class="fa fa-sort"></i></th>
-                                    <th>Old Change</th>
-                                    <th>New Change</th>
+                                    <th>Modifier <i class="fa fa-sort"></i></th>
+                                    <th>Old Value</th>
+                                    <th>New Value</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="audit in allAudits.content" :key="audit">
         
-                                    <td>{{ audit.contentId }}</td>
-                                    <td>{{ audit.contentName }}</td>
-                                    <td>{{ audit.actionName }}</td>
+                                    <td>{{ audit.asset }}</td>
+                                    <td>{{ audit.action }}</td>
                                     <td>{{ changeDate(audit.actionTime) }}</td>
-                                    <td>{{ audit.actionBy }}</td>
-                                    <td>{{ audit.oldContent }}</td>
-                                    <td>{{ audit.newContent }}</td>
+                                    <td>{{ audit.modifier }}</td>
+                                    <td>{{ audit.oldValue }}</td>
+                                    <td>{{ audit.newValue }}</td>
                                 </tr>
                             </tbody>
                         </table>
                 </div>    
             </div>
+            <div v-if="allAudits.totalElements!=0">
             <div class="clearfix">
+                <div class="hint-text">Showing <b><span v-if="allAudits.number!=(allAudits.totalPages-1)">{{((page.pageNumber+1)*allAudits.numberOfElements)}}</span>
+                    <span v-else>{{((allAudits.number*allAudits.size)+allAudits.numberOfElements)}}</span></b> out of <b>{{ allAudits.totalElements }}</b> entries</div>
                 <!-- <div class="hint-text">Showing <b>{{ allAudits.size }}</b> out of <b>{{ allAudits.totalElements }}</b> entries</div> -->
+                <ul class="pagination">
+                    <button v-if="page.pageNumber!=0" @click="prvPage()"   class="btn btn-primary">Prev</button>
+                    <span> {{page.pageNumber+1}} Out of {{allAudits.totalPages}}</span>
+                    <button v-if="page.pageNumber!=(allAudits.totalPages-1)" @click="nextPage()" style="margin:10px;" class="btn btn-primary">Next</button>
+                </ul>
+            </div>
+            </div>
+            <!-- <div class="clearfix">
+                <div class="hint-text">Showing <b>{{ allAudits.size }}</b> out of <b>{{ allAudits.totalElements }}</b> entries</div>
                 <ul class="pagination">
                     <button style="margin:10px;"  @click="prvPage()"  class="btn btn-primary">Previous page</button>
                     <button @click="nextPage()"  class="btn btn-primary">Next page</button>
                 </ul>
-            </div>
+            </div> -->
         </div>
     <!-- </div> -->
 </template>

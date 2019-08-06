@@ -11,7 +11,8 @@ export default {
             programData: {
                 id:"",
                 userId:""
-            }
+            },
+            searchText:""
         }
     },
     computed: {
@@ -22,7 +23,8 @@ export default {
     methods: {
         ...mapActions([
             'getSingleVideoPrograms',
-            'deleteProgramById'
+            'deleteProgramById',
+            'searchInVideo'
         ]),
         init() {
            this.getSingleVideoPrograms(this.page) 
@@ -58,6 +60,14 @@ export default {
                 this.getSingleVideoPrograms(this.page)
             }
         },
+        handleSubmit() {
+            this.searchInVideo(this.searchText).then( (resp) => {
+                this.$router.push('/singleVideos')
+            }).catch((err)=> {
+
+            }) 
+
+        }
 
     },
     mounted() {

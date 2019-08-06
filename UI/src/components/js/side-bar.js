@@ -5,7 +5,7 @@ export default {
     computed: {
         ...mapGetters([
             'userDetails',
-            'roleId'
+            'isLoggedIn'
         ])
     }
 }

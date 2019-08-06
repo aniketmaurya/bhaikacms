@@ -23,7 +23,12 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputCity">Parental rating</label>
-                <input v-model="program.parentalRating"  type="text" class="form-control" required>
+                <select class="form-control" v-model="program.parentalRating">
+                    <option value="7">7+</option>
+                    <option value="13">13+</option>
+                    <option value="18">18+</option>
+                    <option value="all">all</option>
+                </select>
             </div>
             <div class="form-group col-md-6">
                 <label for="inputState">Language</label>
