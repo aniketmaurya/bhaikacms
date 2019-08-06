@@ -44,7 +44,7 @@ public class EpisodeController {
         File file = new File(uploadingDir + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);
         List<Episode> episodeList = episodeService.addEpisodeByBulkUpload(file);
-        //file.delete();
+        file.delete();
         return ResponseEntity.ok(episodeList);
     }
 }

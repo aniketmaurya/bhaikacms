@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/metadata")
@@ -66,5 +71,15 @@ public class SeasonController {
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
         return ResponseEntity.ok(seasonServices.getAllMultiVideo(pageNumber, pageSize));
+    }
+
+    @RequestMapping(path = "/addSeasonByBulk", method = RequestMethod.POST)
+    public ResponseEntity<List<Season>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+        String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
+        File file = new File(uploadingDir + multipartFile.getOriginalFilename());
+        multipartFile.transferTo(file);
+        List<Season> seasonList = seasonServices.addSeasonByBulkUpload(file);
+        file.delete();
+        return ResponseEntity.ok(seasonList);
     }
 }

@@ -5,6 +5,9 @@ import com.coviam.metadata.dto.request.SeasonRequest;
 import com.coviam.metadata.entity.Season;
 import org.springframework.data.domain.Page;
 
+import java.io.File;
+import java.util.List;
+
 public interface SeasonServices {
     /**
      * addSeason and addMultiCategory are same just a difference of implementation and display
@@ -24,5 +27,5 @@ public interface SeasonServices {
 
     Boolean editSeason(SeasonRequest seasonRequest);
 
-
+    List<Season> addSeasonByBulkUpload(File csvFile);
 }

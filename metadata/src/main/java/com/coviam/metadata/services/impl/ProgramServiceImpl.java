@@ -199,7 +199,8 @@ public class ProgramServiceImpl implements ProgramServices {
                     && headers[4].equalsIgnoreCase("Keywords") && headers[5].equalsIgnoreCase("Languages")
                     && headers[6].equalsIgnoreCase("Start Date") && headers[7].equalsIgnoreCase("Expiry Date")
                     && headers[8].equalsIgnoreCase("Category") && headers[9].equalsIgnoreCase("Thumbnail Image Url")
-                    && headers[10].equalsIgnoreCase("Avatar Image Url") && headers[11].equalsIgnoreCase("userId")) {
+                    && headers[10].equalsIgnoreCase("Avatar Image Url") && headers[11].equalsIgnoreCase("userId")
+                    && headers[12].equalsIgnoreCase("Email Id")) {
 
 //            if (Arrays.equals(headers, defaultHeaders)) {
                 while ((line = br.readLine()) != null) {
@@ -223,6 +224,7 @@ public class ProgramServiceImpl implements ProgramServices {
                             .userEmail(records[12])
                             .build();
                     Program program = addProgram(programRequest);
+                    log.info("Added program with program id:{}", program.getId());
                     programList.add(program);
                 }
             }

@@ -5,6 +5,7 @@ import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.SeasonRequest;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.repository.EpisodeRepository;
+import com.coviam.metadata.repository.ProgramRepository;
 import com.coviam.metadata.repository.SeasonRepository;
 import com.coviam.metadata.services.SeasonServices;
 import com.coviam.metadata.utility.AuditUtility;
@@ -16,7 +17,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +34,9 @@ public class SeasonServiceImpl implements SeasonServices {
 
     @Autowired
     private EpisodeRepository episodeRepository;
+
+    @Autowired
+    private ProgramRepository programRepository;
 
     @Autowired
     private AuditUtility auditUtility;
@@ -119,5 +127,52 @@ public class SeasonServiceImpl implements SeasonServices {
         return Boolean.TRUE;
     }
 
+
+    @Override
+    public List<Season> addSeasonByBulkUpload(File csvFile) {
+
+        String line = "";
+        String csvSplitBy = ",";
+        List<Season> seasonList = new ArrayList<>();
+        try {
+            FileReader file = new FileReader(csvFile);
+            BufferedReader br = new BufferedReader(file);
+            line = br.readLine();
+            String[] headers = line.split(csvSplitBy);
+
+            if (headers[0].equalsIgnoreCase("Program Id") && headers[1].equalsIgnoreCase("Season Name")
+                    && headers[2].equalsIgnoreCase("Season Number") && headers[3].equalsIgnoreCase("Season Description")
+                    && headers[4].equalsIgnoreCase("Thumbnail Image Url") && headers[5].equalsIgnoreCase("Avatar Image Url")
+                    && headers[6].equalsIgnoreCase("User Id") && headers[7].equalsIgnoreCase("Email Id")) {
+
+                while ((line = br.readLine()) != null) {
+                    String[] records = line.split(csvSplitBy);
+                    programRepository.findById(records[0]).ifPresent(program -> {
+
+                        HashMap<String, String> images = new HashMap<>();
+                        images.put("Thumbnail", records[4]);
+                        images.put("Avatar", records[5]);
+
+                        SeasonRequest seasonRequest = SeasonRequest.builder()
+                                .program(program)
+                                .seasonName(records[1])
+                                .seasonNumber(Integer.parseInt((records[2])))
+                                .seasonDescription(records[3])
+                                .seasonImgUrls(images)
+                                .userId(records[6])
+                                .userEmail(records[7])
+                                .build();
+
+                        Season season = addSeason(seasonRequest);
+                        log.info("Added season with season id:{}", season.getId());
+                        seasonList.add(season);
+                    });
+                }
+            }
+        } catch (Exception e) {
+            log.debug("Error while uploading season:{}", e.getMessage());
+        }
+        return seasonList;
+    }
 
 }
