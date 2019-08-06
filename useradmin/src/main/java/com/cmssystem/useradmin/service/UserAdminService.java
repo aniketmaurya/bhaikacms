@@ -13,7 +13,7 @@ public interface UserAdminService {
     Page<UserAdminResponseDto> searchUser(String input, Integer pageNumber, Integer pageSize);
 
 
-    Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize);
+    Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize, String sortBy,Integer order);
 
     UserDeleteResponseDto deleteUser(String idDelete, String id);
 

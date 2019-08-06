@@ -36,6 +36,8 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Autowired
     private UserAdminTokenRepository userAdminTokenRepository;
 
+    private static final List<String> ALLOWED=Arrays.asList("email","name","roleId","isActive");
+
     @Override
     public UserAdminAddResponseDto addUser(UserAdminDetailsDto userAdminDetailsDto) {
 
@@ -43,7 +45,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         log.warn(userAdminDetailsDto.toString());
         UserAdmin userAdmin = new UserAdmin();
         userAdmin.setEmail(userAdminDetailsDto.getEmail());
-        userAdmin.setName(userAdminDetailsDto.getName());
+        userAdmin.setName(userAdminDetailsDto.getName().substring(0,1).toUpperCase() +userAdminDetailsDto.getName().substring(1));
         UtilityClass utilityClass = new UtilityClass();
         userAdmin.setPassword(utilityClass.hashPassword(userAdminDetailsDto.getPassword()));
         userAdmin.setActive(true);
@@ -91,11 +93,25 @@ public class UserAdminServiceImpl implements UserAdminService {
     }
 
     @Override
-    public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
+    public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize, String sortBy,Integer order) {
 
-        Page<UserAdmin> page = userAdminRepository.findAll(PageRequest.of(pageNumber, pageSize,
-                Sort.by(Arrays.asList(new Sort.Order(Sort.Direction.DESC, "isActive"),
-                        new Sort.Order(Sort.Direction.ASC, "name")))));
+        pageNumber=pageNumber==null?0:pageNumber;
+        pageSize=pageSize==null?10:pageSize;
+        sortBy=sortBy==null|| !ALLOWED.contains(sortBy)?"":sortBy;
+        order=order==null?0:order;
+
+        PageRequest pageRequest;
+        if(sortBy.equals("")){
+            pageRequest=PageRequest.of(pageNumber,pageSize,
+                    Sort.by(Arrays.asList(new Sort.Order(Sort.Direction.DESC,"isActive"),
+                            new Sort.Order(Sort.Direction.ASC,"name"))));
+
+        }else {
+            pageRequest = PageRequest.of(pageNumber, pageSize,
+                    Sort.by(order == 0 ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
+        }
+        Page<UserAdmin> page = userAdminRepository.findAll(pageRequest);
+
         return page.map(this::convertToDto);
     }
 
@@ -118,7 +134,13 @@ public class UserAdminServiceImpl implements UserAdminService {
         if (userAdmin != null && (userAdmin1.getRoleId()) == 1) {
             userAdmin.setActive(!userAdmin.isActive());
             userDeleteResponseDto.setDeleted(true);
-            userDeleteResponseDto.setMessage(userAdmin.getName() + " got disabled " + "by " + userAdmin1.getName());
+            if(userAdmin.isActive()==true) {
+                userDeleteResponseDto.setMessage(userAdmin.getName() + " got enabled " + "by " + userAdmin1.getName());
+            }
+            if(userAdmin.isActive()==false)
+            {
+                userDeleteResponseDto.setMessage(userAdmin.getName() + " got disabled " + "by " + userAdmin1.getName());
+            }
             userAdminRepository.save(userAdmin);
             AuditUtility auditUtility = new AuditUtility();
             auditUtility.deleteAudit(userAdmin.getName(), userAdmin.getEmail(), userAdmin1.getEmail(), new ArrayList<Change>());
@@ -134,7 +156,7 @@ public class UserAdminServiceImpl implements UserAdminService {
 
     }
 
-    @CachePut(value = "token", key = "#email", cacheManager = "redisCacheManager")
+   // @CachePut(value = "token", key = "#email", cacheManager = "redisCacheManager")
     @Override
     public UserLoginResponseDto authenticateLoginUser(String email, String password) {
         UserAdmin userAdmin = userAdminRepository.findByEmail(email);
@@ -176,7 +198,7 @@ public class UserAdminServiceImpl implements UserAdminService {
         log.debug("Time" + System.currentTimeMillis());
         log.debug(userLoginResponseDto.getMessage());
 
-        log.debug("Before timer");
+      /*  log.debug("Before timer");
         new java.util.Timer().schedule(
                 new java.util.TimerTask() {
                     @Override
@@ -188,7 +210,7 @@ public class UserAdminServiceImpl implements UserAdminService {
                 },
                 7200000
         );
-        log.debug("After timer exec");
+        log.debug("After timer exec");*/
         return userLoginResponseDto;
 
     }

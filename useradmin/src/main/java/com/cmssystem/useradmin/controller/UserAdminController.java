@@ -56,10 +56,12 @@ public class UserAdminController {
 
 
     @GetMapping(value = "/getAllUsers")
-    public ResponseEntity<Page<UserDto>> getAllUsers(@RequestParam(value = "pageNumber") int pageNumber, @RequestParam(value = "pageSize") int pageSize) {
-        return ResponseEntity.ok(userAdminService.getAllUsers(pageNumber, pageSize));
+    public ResponseEntity<Page<UserDto>> getAllUsers(@RequestParam(value = "pageNumber") Integer pageNumber,
+                                                     @RequestParam(value = "pageSize") Integer pageSize,
+                                                     @RequestParam(value = "sortBy") String sortBy,
+                                                     @RequestParam(value = "order") Integer order) {
+        return ResponseEntity.ok(userAdminService.getAllUsers(pageNumber, pageSize,sortBy,order));
     }
-
 
     @DeleteMapping(value = "/userDeleteByDetails")
     public ResponseEntity<?> deleteUser(@RequestParam(value = "idDelete") String idDelete, @RequestParam(value = "id") String id) {

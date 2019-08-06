@@ -12,7 +12,7 @@ import java.util.List;
 public class AuditUtility {
 
 
-    public void callAudit(AuditRequestDto auditRequest) {
+    private void callAudit(AuditRequestDto auditRequest) {
         RestTemplate restTemplate = new RestTemplate();
         String auditServiceUrl = "http://172.16.20.83:8082";
         Boolean response = restTemplate.postForObject(auditServiceUrl + "/audit/addAudit", auditRequest, Boolean.class);
@@ -25,7 +25,9 @@ public class AuditUtility {
                 .assetId(userEmail)
                 .action("ADDED")
                 .modifier(modifierEmail)
-                .changes(changes).build();
+                .changes(changes)
+                .flag(1)
+                .build();
 
         callAudit(auditRequestDto);
     }
@@ -37,7 +39,9 @@ public class AuditUtility {
                 .assetId(userEmail)
                 .action("DELETED")
                 .modifier(modifierEmail)
-                .changes(changes).build();
+                .changes(changes)
+                .flag(1)
+                .build();
 
         callAudit(auditRequestDto);
     }
@@ -49,7 +53,9 @@ public class AuditUtility {
                 .assetId(userEmail)
                 .action("EDITED")
                 .modifier(modifierEmail)
-                .changes(changes).build();
+                .changes(changes)
+                .flag(1)
+                .build();
 
         callAudit(auditRequestDto);
 
