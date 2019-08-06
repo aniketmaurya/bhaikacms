@@ -1,6 +1,7 @@
 package com.coviam.metadata.entity;
 
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLHStoreType;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -15,6 +16,7 @@ import java.util.Map;
 @Data
 @Table(name = SingleVideo.TABLE_NAME)
 @TypeDef(name = "hstore", typeClass = PostgreSQLHStoreType.class)
+@Builder
 public class SingleVideo {
 
     public static final String TABLE_NAME = "single_video";

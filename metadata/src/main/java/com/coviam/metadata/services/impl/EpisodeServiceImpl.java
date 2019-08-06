@@ -1,6 +1,7 @@
 package com.coviam.metadata.services.impl;
 
 import com.coviam.metadata.dto.request.DeleteRequest;
+import com.coviam.metadata.dto.response.EpisodeResponse;
 import com.coviam.metadata.entity.Episode;
 import com.coviam.metadata.repository.EpisodeRepository;
 import com.coviam.metadata.repository.SeasonRepository;
@@ -37,6 +38,11 @@ public class EpisodeServiceImpl implements EpisodeServices {
         return episodes;
     }
 
+    public Episode addSingleEpisodes(Episode episode) {
+        log.info("Adding episodes");
+        return episodeRepository.save(episode);
+    }
+
     @Override
     public Boolean deleteEpisode(DeleteRequest deleteRequest) {
         episodeRepository.deleteById(deleteRequest.getId());
@@ -53,10 +59,10 @@ public class EpisodeServiceImpl implements EpisodeServices {
     }
 
     @Override
-    public List<Episode> addEpisodeByBulkUpload(File csvFile) {
+    public List<EpisodeResponse> addEpisodeByBulkUpload(File csvFile) {
         String line = "";
         String csvSplitBy = ",";
-        List<Episode> episodeList = new ArrayList<>();
+        List<EpisodeResponse> episodeResponseList = new ArrayList<>();
         try {
             FileReader file = new FileReader(csvFile);
             BufferedReader br = new BufferedReader(file);
@@ -66,14 +72,24 @@ public class EpisodeServiceImpl implements EpisodeServices {
             if (headers[0].equalsIgnoreCase("Episode Number") && headers[1].equalsIgnoreCase("Episode Title")
                     && headers[2].equalsIgnoreCase("Episode Description") && headers[3].equalsIgnoreCase("episode Video URL")
                     && headers[4].equalsIgnoreCase("Thumbnail Image URL") && headers[5].equalsIgnoreCase("Avatar Image URL")
-                    && headers[6].equalsIgnoreCase("Season Id")) {
+                    && headers[6].equalsIgnoreCase("Season Id") && headers[7].equalsIgnoreCase("Crew List")) {
                 while ((line = br.readLine()) != null) {
                     String[] records = line.split(csvSplitBy);
 
                     seasonRepository.findById(records[6]).ifPresent(season -> {
+
                         HashMap<String, String> images = new HashMap<>();
                         images.put("Thumbnail", records[4]);
                         images.put("Avatar", records[5]);
+
+                        HashMap<String, String> crewMap = new HashMap<>();
+                        String[] crewMapList = records[7].split(";");
+
+                        for (String crew : crewMapList) {
+                            String[] keyValue = crew.split(":");
+                            crewMap.put(keyValue[0], keyValue[1]);
+                        }
+
                         Episode episode = Episode.builder()
                                 .season(season)
                                 .episodeNumber(Integer.parseInt(records[0]))
@@ -81,16 +97,24 @@ public class EpisodeServiceImpl implements EpisodeServices {
                                 .episodeDescription(records[2])
                                 .episodeVideoUrl(records[3])
                                 .episodeImgUrls(images)
-                                .crewList(images).build();
+                                .crewList(crewMap).build();
 
                         log.info("Added episode with Episode Number : {}", episode.getEpisodeNumber());
-                        episodeList.add(episode);
+                        Episode episode1 = addSingleEpisodes(episode);
+                        EpisodeResponse episodeResponse = new EpisodeResponse();
+
+                        if (episode1 == null) {
+                            episodeResponse.setEpisode(episode);
+                            episodeResponse.setIsSuccessful(false);
+                            episodeResponseList.add(episodeResponse);
+                        }
+
                     });
                 }
             }
         } catch (Exception e) {
             log.debug("Error while uploading episode: {}" + e.getMessage());
         }
-        return addEpisodes(episodeList);
+        return episodeResponseList;
     }
 }

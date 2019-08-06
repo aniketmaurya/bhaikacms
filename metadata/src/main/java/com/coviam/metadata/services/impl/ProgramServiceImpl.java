@@ -4,6 +4,7 @@ import com.coviam.metadata.dto.request.Change;
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.ProgramRequest;
 import com.coviam.metadata.dto.response.EmailResponse;
+import com.coviam.metadata.dto.response.ProgramResponse;
 import com.coviam.metadata.entity.Category;
 import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.repository.CategoryRepository;
@@ -181,10 +182,10 @@ public class ProgramServiceImpl implements ProgramServices {
 
 
     @Override
-    public List<Program> addProgramByBulkUpload(File csvFile) {
+    public List<ProgramResponse> addProgramByBulkUpload(File csvFile) {
         String line = "";
         String csvSplitBy = ",";
-        List<Program> programList = new ArrayList<>();
+        List<ProgramResponse> programResponseList = new ArrayList<>();
         try {
             FileReader file = new FileReader(csvFile);
             BufferedReader br = new BufferedReader(file);
@@ -224,14 +225,20 @@ public class ProgramServiceImpl implements ProgramServices {
                             .userEmail(records[12])
                             .build();
                     Program program = addProgram(programRequest);
+                    ProgramResponse programResponse = new ProgramResponse();
+                    if (program == null) {
+                        programResponse.setProgramRequest(programRequest);
+                        programResponse.setIsSuccessful(false);
+                        programResponseList.add(programResponse);
+                    }
                     log.info("Added program with program id:{}", program.getId());
-                    programList.add(program);
+
                 }
             }
         } catch (Exception e) {
             log.debug("Error while uploading program :" + e.getMessage());
         }
-        return programList;
+        return programResponseList;
     }
 
 

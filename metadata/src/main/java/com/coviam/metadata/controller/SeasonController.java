@@ -2,6 +2,7 @@ package com.coviam.metadata.controller;
 
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.SeasonRequest;
+import com.coviam.metadata.dto.response.SeasonResponse;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.services.SeasonServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,12 +75,12 @@ public class SeasonController {
     }
 
     @RequestMapping(path = "/addSeasonByBulk", method = RequestMethod.POST)
-    public ResponseEntity<List<Season>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<List<SeasonResponse>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
         File file = new File(uploadingDir + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);
-        List<Season> seasonList = seasonServices.addSeasonByBulkUpload(file);
+        List<SeasonResponse> seasonResponseList = seasonServices.addSeasonByBulkUpload(file);
         file.delete();
-        return ResponseEntity.ok(seasonList);
+        return ResponseEntity.ok(seasonResponseList);
     }
 }

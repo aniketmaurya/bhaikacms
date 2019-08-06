@@ -2,6 +2,7 @@ package com.coviam.metadata.services;
 
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.SeasonRequest;
+import com.coviam.metadata.dto.response.SeasonResponse;
 import com.coviam.metadata.entity.Season;
 import org.springframework.data.domain.Page;
 
@@ -27,5 +28,5 @@ public interface SeasonServices {
 
     Boolean editSeason(SeasonRequest seasonRequest);
 
-    List<Season> addSeasonByBulkUpload(File csvFile);
+    List<SeasonResponse> addSeasonByBulkUpload(File csvFile);
 }

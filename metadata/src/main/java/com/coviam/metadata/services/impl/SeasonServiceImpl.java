@@ -3,6 +3,7 @@ package com.coviam.metadata.services.impl;
 import com.coviam.metadata.dto.request.Change;
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.SeasonRequest;
+import com.coviam.metadata.dto.response.SeasonResponse;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.repository.EpisodeRepository;
 import com.coviam.metadata.repository.ProgramRepository;
@@ -129,11 +130,11 @@ public class SeasonServiceImpl implements SeasonServices {
 
 
     @Override
-    public List<Season> addSeasonByBulkUpload(File csvFile) {
+    public List<SeasonResponse> addSeasonByBulkUpload(File csvFile) {
 
         String line = "";
         String csvSplitBy = ",";
-        List<Season> seasonList = new ArrayList<>();
+        List<SeasonResponse> seasonResponseList = new ArrayList<>();
         try {
             FileReader file = new FileReader(csvFile);
             BufferedReader br = new BufferedReader(file);
@@ -164,15 +165,20 @@ public class SeasonServiceImpl implements SeasonServices {
                                 .build();
 
                         Season season = addSeason(seasonRequest);
+                        SeasonResponse seasonResponse = new SeasonResponse();
+                        if (season == null) {
+                            seasonResponse.setSeasonRequest(seasonRequest);
+                            seasonResponse.setIsSuccessful(false);
+                        }
                         log.info("Added season with season id:{}", season.getId());
-                        seasonList.add(season);
+                        seasonResponseList.add(seasonResponse);
                     });
                 }
             }
         } catch (Exception e) {
             log.debug("Error while uploading season:{}", e.getMessage());
         }
-        return seasonList;
+        return seasonResponseList;
     }
 
 }

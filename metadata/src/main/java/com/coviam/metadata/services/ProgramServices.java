@@ -3,6 +3,7 @@ package com.coviam.metadata.services;
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.ProgramRequest;
 import com.coviam.metadata.dto.response.EmailResponse;
+import com.coviam.metadata.dto.response.ProgramResponse;
 import com.coviam.metadata.entity.Program;
 import org.springframework.data.domain.Page;
 
@@ -29,7 +30,7 @@ public interface ProgramServices {
 
     List<EmailResponse> sendAboutToExpire();
 
-    List<Program> addProgramByBulkUpload(File csvFile);
+    List<ProgramResponse> addProgramByBulkUpload(File csvFile);
 
 
 }

@@ -3,6 +3,7 @@ package com.coviam.metadata.controller;
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.ProgramRequest;
 import com.coviam.metadata.dto.response.EmailResponse;
+import com.coviam.metadata.dto.response.ProgramResponse;
 import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.services.ProgramServices;
 import lombok.extern.slf4j.Slf4j;
@@ -89,12 +90,12 @@ public class ProgramController {
     }
 
     @RequestMapping(path = "/addProgramByBulk", method = RequestMethod.POST)
-    public ResponseEntity<List<Program>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<List<ProgramResponse>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
         File file = new File(uploadingDir + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);
-        List<Program> programList = programServices.addProgramByBulkUpload(file);
+        List<ProgramResponse> programResponseList = programServices.addProgramByBulkUpload(file);
         file.delete();
-        return ResponseEntity.ok(programList);
+        return ResponseEntity.ok(programResponseList);
     }
 }
