@@ -114,7 +114,7 @@ public class UserAdminController {
     }
 
     @GetMapping(value = "/countUser")
-    public ResponseEntity countUser(Integer roleId) {
+    public ResponseEntity countUser(@RequestParam(value = "roleId") Integer roleId) {
         Long userCount = userAdminService.countUser(roleId);
         return new ResponseEntity<>(userCount, HttpStatus.OK);
     }

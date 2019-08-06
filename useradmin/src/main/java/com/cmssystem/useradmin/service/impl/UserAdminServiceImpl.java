@@ -17,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -95,8 +94,8 @@ public class UserAdminServiceImpl implements UserAdminService {
     public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
 
         Page<UserAdmin> page = userAdminRepository.findAll(PageRequest.of(pageNumber, pageSize,
-                Sort.by(Arrays.asList(new Sort.Order(Sort.Direction.ASC,"name"),
-                        new Sort.Order(Sort.Direction.ASC,"isActive")))));
+                Sort.by(Arrays.asList(new Sort.Order(Sort.Direction.DESC, "isActive"),
+                        new Sort.Order(Sort.Direction.ASC, "name")))));
         return page.map(this::convertToDto);
     }
 
@@ -107,6 +106,7 @@ public class UserAdminServiceImpl implements UserAdminService {
                 .isActive(userAdmin.isActive())
                 .name(userAdmin.getName())
                 .roleId(userAdmin.getRoleId())
+                .editable(0)
                 .build();
     }
 

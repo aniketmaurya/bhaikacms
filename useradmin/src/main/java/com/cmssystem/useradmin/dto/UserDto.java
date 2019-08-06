@@ -15,4 +15,5 @@ public class UserDto {
     private String name;
     private int roleId;
     private boolean isActive;
+    private Integer editable = 0;
 }
