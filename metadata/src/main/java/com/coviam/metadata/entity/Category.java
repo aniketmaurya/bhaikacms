@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 
@@ -31,6 +32,7 @@ public class Category implements Serializable {
     @JoinColumn(name = "parent_id", nullable = true)
     private Category parent;
 
+    @Pattern(regexp = "[A-Za-z0-9 ]+")
     private String categoryName;
 
 }
