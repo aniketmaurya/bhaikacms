@@ -33,9 +33,6 @@ import java.util.*;
 @Slf4j
 public class ProgramServiceImpl implements ProgramServices {
 
-    private final String ADD = "ADD";
-    private final String UPDATE = "UPDATE";
-    private final String DELETE = "DELETE";
     @Autowired
     private ProgramRepository programRepository;
     @Autowired
@@ -80,6 +77,7 @@ public class ProgramServiceImpl implements ProgramServices {
 
         return program1;
     }
+
 
     @Transactional
     @Override
@@ -276,4 +274,94 @@ public class ProgramServiceImpl implements ProgramServices {
         }
         return aboutToExpire;
     }
+
+
+    //=============================================
+    //added by Sunil
+    @Override
+    public Page<Program> getAllSingleVideoProgramSortByNameAsc(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByNameAsc("Single video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Program> getAllSingleVideoProgramSortByNameDesc(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByNameDesc("Single video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Program> getAllSingleVideoProgramSortByNewestFirst(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByCreationDateDesc("Single video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Program> getAllSingleVideoProgramSortByOldestFirst(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByCreationDateAsc("Single video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    // getAllMultiVideoProgramSortByNameAsc
+    @Override
+    public Page<Program> getAllMultiVideoProgramSortByNameAsc(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByNameAsc("Multi video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Program> getAllMultiVideoProgramSortByNameDesc(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByNameDesc("Multi video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Program> getAllMultiVideoProgramSortByNewestFirst(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByCreationDateDesc("Multi video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Program> getAllMultiVideoProgramSortByOldestFirst(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByCreationDateAsc("Multi video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    //getAllSeasonalVideoProgram
+    @Override
+    public Page<Program> getAllSeasonalVideoProgramSortByNameAsc(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByNameAsc("Seasonal video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Program> getAllSeasonalVideoProgramSortByNameDesc(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByNameDesc("Seasonal video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Program> getAllSeasonalVideoProgramSortByNewestFirst(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByCreationDateDesc("Seasonal video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Program> getAllSeasonalVideoProgramSortByOldestFirst(Integer pageNumber, Integer pageSize) {
+        return programRepository.findByTypeOrderByCreationDateAsc("Seasonal video program", PageRequest.of(pageNumber, pageSize));
+    }
+
+    //Filter elements
+    @Override
+    public Page<Program> filterByProgramName(Integer pageNumber, Integer pageSize, String name) {
+        return programRepository.findByNameOrderByNameAsc(name, PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Program> filterByProgramType(Integer pageNumber, Integer pageSize, String type) {
+        return programRepository.findByTypeOrderByNameAsc(type, PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Page<Program> filterByProgramLanguage(Integer pageNumber, Integer pageSize, String languages) {
+        return programRepository.findByLanguagesOrderByNameAsc(languages, PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public Long countByType(String type) {
+        if (type == null)
+            return programRepository.count();
+        return programRepository.countByTypeIgnoreCaseStartsWith(type);
+    }
+
+
 }
