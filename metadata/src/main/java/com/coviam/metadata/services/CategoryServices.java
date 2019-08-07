@@ -24,6 +24,4 @@ public interface CategoryServices {
 
     List<CategoryInfo> getAllParents();
 
-    Category updateCategory(String categoryName, String newCategoryName);
-
 }

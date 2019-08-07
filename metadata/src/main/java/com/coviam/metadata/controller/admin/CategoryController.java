@@ -6,7 +6,6 @@ import com.coviam.metadata.services.CategoryServices;
 import com.coviam.metadata.utility.CategoryInfo;
 import com.coviam.metadata.utility.SubCategories;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,16 +19,9 @@ public class CategoryController {
     private CategoryServices categoryService;
 
     @PostMapping("/addCategory")
-    public ResponseEntity<Category> addCategory(@RequestParam(name = "categoryName") String categoryName,
-                                                @RequestParam(name = "parentName", required = false) String parentName) {
-
-        Category category = categoryService.addCategory(categoryName, parentName);
-
-        if (category == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok(category);
+    public Category addCategory(@RequestParam(name = "categoryName") String categoryName,
+                                @RequestParam(name = "parentName", required = false) String parentName) {
+        return categoryService.addCategory(categoryName, parentName);
     }
 
     @DeleteMapping("/deleteCategory")
@@ -58,10 +50,5 @@ public class CategoryController {
         return categoryService.getAllParents();
     }
 
-    @PutMapping("/updateCategory")
-    public Category updateCategory(@RequestParam(name = "categoryName") String categoryName,
-                                   @RequestParam(name = "newName") String newCategoryName) {
-        return categoryService.updateCategory(categoryName, newCategoryName);
-
-    }
+    //update category
 }

@@ -1,6 +1,7 @@
 package com.coviam.metadata.entity;
 
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLHStoreType;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -8,13 +9,13 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
 @Data
+@Builder
 @Table(name = Episode.TABLE_NAME)
 @TypeDef(name = "hstore", typeClass = PostgreSQLHStoreType.class)
 public class Episode implements Serializable {
@@ -31,15 +32,13 @@ public class Episode implements Serializable {
     @JoinColumn(name = "season_id", nullable = false)
     private Season season;
 
-    @NotNull(message = "episodeNumber may not be null")
+    @NotNull
     private Integer episodeNumber;
 
-    @NotNull(message = "episodeTitle may not be null")
+    @NotNull
     private String episodeTitle;
 
     @NotNull
-    @Size
-    @NotNull(message = "episodeDescription may not be null")
     private String episodeDescription;
 
     private String episodeVideoUrl;
@@ -49,10 +48,12 @@ public class Episode implements Serializable {
     // todo multiple imgs: Done
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
+    @NotNull
     private Map<String, String> episodeImgUrls = new HashMap<>();
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
+    @NotNull
     private Map<String, String> crewList = new HashMap<>();
 
     @Override

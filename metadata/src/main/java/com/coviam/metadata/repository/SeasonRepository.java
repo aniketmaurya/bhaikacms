@@ -20,5 +20,5 @@ public interface SeasonRepository extends CrudRepository<Season, String> {
 
     Optional<List<Season>> findByProgramId(String programId);
 
-
+    Optional<Season> findById(String seasonId);
 }

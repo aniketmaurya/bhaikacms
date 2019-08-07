@@ -1,6 +1,5 @@
 package com.coviam.metadata.entity;
 
-import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
@@ -10,7 +9,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "crew")
-@Data
 public class Crew {
 
 

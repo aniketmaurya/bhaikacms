@@ -14,4 +14,5 @@ public interface EpisodeRepository extends CrudRepository<Episode, String> {
     void deleteById(String episodeId);
 
     void deleteAllBySeasonId(String seasonId);
+
 }

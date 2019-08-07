@@ -7,10 +7,5 @@ import java.util.List;
 public interface CrewServices {
 
     Boolean addCrew(List<Crew> crewList);
-
-    List<Crew> getAllCrew();
-
-    Boolean deleteCrew(String crewId);
-
-    Boolean updateCrew(String id, String role);
+    Boolean deleteCrew(String role, String name);
 }

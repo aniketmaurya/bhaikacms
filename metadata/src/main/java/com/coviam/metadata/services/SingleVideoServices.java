@@ -1,16 +1,18 @@
 package com.coviam.metadata.services;
 
-import com.coviam.metadata.dto.request.DeleteRequest;
-import com.coviam.metadata.dto.request.SingleVideoRequest;
+import com.coviam.metadata.dto.response.SingleVideoResponse;
 import com.coviam.metadata.entity.SingleVideo;
 
+import java.io.File;
 import java.util.List;
 
 public interface SingleVideoServices {
 
-    SingleVideo addEpisodes(SingleVideoRequest singleVideoRequest);
+    SingleVideo addEpisodes(SingleVideo singleVideos);
 
-    Boolean deleteEpisode(DeleteRequest deleteRequest);
+    Boolean deleteEpisode(String videoId);
 
     List<SingleVideo> getAllSingleVideo();
+
+    List<SingleVideoResponse> addSingleVideoByBulkUpload(File csvFile);
 }

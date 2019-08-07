@@ -3,12 +3,13 @@ package com.coviam.metadata.services.impl;
 import com.coviam.metadata.dto.request.Change;
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.SeasonRequest;
+import com.coviam.metadata.dto.response.SeasonResponse;
 import com.coviam.metadata.entity.Season;
 import com.coviam.metadata.repository.EpisodeRepository;
+import com.coviam.metadata.repository.ProgramRepository;
 import com.coviam.metadata.repository.SeasonRepository;
 import com.coviam.metadata.services.SeasonServices;
 import com.coviam.metadata.utility.AuditUtility;
-import com.coviam.metadata.utility.SearchUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,10 +37,10 @@ public class SeasonServiceImpl implements SeasonServices {
     private EpisodeRepository episodeRepository;
 
     @Autowired
-    private AuditUtility auditUtility;
+    private ProgramRepository programRepository;
 
     @Autowired
-    private SearchUtility searchUtility;
+    private AuditUtility auditUtility;
 
 
     @Override
@@ -52,7 +57,6 @@ public class SeasonServiceImpl implements SeasonServices {
                 season1.getSeasonName(),
                 seasonRequest.getUserEmail(),
                 new ArrayList<Change>());
-
 
         return season1;
     }
@@ -76,6 +80,7 @@ public class SeasonServiceImpl implements SeasonServices {
         return seasonRepository.findById(seasonId).orElse(new Season());
     }
 
+    // todo change the log error
     @Override
     public Page<Season> getSeasonsByProgramId(String programId, Integer pageNumber, Integer size) {
         return seasonRepository.findByProgramId(programId, PageRequest.of(pageNumber, size));
@@ -121,6 +126,59 @@ public class SeasonServiceImpl implements SeasonServices {
                 changes);
 
         return Boolean.TRUE;
+    }
+
+
+    @Override
+    public List<SeasonResponse> addSeasonByBulkUpload(File csvFile) {
+
+        String line = "";
+        String csvSplitBy = ",";
+        List<SeasonResponse> seasonResponseList = new ArrayList<>();
+        try {
+            FileReader file = new FileReader(csvFile);
+            BufferedReader br = new BufferedReader(file);
+            line = br.readLine();
+            String[] headers = line.split(csvSplitBy);
+
+            if (headers[0].equalsIgnoreCase("Program Id") && headers[1].equalsIgnoreCase("Season Name")
+                    && headers[2].equalsIgnoreCase("Season Number") && headers[3].equalsIgnoreCase("Season Description")
+                    && headers[4].equalsIgnoreCase("Thumbnail Image Url") && headers[5].equalsIgnoreCase("Avatar Image Url")
+                    && headers[6].equalsIgnoreCase("User Id") && headers[7].equalsIgnoreCase("Email Id")) {
+
+                while ((line = br.readLine()) != null) {
+                    String[] records = line.split(csvSplitBy);
+                    programRepository.findById(records[0]).ifPresent(program -> {
+
+                        HashMap<String, String> images = new HashMap<>();
+                        images.put("Thumbnail", records[4]);
+                        images.put("Avatar", records[5]);
+
+                        SeasonRequest seasonRequest = SeasonRequest.builder()
+                                .program(program)
+                                .seasonName(records[1])
+                                .seasonNumber(Integer.parseInt((records[2])))
+                                .seasonDescription(records[3])
+                                .seasonImgUrls(images)
+                                .userId(records[6])
+                                .userEmail(records[7])
+                                .build();
+
+                        Season season = addSeason(seasonRequest);
+                        SeasonResponse seasonResponse = new SeasonResponse();
+                        seasonRequest.setId(season.getId());
+                        seasonResponse.setSeasonRequest(seasonRequest);
+                        seasonResponse.setIsSuccessful(season != null);
+
+                        log.info("Added season with season id:{}", season.getId());
+                        seasonResponseList.add(seasonResponse);
+                    });
+                }
+            }
+        } catch (Exception e) {
+            log.debug("Error while uploading season:{}", e.getMessage());
+        }
+        return seasonResponseList;
     }
 
 }

@@ -1,9 +1,11 @@
 package com.coviam.metadata.services;
 
 import com.coviam.metadata.dto.request.DeleteRequest;
+import com.coviam.metadata.dto.response.EpisodeResponse;
 import com.coviam.metadata.entity.Episode;
 import org.springframework.data.domain.Page;
 
+import java.io.File;
 import java.util.List;
 
 public interface EpisodeServices {
@@ -14,5 +16,7 @@ public interface EpisodeServices {
     Boolean deleteEpisode(DeleteRequest deleteRequest);
 
     Page<Episode> getEpisodesBySeasonId(String seasonId, Integer pageNumber, Integer pageSize);
+
+    List<EpisodeResponse> addEpisodeByBulkUpload(File csvFile);
 
 }

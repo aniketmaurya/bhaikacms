@@ -8,7 +8,6 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class Program implements Serializable {
     private String type;
 
     @NotNull(message = "description may not be null")
-    @Size
+    //@Size(min = 10)
     private String description;
 
     @NotNull(message = "name may not be null")
@@ -44,15 +43,17 @@ public class Program implements Serializable {
     private String parentalRating;
 
     // we will store keywords as space separated values
+    @NotNull
     private String keywords;
 
     // We will languages as space separated values
     @NotNull(message = "languages may not be null")
     private String languages;
 
-    @NotNull(message = "startDate may not be null")
+    @NotNull
     private Long startDate;
 
+    @NotNull
     private Long expiryDate;
 
     private Boolean isAlive;
@@ -69,11 +70,6 @@ public class Program implements Serializable {
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
     private Map<String, String> imgUrls = new HashMap<>();
-
-
-    @Type(type = "hstore")
-    @Column(columnDefinition = "hstore")
-    private Map<String, String> crewList = new HashMap<>();
 
 
     private Long creationDate;

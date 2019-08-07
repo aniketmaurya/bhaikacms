@@ -4,6 +4,7 @@ import com.coviam.metadata.dto.request.Change;
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.ProgramRequest;
 import com.coviam.metadata.dto.response.EmailResponse;
+import com.coviam.metadata.dto.response.ProgramResponse;
 import com.coviam.metadata.entity.Category;
 import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.repository.CategoryRepository;
@@ -26,15 +27,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
 public class ProgramServiceImpl implements ProgramServices {
 
+    private final String ADD = "ADD";
+    private final String UPDATE = "UPDATE";
+    private final String DELETE = "DELETE";
     @Autowired
     private ProgramRepository programRepository;
     @Autowired
@@ -74,12 +75,11 @@ public class ProgramServiceImpl implements ProgramServices {
 
         log.info("Adding program programName: {}", program.getName());
 
-//        searchUtility.addToSearch(program1);
+        // searchUtility.addToSearch(program1);
 
 
         return program1;
     }
-
 
     @Transactional
     @Override
@@ -101,8 +101,8 @@ public class ProgramServiceImpl implements ProgramServices {
         }
         if (!program.getDescription().equals(programRequest.getDescription())) {
             fieldChanged = "Description";
-            oldValue = program.getDescription();
-            newValue = programRequest.getDescription();
+            oldValue = program.getName();
+            newValue = programRequest.getName();
             changes.add(new Change(fieldChanged, oldValue, newValue));
         }
         if (!program.getParentalRating().equals(programRequest.getParentalRating())) {
@@ -182,22 +182,28 @@ public class ProgramServiceImpl implements ProgramServices {
 
 
     @Override
-    public List<Program> addProgramByBulkUpload(File csvFile) {
+    public List<ProgramResponse> addProgramByBulkUpload(File csvFile) {
         String line = "";
         String csvSplitBy = ",";
-        List<Program> programList = new ArrayList<>();
+        List<ProgramResponse> programResponseList = new ArrayList<>();
         try {
             FileReader file = new FileReader(csvFile);
             BufferedReader br = new BufferedReader(file);
             line = br.readLine();
             String[] headers = line.split(csvSplitBy);
+
+//            String[] defaultHeaders = {"Program Type", "Description", "Program Name", "Parental Rating", "Keywords", "Languages"
+//                    , "Start Date", "Expiry Date", "Category", "Thumbnail Image Url", "Avatar Image Url", "userId", "userEmail"};
+
             if (headers[0].equalsIgnoreCase("Program Type") && headers[1].equalsIgnoreCase("Description")
                     && headers[2].equalsIgnoreCase("Program Name") && headers[3].equalsIgnoreCase("Parental Rating")
                     && headers[4].equalsIgnoreCase("Keywords") && headers[5].equalsIgnoreCase("Languages")
                     && headers[6].equalsIgnoreCase("Start Date") && headers[7].equalsIgnoreCase("Expiry Date")
                     && headers[8].equalsIgnoreCase("Category") && headers[9].equalsIgnoreCase("Thumbnail Image Url")
-                    && headers[10].equalsIgnoreCase("Avatar Image Url")
-                    && headers[11].equalsIgnoreCase("userId")) {
+                    && headers[10].equalsIgnoreCase("Avatar Image Url") && headers[11].equalsIgnoreCase("userId")
+                    && headers[12].equalsIgnoreCase("Email Id")) {
+
+//            if (Arrays.equals(headers, defaultHeaders)) {
                 while ((line = br.readLine()) != null) {
                     String[] records = line.split(csvSplitBy);
                     HashMap<String, String> images = new HashMap<>();
@@ -211,21 +217,26 @@ public class ProgramServiceImpl implements ProgramServices {
                             .keywords(records[4])
                             .languages(records[5])
                             .category(categoryRepository.getCategoryByCategoryName(records[8]))
-                            .isAlive(Boolean.TRUE)
+                            .isAlive((System.currentTimeMillis() < (new Date(records[6])).getTime()) ? Boolean.FALSE : Boolean.TRUE)
                             .imgUrls(images)
                             .startDate((new SimpleDateFormat("dd/MM/yyyy").parse(records[6])).getTime())
                             .expiryDate((new SimpleDateFormat("dd/MM/yyyy").parse(records[7])).getTime())
                             .userId(records[11])
+                            .userEmail(records[12])
                             .build();
-                    System.out.println(programRequest);
                     Program program = addProgram(programRequest);
-                    programList.add(program);
+                    ProgramResponse programResponse = new ProgramResponse();
+                    programRequest.setId(program.getId());
+                    programResponse.setProgramRequest(programRequest);
+                    programResponse.setIsSuccessful(program != null);
+                    programResponseList.add(programResponse);
+                    log.info("Added program with program id:{}", program.getId());
                 }
             }
         } catch (Exception e) {
             log.debug("Error while uploading program :" + e.getMessage());
         }
-        return programList;
+        return programResponseList;
     }
 
 
@@ -263,94 +274,4 @@ public class ProgramServiceImpl implements ProgramServices {
         }
         return aboutToExpire;
     }
-
-
-    //=============================================
-    //added by Sunil
-    @Override
-    public Page<Program> getAllSingleVideoProgramSortByNameAsc(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByNameAsc("Single video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Page<Program> getAllSingleVideoProgramSortByNameDesc(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByNameDesc("Single video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Page<Program> getAllSingleVideoProgramSortByNewestFirst(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByCreationDateDesc("Single video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Page<Program> getAllSingleVideoProgramSortByOldestFirst(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByCreationDateAsc("Single video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    // getAllMultiVideoProgramSortByNameAsc
-    @Override
-    public Page<Program> getAllMultiVideoProgramSortByNameAsc(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByNameAsc("Multi video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Page<Program> getAllMultiVideoProgramSortByNameDesc(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByNameDesc("Multi video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Page<Program> getAllMultiVideoProgramSortByNewestFirst(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByCreationDateDesc("Multi video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Page<Program> getAllMultiVideoProgramSortByOldestFirst(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByCreationDateAsc("Multi video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    //getAllSeasonalVideoProgram
-    @Override
-    public Page<Program> getAllSeasonalVideoProgramSortByNameAsc(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByNameAsc("Seasonal video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Page<Program> getAllSeasonalVideoProgramSortByNameDesc(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByNameDesc("Seasonal video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Page<Program> getAllSeasonalVideoProgramSortByNewestFirst(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByCreationDateDesc("Seasonal video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Page<Program> getAllSeasonalVideoProgramSortByOldestFirst(Integer pageNumber, Integer pageSize) {
-        return programRepository.findByTypeOrderByCreationDateAsc("Seasonal video program", PageRequest.of(pageNumber, pageSize));
-    }
-
-    //Filter elements
-    @Override
-    public Page<Program> filterByProgramName(Integer pageNumber, Integer pageSize, String name) {
-        return programRepository.findByNameOrderByNameAsc(name, PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Page<Program> filterByProgramType(Integer pageNumber, Integer pageSize, String type) {
-        return programRepository.findByTypeOrderByNameAsc(type, PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Page<Program> filterByProgramLanguage(Integer pageNumber, Integer pageSize, String languages) {
-        return programRepository.findByLanguagesOrderByNameAsc(languages, PageRequest.of(pageNumber, pageSize));
-    }
-
-    @Override
-    public Long countByType(String type) {
-        if (type == null)
-            return programRepository.count();
-        return programRepository.countByTypeIgnoreCaseStartsWith(type);
-    }
-
-
 }

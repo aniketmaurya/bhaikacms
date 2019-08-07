@@ -27,16 +27,15 @@ public class Season {
 
     @ManyToOne
     @JoinColumn(name = "program_id", nullable = false)
-    @NotNull(message = "program may not be null")
     private Program program;
 
-    @NotNull(message = "seasonName may not be null")
+    @NotNull
     private String seasonName;
 
-    @NotNull(message = "seasonNumber may not be null")
+    @NotNull
     private Integer seasonNumber;
 
-    @NotNull(message = "seasonDescription may not be null")
+    @NotNull
     private String seasonDescription;
 
     @Type(type = "hstore")

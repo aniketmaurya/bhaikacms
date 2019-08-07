@@ -7,13 +7,23 @@ import lombok.Data;
 public class SingleVideoRequest {
     private String id;
 
-    private Program program;
+    private Program programId;
 
     private String videoTitle;
 
     private String videoUrl;
 
     private String videoDescription;
-    private String userEmail;
 
+
+    @Override
+    public String toString() {
+        return "SingleVideoRequest{" +
+                "id='" + id + '\'' +
+                ", programId=" + programId +
+                ", videoTitle='" + videoTitle + '\'' +
+                ", videoUrl='" + videoUrl + '\'' +
+                ", videoDescription='" + videoDescription + '\'' +
+                '}';
+    }
 }

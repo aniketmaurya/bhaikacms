@@ -3,48 +3,44 @@ package com.coviam.metadata.services.impl;
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.response.EpisodeResponse;
 import com.coviam.metadata.entity.Episode;
-import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.repository.EpisodeRepository;
+import com.coviam.metadata.repository.SeasonRepository;
 import com.coviam.metadata.services.EpisodeServices;
-import com.coviam.metadata.services.ProgramServices;
-import com.coviam.metadata.utility.SearchUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class EpisodeServiceImpl implements EpisodeServices {
     @Autowired
     private EpisodeRepository episodeRepository;
+
     @Autowired
-    private SearchUtility searchUtility;
-    @Autowired
-    private ProgramServices programServices;
+    private SeasonRepository seasonRepository;
 
     // TODO CHANGE FROM EPISODREQUEST TO EPISODE
     @Override
     public List<Episode> addEpisodes(List<Episode> episodes) {
 
         episodes.forEach(episode -> episode.setCreationDate(System.currentTimeMillis()));
-        String userId = "", modification = "ADDED/UPDATED/DELETED";
-        List<Episode> episodes1 = new ArrayList<>();
-        episodeRepository.saveAll(episodes).forEach(episodes1::add);
-        for (Episode episode : episodes1) {
-            Program program = programServices.getProgramById(episode.getSeason().getProgram().getId());
-            episode.getSeason().setProgram(program);
-        }
-        episodes1 = episodes1.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        episodeRepository.saveAll(episodes);
         log.info("Adding episodes");
-        searchUtility.addEpisodesToSearch(new EpisodeResponse(episodes1));
         return episodes;
+    }
+
+    public Episode addSingleEpisodes(Episode episode) {
+        log.info("Adding episodes");
+        return episodeRepository.save(episode);
     }
 
     @Override
@@ -60,5 +56,64 @@ public class EpisodeServiceImpl implements EpisodeServices {
     @Override
     public Page<Episode> getEpisodesBySeasonId(String seasonId, Integer pageNumber, Integer pageSize) {
         return episodeRepository.findBySeasonId(seasonId, PageRequest.of(pageNumber, pageSize));
+    }
+
+    @Override
+    public List<EpisodeResponse> addEpisodeByBulkUpload(File csvFile) {
+        String line = "";
+        String csvSplitBy = ",";
+        List<EpisodeResponse> episodeResponseList = new ArrayList<>();
+        try {
+            FileReader file = new FileReader(csvFile);
+            BufferedReader br = new BufferedReader(file);
+
+            line = br.readLine();
+            String[] headers = line.split(csvSplitBy);
+            if (headers[0].equalsIgnoreCase("Episode Number") && headers[1].equalsIgnoreCase("Episode Title")
+                    && headers[2].equalsIgnoreCase("Episode Description") && headers[3].equalsIgnoreCase("episode Video URL")
+                    && headers[4].equalsIgnoreCase("Thumbnail Image URL") && headers[5].equalsIgnoreCase("Avatar Image URL")
+                    && headers[6].equalsIgnoreCase("Season Id") && headers[7].equalsIgnoreCase("Crew List")) {
+                while ((line = br.readLine()) != null) {
+                    String[] records = line.split(csvSplitBy);
+
+                    seasonRepository.findById(records[6]).ifPresent(season -> {
+
+                        HashMap<String, String> images = new HashMap<>();
+                        images.put("Thumbnail", records[4]);
+                        images.put("Avatar", records[5]);
+
+                        HashMap<String, String> crewMap = new HashMap<>();
+                        String[] crewMapList = records[7].split(";");
+
+                        for (String crew : crewMapList) {
+                            String[] keyValue = crew.split(":");
+                            crewMap.put(keyValue[0], keyValue[1]);
+                        }
+
+                        Episode episode = Episode.builder()
+                                .season(season)
+                                .episodeNumber(Integer.parseInt(records[0]))
+                                .episodeTitle(records[1])
+                                .episodeDescription(records[2])
+                                .episodeVideoUrl(records[3])
+                                .episodeImgUrls(images)
+                                .crewList(crewMap).build();
+
+                        log.info("Added episode with Episode Number : {}", episode.getEpisodeNumber());
+                        Episode episode1 = addSingleEpisodes(episode);
+                        EpisodeResponse episodeResponse = new EpisodeResponse();
+                        episode.setId(episode1.getId());
+                        episodeResponse.setEpisode(episode);
+                        episodeResponse.setIsSuccessful(episode1 != null);
+                        episodeResponseList.add(episodeResponse);
+
+
+                    });
+                }
+            }
+        } catch (Exception e) {
+            log.debug("Error while uploading episode: {}" + e.getMessage());
+        }
+        return episodeResponseList;
     }
 }

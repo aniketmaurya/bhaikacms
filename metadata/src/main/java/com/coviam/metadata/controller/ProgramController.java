@@ -3,6 +3,7 @@ package com.coviam.metadata.controller;
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.request.ProgramRequest;
 import com.coviam.metadata.dto.response.EmailResponse;
+import com.coviam.metadata.dto.response.ProgramResponse;
 import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.services.ProgramServices;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ public class ProgramController {
 
     @Autowired
     private ProgramServices programServices;
+
 
     @PutMapping("/addProgram")
     public ResponseEntity<Program> addProgram(@RequestBody ProgramRequest programRequest) {
@@ -87,22 +89,13 @@ public class ProgramController {
         return ResponseEntity.ok(Optional.of(programServices.sendAboutToExpire()));
     }
 
-    @RequestMapping(path = "/addProgramByBulk", method = RequestMethod.POST)
-    public ResponseEntity<List<Program>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    @RequestMapping(path = "/addProgramInBulk", method = RequestMethod.POST)
+    public ResponseEntity<List<ProgramResponse>> addProgramInBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
-        log.error(multipartFile.getOriginalFilename());
-        log.info(multipartFile.getOriginalFilename());
         File file = new File(uploadingDir + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);
-        List<Program> programList = programServices.addProgramByBulkUpload(file);
-        return ResponseEntity.ok(programList);
-    }
-
-    @GetMapping("/count")
-    public ResponseEntity<?> count(
-            @RequestParam(name = "programType", required = false) String type) {
-
-        log.info("Count for Program type : {} ", type);
-        return ResponseEntity.ok(programServices.countByType(type));
+        List<ProgramResponse> programResponseList = programServices.addProgramByBulkUpload(file);
+        file.delete();
+        return ResponseEntity.ok(programResponseList);
     }
 }
