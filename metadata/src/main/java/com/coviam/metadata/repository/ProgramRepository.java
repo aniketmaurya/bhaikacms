@@ -14,4 +14,25 @@ public interface ProgramRepository extends CrudRepository<Program, String> {
     Page<Program> findByExpiryDateLessThan(Long expiryDate, Pageable page);
 
     Page<Program> findByStartDateLessThan(Long currentDate, Pageable page);// to
+
+    Page<Program> findByStartDateLessThan(Long currentDate, Pageable page);
+
+
+    //Added  by sunil
+    Page<Program> findByTypeOrderByNameAsc(String type, Pageable page);
+
+    Page<Program> findByTypeOrderByNameDesc(String type, Pageable page);
+
+    Page<Program> findByTypeOrderByCreationDateDesc(String type, Pageable page);
+
+    Page<Program> findByTypeOrderByCreationDateAsc(String type, Pageable page);
+
+    //filter
+    Page<Program> findByNameOrderByNameAsc(String type, Pageable page);
+
+    Page<Program> findByLanguagesOrderByNameAsc(String type, Pageable page);
+
+
+    Long countByTypeIgnoreCaseStartsWith(String type);
+
 }

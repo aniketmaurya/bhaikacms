@@ -53,7 +53,6 @@ public class Episode implements Serializable {
 
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
-    @NotNull
     private Map<String, String> crewList = new HashMap<>();
 
     @Override
