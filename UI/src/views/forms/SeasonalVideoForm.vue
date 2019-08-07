@@ -23,9 +23,11 @@
         <div class="form-group col-md-12">
             <div class="col-md-6">
                 <input @change="processFile($event,'Thumbnail')" type="file" class="form-control" required>
+                <img height="50" width="50" v-if="seasonalVideo.seasonImgUrls.thumbnail" :src="seasonalVideo.seasonImgUrls.thumbnail" alt="">
             </div>
             <div class="col-md-6">
                 <input @change="processFile($event,'Avatar')" type="file" class="form-control" required>
+                <img height="50" width="50" v-if="seasonalVideo.seasonImgUrls.avatar" :src="seasonalVideo.seasonImgUrls.avatar" alt="">
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Save video</button>
@@ -55,7 +57,8 @@ export default {
                seasonImgUrls: {
                    thumbnail:"",
                    avatar:""
-               }
+               },
+               userEmail:"",
            }
        }
     },
@@ -66,6 +69,7 @@ export default {
         ]),
         handleSubmit() {
             this.seasonalVideo.program.id = this.program.id
+            this.seasonalVideo.userEmail = this.$session.get('email')
 
             this.addSeason(this.seasonalVideo).then( (resp) => {
                 if(resp) {

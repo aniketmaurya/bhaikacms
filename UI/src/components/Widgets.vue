@@ -1,9 +1,9 @@
 <template>
 <div class="content-area">
     <div class="count-users">TOTAL USERS<div id="user-nos">{{ this.userCount }}</div></div>
-    <div class="count-videos">TOTAL VIDEOS<div id="video-nos">50</div></div>
+    <div class="count-videos">TOTAL PROGRAMS<div id="video-nos">{{ this.programCount }}</div></div>
     <div class="count-admin">TOTAL ADMINS<div id="admin-nos">{{ this.adminCount }}</div></div>
-    <div class="count-activities">RECENT ACTIVITIES<span id="activities-nos"></span></div>
+    <!-- <div class="count-activities">RECENT ACTIVITIES<span id="activities-nos"></span></div> -->
 </div>
 </template>
 
@@ -14,7 +14,8 @@ export default {
     computed: {
         ...mapGetters([
             'userCount',
-            'adminCount'
+            'adminCount',
+            'programCount'
         ])
     },
     methods: {

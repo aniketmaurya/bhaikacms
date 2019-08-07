@@ -18,7 +18,7 @@
         </div>
         <div class="form-group col-md-12">
             <label for="inputAddress">Video Url</label>
-            <input v-model="singleVideo.videoUrl"  type="text" class="form-control" required>
+            <input type="file"  @change="processFile($event)"  class="form-control" required>
         </div>
         <button type="submit" class="btn btn-primary">Save video</button>
     </form>
@@ -39,7 +39,8 @@ export default {
                 videoUrl: null,
                 description: "",
                 videoImgUrls: null,
-                crewList: null
+                crewList: null,
+                userEmail:""
             }
         }
     },
@@ -56,6 +57,7 @@ export default {
         handleSubmit() {
             //setting programId here
             this.singleVideo.program.id = this.program.id
+            this.singleVideo.userEmail = this.$session.get('email')
 
             this.addSingleVideo(this.singleVideo).then ( (resp) => {
                 if (resp) {
@@ -67,8 +69,24 @@ export default {
             }).catch ( (err) => {
                 console.log(err)
             })
-
+        },
+        processFile(event,type) {
+            let formData = new FormData()
+                formData.append('file', event.target.files[0])
+                formData.append('filetype','video')
+                formData.append('type','Single_Video')
+                this.imageUpload(formData).then( (resp) => {
+                    if(resp.uploadLink) {
+                        this.multiVideo.videoUrl = resp.uploadLink
+                    } else {
+                        this.$swal(resp.message)
+                    }
+                }).catch( (err) => {
+                    console.log(err)
+                })
+        
         }
+
 
     },
     

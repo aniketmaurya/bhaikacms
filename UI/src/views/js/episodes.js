@@ -56,6 +56,14 @@ export default {
                 this.getSeasonalVideoPrograms(this.page)
             }
         },
+        changeTime(date) {
+            let d = new Date(date) 
+            return d.toDateString();
+        },
+        addNewEpisode(data) {
+            this.$store.commit('setSeason',data[0].season)
+            this.$router.push('/episodeForm')
+        }
 
     },
     mounted() {

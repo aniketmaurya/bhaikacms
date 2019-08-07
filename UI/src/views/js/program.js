@@ -25,7 +25,7 @@ export default {
                 startDate:"",
                 expiryDate:"",
                 category: {
-                  id: "1",
+                  id:"",
                 },
                 imgUrls: {
                     thumbnail: "",
@@ -62,6 +62,7 @@ export default {
             this.program.expiryDate = this.convertDateToLong(new Date(this.program.expiryDate))
             this.program.userId = this.$session.get('userId')
             this.program.userEmail = this.$session.get('email')
+            // this.program.category.
              
             for(let i=0;i<this.tags.length;i++) {
                 if(i==0) {
@@ -123,6 +124,9 @@ export default {
             }
              
         },
+        handleCancel() {
+            this.$router.go(-1)
+        }
 
     },
     mounted() {

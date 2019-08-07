@@ -2,10 +2,10 @@
 <div class="box">
     <h2 class="form-heading">EPISODE FORM</h2>
         <button class="btn btn-success" @click="addNewEmployeeForm">New Episode</button>
-        <div class="card mb-3" v-for="(episode,index) in episodes" :key="episode.name">
+        <div class="card mb-3" v-for="(episode,index) in Episodes" :key="episode.name">
         <div class="card-body" >
             <span  class="float-right" style="cursor:pointer" @click="deleteEmployeeForm(index)">X</span>
-            <h4 class="ard-title">Episode No {{ index }} </h4>
+            <h4 class="ard-title">Episode </h4>
             <div class="employee-form">
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -25,9 +25,11 @@
                     <div class="form-group col-md-6">
                         <div class="col-md-6">
                             <input @change="processFile($event,'Thumbnail',index)" type="file" class="form-control" required>
+                            <img height="50" width="50" v-if="episode.episodeImgUrls.thumbnail" :src="episode.episodeImgUrls.thumbnail" alt="">
                         </div>
                         <div class="col-md-6">
                             <input @change="processFile($event,'Avatar',index)" type="file" class="form-control" required>
+                            <img height="50" width="50" v-if="episode.episodeImgUrls.avatar" :src="episode.episodeImgUrls.avatar" alt="">
                         </div>
                     </div>
                 </div>
@@ -45,7 +47,7 @@ export default {
     data() {
         return {
             // getSeason: {},
-            episodes:[
+            Episodes:[
                 {
                     season: {},
                     episodeNumber:"",
@@ -57,13 +59,15 @@ export default {
                         avatar:""
                     },
                     crewList:null,
+                    userEmail:"",
                 } 
             ]
         }
     },
     computed: {
         ...mapGetters([
-            'season'
+            'season',
+            'episodes'
         ])
     },
     methods:{
@@ -72,13 +76,13 @@ export default {
             'imageUpload'
         ]),
         addNewEmployeeForm(){
-            this.episodes.push({
+            this.Episodes.push({
                 season: {},
                     episodeNumber:"",
                     episodeTitle:"",
                     episodeDescription:"",
                     episodeVideoUrl:"",
-                    episodesImageUrls:{
+                    episodeImgUrls:{
                         thumbnail:"",
                         avatar:""
                     },
@@ -89,12 +93,17 @@ export default {
             this.episodes.splice(index, 1)
         },
         handleSubmit() {
-            let counter = 1;
+            let counter = 1
+            if(this.episodes.totalElements>0) 
+                counter = this.episodes.totalElements
+    
+            debugger
             for(let i in this.episodes) {
-                this.episodes[i].season = this.season
-                this.episodes[i].episodeNumber = counter++
+                this.Episodes[i].season = this.season
+                this.Episodes[i].episodeNumber = counter++
+                this.Episodes[i].userEmail = this.$session.get('email')
             }
-            this.addEpisodes(this.episodes).then( (resp) => {
+            this.addEpisodes(this.Episodes).then( (resp) => {
                 if(resp) { 
                     this.$swal('','Successfully added','success')
                     this.$router.push('/seasonalVideo')
@@ -113,7 +122,7 @@ export default {
                 formData.append('type','Thumbnail')
                 this.imageUpload(formData).then( (resp) => {
                     if(resp.uploadLink) {
-                        this.episodes[index].episodesImageUrls.thumbnail = resp.uploadLink
+                        this.Episodes[index].episodeImgUrls.thumbnail = resp.uploadLink
                     } else {
                         this.$swal(resp.message)
                     }
@@ -127,7 +136,7 @@ export default {
                 formData.append('type','Avatar')
                 this.imageUpload(formData).then( (resp) => {
                     if(resp.uploadLink) {
-                        this.episodes[index].episodesImageUrls.avatar = resp.uploadLink
+                        this.Episodes[index].episodeImgUrls.avatar = resp.uploadLink
                     } else {
                         this.$swal(resp.message)
                     }

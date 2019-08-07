@@ -48,8 +48,8 @@
             </div>
              <div class="form-group col-md-4">
                 <label for="inputState">Category</label>
-                <select id="inputState" class="form-control">
-                    <option v-for="element in getStackOfCategories" :key="element">{{ element }}</option>
+                <select id="inputState" class="form-control" v-model="program.category.id">
+                    <option v-for="element in getStackOfCategories" :key="element.id" :value="element.id">{{ element.name }}</option>
                 </select>
             </div>
         </div>
@@ -65,7 +65,10 @@
                 <img height="50" width="50" v-if="program.imgUrls.avatar" :src="program.imgUrls.avatar" alt="">
             </div>
         </div>
-        <div class="button"><button type="submit" class="btn btn-primary">Save program</button></div>
+        <div class="button">
+            <span class="button1"><button type="submit" class="btn btn-primary">Save program</button></span>
+            <span class="button1"><button @click="handleCancel()"  class="btn btn-primary">Close</button></span>
+        </div>
     </form>
 </div>   
 </template>
@@ -87,5 +90,7 @@
 .button {
     margin-top:530px;
 }
-
+.button1 {
+    margin:10px;
+}
 </style>

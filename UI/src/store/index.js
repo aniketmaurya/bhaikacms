@@ -23,6 +23,7 @@ export default new Vuex.Store({
     episodes:{},
     userCount:0,
     adminCount:0,
+    programCount:0,
     // VK
     userListEdit:{
       editable: false,
@@ -34,8 +35,11 @@ export default new Vuex.Store({
       id:"category",
       subCategories:[],
     },
-    stackOfCategories:[]
-    
+    stackOfCategories:[],
+    // nameMap:{
+    //   name="",
+    //   id=""
+    // }
   },
   
   mutations: {
@@ -95,12 +99,11 @@ export default new Vuex.Store({
       state.categories.subCategories=payload
     },
     setStackOfCategories(state,nodes){
-      window.console.log(nodes)
-      for(let i=0;i<nodes.length;i++){
-        state.stackOfCategories.push(nodes[i].name)
-          if(nodes[i].subCategories && nodes[i].subCategories.length>0 )
-              setStackOfCategories(nodes[i].subCategories)
-      }
+      state.stackOfCategories.push(nodes)
+    },
+    setProgramCount(state,payload){
+      console.log(payload)
+      state.programCount=payload
     }
   },
 
@@ -173,6 +176,11 @@ export default new Vuex.Store({
         commit('setUserCount',resp.body)
         Vue.http.get("http://172.16.20.78:8080/useradmin/countUser?roleId=0").then( (resp) => {
           commit('setAdminCount',resp.body)
+          Vue.http.get("http://172.16.20.95:8081/metadata/count").then( () => {
+            commit('setProgramCount',resp.body)
+          }).catch( (err) => {
+             console.log(err)
+          })
           }).catch( (err) => {
             console.log(err)
             reject(false)
@@ -436,17 +444,21 @@ export default new Vuex.Store({
 
 
     //Categories
-    fetchCategoriesAction({commit}){
+    fetchCategoriesAction({commit,dispatch}){
       Vue.http.get("http://172.16.20.95:8081/admin/getCompleteTree")
       .then(response => response.json())
       .then(response => {
         commit('setCategories',response)
-
+        dispatch('createList',response)
       })
     },
-    calculateStack({commit},payload){
-      commit('setStackOfCategories',payload.subCategories)
-      // commit('setStackOfCategories')
+    createList({commit,dispatch,state},nodes){
+      for(let i=0;i<nodes.length;i++){
+        commit('setStackOfCategories',{name:nodes[i].name,id:nodes[i].id})
+        if(nodes[i].subCategories&& nodes[i].subCategories.length>0){
+          dispatch('createList',nodes[i].subCategories)
+        }
+      }
   }
 
     
@@ -508,6 +520,9 @@ export default new Vuex.Store({
     },
     getStackOfCategories(state){
       return state.stackOfCategories
+    },
+    programCount(state) {
+      return state.programCount
     }
   }
 })

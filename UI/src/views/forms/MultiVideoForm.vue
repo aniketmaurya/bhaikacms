@@ -20,10 +20,12 @@
             <div class="form-group col-md-4">
                 <label>Thumbnail</label>
                 <input @change="processFile($event,'Thumbnail')" type="file" class="form-control" required>
+                <img height="50" width="50" v-if="multiVideo.seasonImgUrls.thumbnail" :src="multiVideo.seasonImgUrls.thumbnail" alt="">
             </div>
             <div class="form-group col-md-4">
                 <label>Avatar</label>
                 <input @change="processFile($event,'Avatar')" type="file" class="form-control" required>
+                <img height="50" width="50" v-if="multiVideo.seasonImgUrls.avatar" :src="multiVideo.seasonImgUrls.avatar" alt="">
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Save video</button>
@@ -47,7 +49,8 @@ export default {
                seasonImgUrls:{
                    thumbnail: "",
                     avatar: "",
-               }
+               },
+               userEmail:"",
            }
        }
     },
@@ -58,7 +61,7 @@ export default {
         ]),
         handleSubmit() {
             this.multiVideo.program.id = this.program.id
-
+            this.multiVideo.userEmail = this.$session.get("email")
             this.addSeason(this.multiVideo).then( (resp) => {
                 if(resp) {
                     this.$swal('','Successfully added','success')

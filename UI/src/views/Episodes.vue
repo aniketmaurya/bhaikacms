@@ -1,5 +1,6 @@
 <template>
 <div class="card-wrapper">
+<center><button @click="addNewEpisode(episodes.content)"  style="margin:10px;" class="btn btn-success">Upload new episode</button></center>
 <div v-for="episode in episodes.content" :key="episode.id"  class="card">
     <div class="row ">
         <div class="col-md-4">
@@ -10,7 +11,7 @@
                 <router-link :to="'#'"><h3 class="card-title">{{ episode.episodeTitle }}</h3></router-link>
                 <p class="card-text"><b>Episode Number : </b>{{ episode.episodeNumber }}</p>
                 <p class="card-text"><b>Episode Description : </b>{{ episode.episodeDescription }}</p>
-                <p class="card-text"><b>Uploaded on : </b>{{ episode.creationDate }}</p>
+                <p class="card-text"><b>Uploaded on : </b>{{ changeTime(episode.creationDate) }}</p>
             </div>
             <div class="card-block col-md-3 px-3">
                 <div class="help1"> </div>

@@ -33,7 +33,7 @@
             <div class="card-block col-md-4 px-3">
                 <div class="help"> </div>
                 <p class="card-text"><b>Description : </b>{{ program.description }}</p>
-                <p class="card-text"><b>Category : </b>{{ program.category.name }}</p>
+                <p class="card-text"><b>Category : </b>{{ program.category.categoryName }}</p>
                 <p class="card-text"><b>Languages : </b>{{ program.languages }}</p>
                 <p class="card-text"><b>Parental Rating : </b>{{ program.parentalRating }} +</p>
             </div>

@@ -33,7 +33,6 @@ export default {
   },
   created() {
       this.fetchCategoriesAction()
-      this.calculateStack(this.getCategories)
   }
   
 }

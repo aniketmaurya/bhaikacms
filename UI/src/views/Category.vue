@@ -31,6 +31,10 @@
                 <label class="input-label">Category Name: </label>
                 <input type="text" class="input-field" v-model="addCategory.parentName" />
             </div>
+            <div>
+                <label class="input-label">New Name: </label>
+                <input type="text" class="input-field" v-model="addCategory.newName" />
+            </div>
             <div class="input-container">
                 <button class="btn" @click="editCategory">Edit</button>
             </div>
