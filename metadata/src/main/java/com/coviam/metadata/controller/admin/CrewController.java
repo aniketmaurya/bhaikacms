@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping("/admin")
+@RestController
+@CrossOrigin
 public class CrewController {
 
     @Autowired
@@ -25,14 +28,14 @@ public class CrewController {
     }
 
     @DeleteMapping("/deleteCrewRole")
-    public ResponseEntity<Boolean> deleteCrewRole(@RequestParam(name = "crewId") String crewId){
+    public ResponseEntity<Boolean> deleteCrewRole(@RequestParam(name = "crewId") String crewId) {
         return ResponseEntity.ok(crewServices.deleteCrew(crewId));
     }
 
     //update crew
     @PutMapping("/updateCrewRole")
-    public ResponseEntity<Boolean> updateCrewRole(@RequestParam(name = "id") String crewId,@RequestParam(name = "role") String role){
-        return ResponseEntity.ok(crewServices.updateCrew(crewId,role));
+    public ResponseEntity<Boolean> updateCrewRole(@RequestParam(name = "id") String crewId, @RequestParam(name = "role") String role) {
+        return ResponseEntity.ok(crewServices.updateCrew(crewId, role));
     }
 
 }

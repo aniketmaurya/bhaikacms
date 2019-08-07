@@ -1,7 +1,6 @@
 package com.coviam.metadata.utility;
 
 import com.coviam.metadata.dto.response.EpisodeResponse;
-import com.coviam.metadata.dto.response.SingleVideoResponse;
 import com.coviam.metadata.entity.SingleVideo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -19,13 +18,13 @@ public class SearchUtility {
 
     @Async
     public void addEpisodesToSearch(EpisodeResponse episodeResponse) {
-        EpisodeResponse episodeResponse1= restTemplate.postForObject(url + "solrSearch/addEpisodesToSearch", episodeResponse, EpisodeResponse.class);
+        EpisodeResponse episodeResponse1 = restTemplate.postForObject(url + "solrSearch/addEpisodesToSearch", episodeResponse.getEpisode(), EpisodeResponse.class);
         log.debug("Video Search Response: {}", episodeResponse1);
     }
 
     @Async
     public void addSingleVideoToSearch(SingleVideo singleVideo) {
-        SingleVideo singleVideo1= restTemplate.postForObject(url + "solrSearch/addSingleVideoToSearch", singleVideo, SingleVideo.class);
+        SingleVideo singleVideo1 = restTemplate.postForObject(url + "solrSearch/addSingleVideoToSearch", singleVideo, SingleVideo.class);
         log.debug("Video Search Response: {}", singleVideo1);
     }
 }

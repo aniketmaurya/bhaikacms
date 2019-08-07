@@ -12,7 +12,6 @@ import java.util.Map;
 @Getter
 @Setter
 public class SeasonRequest {
-
     private String id;
 
     private Program program;
@@ -28,8 +27,6 @@ public class SeasonRequest {
     private Long creationDate;
 
     private String userEmail;
-
-    private String userId;
 
 
 }

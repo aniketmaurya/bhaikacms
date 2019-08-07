@@ -8,6 +8,7 @@ import com.coviam.metadata.repository.EpisodeRepository;
 import com.coviam.metadata.repository.SeasonRepository;
 import com.coviam.metadata.services.SeasonServices;
 import com.coviam.metadata.utility.AuditUtility;
+import com.coviam.metadata.utility.SearchUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class SeasonServiceImpl implements SeasonServices {
     @Autowired
     private AuditUtility auditUtility;
 
+    @Autowired
+    private SearchUtility searchUtility;
+
 
     @Override
     public Season addSeason(SeasonRequest seasonRequest) {
@@ -48,6 +52,7 @@ public class SeasonServiceImpl implements SeasonServices {
                 season1.getSeasonName(),
                 seasonRequest.getUserEmail(),
                 new ArrayList<Change>());
+
 
         return season1;
     }
@@ -71,7 +76,6 @@ public class SeasonServiceImpl implements SeasonServices {
         return seasonRepository.findById(seasonId).orElse(new Season());
     }
 
-    // todo change the log error
     @Override
     public Page<Season> getSeasonsByProgramId(String programId, Integer pageNumber, Integer size) {
         return seasonRepository.findByProgramId(programId, PageRequest.of(pageNumber, size));

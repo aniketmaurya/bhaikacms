@@ -21,11 +21,11 @@ public class CategoryController {
 
     @PostMapping("/addCategory")
     public ResponseEntity<Category> addCategory(@RequestParam(name = "categoryName") String categoryName,
-                                               @RequestParam(name = "parentName", required = false) String parentName) {
+                                                @RequestParam(name = "parentName", required = false) String parentName) {
 
         Category category = categoryService.addCategory(categoryName, parentName);
 
-        if(category == null) {
+        if (category == null) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -60,8 +60,8 @@ public class CategoryController {
 
     @PutMapping("/updateCategory")
     public Category updateCategory(@RequestParam(name = "categoryName") String categoryName,
-                                   @RequestParam(name = "newName") String newCategoryName){
-        return categoryService.updateCategory(categoryName,newCategoryName);
+                                   @RequestParam(name = "newName") String newCategoryName) {
+        return categoryService.updateCategory(categoryName, newCategoryName);
 
     }
 }

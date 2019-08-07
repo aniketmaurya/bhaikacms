@@ -8,6 +8,7 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,13 +31,15 @@ public class Episode implements Serializable {
     @JoinColumn(name = "season_id", nullable = false)
     private Season season;
 
-    @NotNull
+    @NotNull(message = "episodeNumber may not be null")
     private Integer episodeNumber;
 
-    @NotNull
+    @NotNull(message = "episodeTitle may not be null")
     private String episodeTitle;
 
     @NotNull
+    @Size
+    @NotNull(message = "episodeDescription may not be null")
     private String episodeDescription;
 
     private String episodeVideoUrl;
@@ -46,7 +49,6 @@ public class Episode implements Serializable {
     // todo multiple imgs: Done
     @Type(type = "hstore")
     @Column(columnDefinition = "hstore")
-    @NotNull
     private Map<String, String> episodeImgUrls = new HashMap<>();
 
     @Type(type = "hstore")

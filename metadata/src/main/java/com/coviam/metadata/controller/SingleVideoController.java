@@ -1,5 +1,7 @@
 package com.coviam.metadata.controller;
 
+import com.coviam.metadata.dto.request.DeleteRequest;
+import com.coviam.metadata.dto.request.SingleVideoRequest;
 import com.coviam.metadata.entity.SingleVideo;
 import com.coviam.metadata.services.SingleVideoServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,13 @@ public class SingleVideoController {
     private SingleVideoServices singleVideoServices;
 
     @PutMapping("/addSingleVideo")
-    public ResponseEntity<SingleVideo> addSingleVideo(@RequestBody SingleVideo singleVideo) {
-        return ResponseEntity.ok(singleVideoServices.addEpisodes(singleVideo));
+    public ResponseEntity<SingleVideo> addSingleVideo(@RequestBody SingleVideoRequest singleVideoRequest) {
+        return ResponseEntity.ok(singleVideoServices.addEpisodes(singleVideoRequest));
     }
 
     @PostMapping("/deleteSingleVideo")
-    public ResponseEntity<Boolean> deleteSingleVideo(@RequestParam(name = "id") String singleVideoId) {
-        return ResponseEntity.ok(singleVideoServices.deleteEpisode(singleVideoId));
+    public ResponseEntity<Boolean> deleteSingleVideo(@RequestBody DeleteRequest deleteRequest) {
+        return ResponseEntity.ok(singleVideoServices.deleteEpisode(deleteRequest));
     }
 
     @GetMapping("/getAllSingleVideo")

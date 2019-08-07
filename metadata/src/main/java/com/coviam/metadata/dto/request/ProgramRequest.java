@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class ProgramRequest implements Serializable {
 
     private String description;
 
+    // @Size(min = 2)
     private String name;
 
     private String parentalRating;
@@ -35,6 +37,7 @@ public class ProgramRequest implements Serializable {
     // We will languages as space separated values
     private String languages;
 
+    @NotNull
     private Long startDate;
 
     private Long expiryDate;
@@ -48,9 +51,10 @@ public class ProgramRequest implements Serializable {
 
     private Map<String, String> imgUrls = new HashMap<>();
 
+    private Map<String, String> crewList = new HashMap<>();
+
 
     private Long creationDate;
-
     private String userEmail;
 
 }

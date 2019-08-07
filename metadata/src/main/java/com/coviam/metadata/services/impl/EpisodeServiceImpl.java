@@ -3,8 +3,10 @@ package com.coviam.metadata.services.impl;
 import com.coviam.metadata.dto.request.DeleteRequest;
 import com.coviam.metadata.dto.response.EpisodeResponse;
 import com.coviam.metadata.entity.Episode;
+import com.coviam.metadata.entity.Program;
 import com.coviam.metadata.repository.EpisodeRepository;
 import com.coviam.metadata.services.EpisodeServices;
+import com.coviam.metadata.services.ProgramServices;
 import com.coviam.metadata.utility.SearchUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class EpisodeServiceImpl implements EpisodeServices {
     private EpisodeRepository episodeRepository;
     @Autowired
     private SearchUtility searchUtility;
+    @Autowired
+    private ProgramServices programServices;
 
     // TODO CHANGE FROM EPISODREQUEST TO EPISODE
     @Override
@@ -33,6 +37,10 @@ public class EpisodeServiceImpl implements EpisodeServices {
         String userId = "", modification = "ADDED/UPDATED/DELETED";
         List<Episode> episodes1 = new ArrayList<>();
         episodeRepository.saveAll(episodes).forEach(episodes1::add);
+        for (Episode episode : episodes1) {
+            Program program = programServices.getProgramById(episode.getSeason().getProgram().getId());
+            episode.getSeason().setProgram(program);
+        }
         episodes1 = episodes1.stream().filter(Objects::nonNull).collect(Collectors.toList());
         log.info("Adding episodes");
         searchUtility.addEpisodesToSearch(new EpisodeResponse(episodes1));

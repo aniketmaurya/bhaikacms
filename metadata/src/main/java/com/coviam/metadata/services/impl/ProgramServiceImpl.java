@@ -101,8 +101,8 @@ public class ProgramServiceImpl implements ProgramServices {
         }
         if (!program.getDescription().equals(programRequest.getDescription())) {
             fieldChanged = "Description";
-            oldValue = program.getName();
-            newValue = programRequest.getName();
+            oldValue = program.getDescription();
+            newValue = programRequest.getDescription();
             changes.add(new Change(fieldChanged, oldValue, newValue));
         }
         if (!program.getParentalRating().equals(programRequest.getParentalRating())) {
