@@ -16,6 +16,11 @@
                             <button @click="handleExport()" style="margin-left:10px;" class="btn btn-primary">Export to PDF</button>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="pull-right">
+                            <button @click="handleFilter()" style="margin-left:10px;" class="btn btn-primary">Filter</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">

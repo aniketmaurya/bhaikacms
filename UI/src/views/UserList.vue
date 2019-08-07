@@ -13,20 +13,23 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-sm-12">
                         <table class="table table-striped table-hover table-bordered">
                             <thead>
                                 <tr>
                                     <th style="cursor:pointer;" @click="sort('name')">User Name <i class="fa fa-sort"></i></th>
-                                    <th style="cursor:pointer;" @click="sort('email')">User Email <i class="fa fa-sort"></i></th>
-                                    <th style="cursor:pointer;" @click="sort('roleId')">Role <i class="fa fa-sort"></i></th>
-                                    <th style="cursor:pointer;" @click="sort('isActive')">Is Active <i class="fa fa-sort"></i></th>
+                                    <th style="cursor:pointer;" @click="sort('email')">User Email</th>
+                                    <th style="cursor:pointer;" @click="sort('roleId')">Role<i class="fa fa-sort"></i></th>
+                                    <th style="cursor:pointer;" @click="sort('isActive')">Is Active</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="user in userList.content" :key="user.id">
+                                
+                                <UserListData  v-for="user in userList.content" :key="user.id" :data="user" :refresh="refresh"  /> 
+                                <!-- <tr v-for="user in userList.content" :key="user.id">
                                      <td>
                                         <div v-if="!editing">
                                             <span class='text' @click="enableEditing(user.name)">{{user.name}}</span>
@@ -37,7 +40,7 @@
                                             <button @click="saveEdit"> Save </button>
                                         </div>
                                     </td>
-                                    <!-- <td><div class="editable-text">{{ user.name }}</div></td> -->
+                                    <td><div class="editable-text">{{ user.name }}</div></td>
                                     <td>{{ user.email }}</td>
                                     <td>
                                         <div v-if="!editing">
@@ -54,17 +57,27 @@
                                     <td>{{ changeIsActive(user.active) }}</td>
                                     <td v-if="user.active==1"><button @click="handleDelete(user.id)" class="btn btn-danger">Deactivae</button></td>
                                     <td v-if="user.active==0"><button @click="handleActivate(user.id)" class="btn btn-success">Activate</button></td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                 </div>    
             </div>
-            <div v-if="userList.content">
+            <div v-if="userList.totalElements!=0">
             <div class="clearfix">
-                <div class="hint-text">Showing <b>{{((userList.size)*userList.number)+1}} -
-                    <span v-if="userList.number!=(userList.totalPages-1)">{{(userList.size*(userList.number+1))}}</span> 
+                <!-- <div class="hint-text">Showing <b><span v-if="userList.number!=(userList.totalPages-1)">{{((page.pageNumber+1)*userList.numberOfElements)}}</span>
+                    <span v-else>{{((userList.number*userList.size)+userList.numberOfElements)}}</span></b> out of <b>{{ userList.totalElements }}</b> entries</div>
+                <!-- <div class="hint-text">Showing <b>{{ allAudits.size }}</b> out of <b>{{ allAudits.totalElements }}</b> entries</div> -->
+                <!-- <ul class="pagination">
+                    <button v-if="page.pageNumber!=0" @click="prvPage()"   class="btn btn-primary">Prev</button>
+                    <span> {{page.pageNumber+1}} Out of {{userList.totalPages}}</span>
+                    <button v-if="page.pageNumber!=(userList.totalPages-1)" @click="nextPage()" style="margin:10px;" class="btn btn-primary">Next</button>
+                </ul> -->
+                <div class="clearfix">
+                <div class="hint-text">Showing <b>{{((userList.size)*userList.number)+1}} - 
+                    <span v-if="userList.number!=(userList.totalPages-1)">{{(userList.size*(userList.number+1))}}</span>
                     <span v-else>{{ userList.totalElements }}</span>
                     </b> out of <b>{{ userList.totalElements }}</b> entries</div>
+                <!-- <div class="hint-text">Showing <b>{{ allAudits.size }}</b> out of <b>{{ allAudits.totalElements }}</b> entries</div> -->
                 <ul class="pagination">
                     Page:
                     <input style="width:60px;" type="number" v-model="currentPage"/>
@@ -75,13 +88,12 @@
                     <button v-if="page.pageNumber!=(userList.totalPages-1)" @click="nextPage()" style="margin:10px;" class="btn btn-primary">Next</button>
                 </ul>
             </div>
+            </div>
         </div>
         </div>
     <!-- </div> -->
 </template>
-
 <script src="./js/userList.js"></script>
-
 <style scoped>
     .table-wrapper {
         background: #fff;

@@ -3,7 +3,7 @@ export default {
     name:'Episodes',
     computed: {
         ...mapGetters([
-            'episodes'
+            'episodes',
         ])
     },
     data() {
@@ -61,6 +61,7 @@ export default {
             return d.toDateString();
         },
         addNewEpisode(data) {
+            
             this.$store.commit('setSeason',data[0].season)
             this.$router.push('/episodeForm')
         }

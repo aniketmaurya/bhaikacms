@@ -176,7 +176,8 @@ export default new Vuex.Store({
         commit('setUserCount',resp.body)
         Vue.http.get("http://172.16.20.78:8080/useradmin/countUser?roleId=0").then( (resp) => {
           commit('setAdminCount',resp.body)
-          Vue.http.get("http://172.16.20.95:8081/metadata/count").then( () => {
+          Vue.http.get("http://172.16.20.95:8081/metadata/count").then( (resp) => {
+            console.log(resp.body)
             commit('setProgramCount',resp.body)
           }).catch( (err) => {
              console.log(err)
@@ -217,6 +218,7 @@ export default new Vuex.Store({
       return new Promise ((resolve,reject) => {
         Vue.http.put("http://172.16.20.95:8081/metadata/addSeason",JSON.stringify(payload)).then( (resp) => {
           commit('setSeason',resp.body)
+          console.log(resp.body)
           resolve(resp.body)
         }).catch( (err) => {
           console.log(err)
@@ -395,7 +397,34 @@ export default new Vuex.Store({
     getReport: ({commit},payload) => {
       return new Promise((resolve,reject) => {
         Vue.http.post("http://172.16.20.83:8082/audit/getReport?start="+payload.startDate+"&end="+payload.endDate).then( (resp) => {
-           console.log(resp.body)
+        
+        var fileName = "myDefaultFileName.pdf";
+
+        //replace leading and trailing slashes that C# added to your file name
+        // fileName = fileName.replace(/\"/g, "");
+
+        //determine the content type from the header or default to octect stream
+        var contentType = resp.headers["content-type"];
+
+    //finally, download it
+    try {
+        var blob = new Blob([resp.body], {type: contentType});
+
+        //downloading the file depends on the browser
+        //IE handles it differently than chrome/webkit
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, fileName);
+        } else {
+            var objectUrl = URL.createObjectURL(blob);
+            window.open(objectUrl);
+        }
+    } catch (exc) {
+        console.log("Save Blob method failed with the following exception.");
+        console.log(exc);
+    }
+
+           
+           console.log(resp)
           resolve(resp.body)
         }).catch( (err) => {
           console.log(err)

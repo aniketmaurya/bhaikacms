@@ -97,8 +97,7 @@ export default {
             if(this.episodes.totalElements>0) 
                 counter = this.episodes.totalElements
     
-            debugger
-            for(let i in this.episodes) {
+            for(let i in this.Episodes) {
                 this.Episodes[i].season = this.season
                 this.Episodes[i].episodeNumber = counter++
                 this.Episodes[i].userEmail = this.$session.get('email')

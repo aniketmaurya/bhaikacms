@@ -164,7 +164,16 @@ let router = new Router({
       meta: {
         authentication: 'required'
       }
+    },
+    {
+      path: '/bulkUpload',
+      name: 'bulkUpload',
+      component: () => import('./views/BulkUpload.vue'),
+      meta: {
+        authentication: 'required'
+      }
     }
+
   ]
 })
 

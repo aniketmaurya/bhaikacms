@@ -5,10 +5,10 @@
         <div class="col-md-6">
             <form  v-if="singleVideos.content!=0" @submit.prevent="handleSubmit()">
                 <div class="col-md-8">
-                    <input v-model="searchData.searchText"  class="form-control" type="text" placeholder="Search here">
+                    <!-- <input v-model="searchData.searchText"  class="form-control" type="text" placeholder="Search here"> -->
                 </div>
                 <div class="col-md-4">
-                    <button class="btn btn-primary">Search</button> 
+                    <!-- <button class="btn btn-primary">Search</button>  -->
                 </div>
             </form>
        </div>

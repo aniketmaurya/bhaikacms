@@ -87,6 +87,11 @@ export default {
                 console.log(err)
             })
         },
+        handleFilter() {
+            this.page.startDate = this.convertDateToLong(new Date(this.startDate))
+            this.page.endDate = this.convertDateToLong(new Date(this.endDate))
+            this.getAllAudits(this.page)
+        },
         convertDateToLong(date) {
             return date.getTime()
         },

@@ -5,10 +5,10 @@
         <div class="col-md-6">
             <form @submit.prevent="handleSubmit()">
                 <div class="col-md-8">
-                    <input v-model="searchText"  class="form-control" type="text" placeholder="Search here">
+                    <!-- <input v-model="searchText"  class="form-control" type="text" placeholder="Search here"> -->
                 </div>
                 <div class="col-md-4">
-                    <button class="btn btn-primary">Search</button> 
+                    <!-- <button class="btn btn-primary">Search</button>  -->
                 </div>
             </form>
         </div>

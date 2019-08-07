@@ -1,5 +1,5 @@
-import { mapGetters, mapActions } from 'vuex';
-
+import { mapGetters, mapActions } from 'vuex'
+import UserListData from '@/views/UserListData'
 export default {
     name:'UserList',
     data() {
@@ -9,16 +9,18 @@ export default {
                 pageSize:10,
                 sortBy:"",
                 order:0,
-                searchText:""
             },
             deleteData : {
                 idDelete:"",
                 id:""
             },
-            currentPage:1,
             tempValue: null,
             editing: false,
+            currentPage:1,
         }
+    },
+    components:{
+        UserListData,
     },
     computed: {
         ...mapGetters([
@@ -37,6 +39,11 @@ export default {
                 this.$router.push('/')
             }
             this.getUserList(this.page)
+        },
+        refresh () {
+            // TODO
+            // call api to fetch all data
+            //this.init();
         },
         toggleRoleName (roleId) {
             let roleName = ''
@@ -68,9 +75,8 @@ export default {
             if(this.page.pageNumber < this.userList.totalPages-1)
             {
                 this.page.pageNumber = this.page.pageNumber+1
-                this.currentPage = this.currentPage+1
+                this.currentPage = this.currentPage+1    
                 this.page.pageSize = 10
-                
                 this.getUserList(this.page)
             }
         },
@@ -100,22 +106,22 @@ export default {
                         this.$swal(resp.message)
                         this.getUserList(this.page)
                     } else {
-                        this.$swal('Not able to delete')
+                        this.$swal('Not able to deactivae')
                     }
                     }).catch( (err) => {
                         console.log(err)
                     })
                 } else {
-                  this.$swal("Not deleted");
+                  this.$swal("Not deactivated");
                 }
               })
         },
         handleActivate(id) {
             this.deleteData.idDelete = id
             this.deleteData.id = this.$session.get('userId')
+            console.log(this.deleteData)
             this.deleteUser(this.deleteData).then( (resp) => {
             if(resp.deleted) {
-                console.log(resp)
                 this.$swal(resp.message)
                 this.getUserList(this.page)
             } else {
@@ -124,10 +130,6 @@ export default {
             }).catch( (err) => {
                 console.log(err)
             })
-        },
-        search() {
-            this.searchUser
-
         },
         enableEditing: function(value) {
             this.tempValue = value;
@@ -154,13 +156,9 @@ export default {
         handleSubmit() {
             this.searchUser(this.page)
         },
-        renderPage() {
-            this.page.pageNumber = this.currentPage-1
-            this.getUserList(this.page);
-        }
-
     },
     mounted() {
         this.init()
     }
 }
+
