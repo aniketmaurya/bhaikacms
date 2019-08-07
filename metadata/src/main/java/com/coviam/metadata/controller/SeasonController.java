@@ -75,7 +75,7 @@ public class SeasonController {
     }
 
     @RequestMapping(path = "/addSeasonInBulk", method = RequestMethod.POST)
-    public ResponseEntity<List<SeasonResponse>> addSeasonByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<List<SeasonResponse>> addSeasonInBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
         File file = new File(uploadingDir + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);

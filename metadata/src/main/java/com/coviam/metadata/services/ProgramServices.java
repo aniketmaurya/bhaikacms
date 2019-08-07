@@ -33,42 +33,4 @@ public interface ProgramServices {
     List<ProgramResponse> addProgramByBulkUpload(File csvFile);
 
 
-    //============================================================================================
-    //Added by Sunil --> single video program
-    Page<Program> getAllSingleVideoProgramSortByNameAsc(Integer pageNumber, Integer pageSize);
-
-    Page<Program> getAllSingleVideoProgramSortByNameDesc(Integer pageNumber, Integer pageSize);
-
-    Page<Program> getAllSingleVideoProgramSortByNewestFirst(Integer pageNumber, Integer pageSize);
-
-    Page<Program> getAllSingleVideoProgramSortByOldestFirst(Integer pageNumber, Integer pageSize);
-
-    // Multi video program
-    Page<Program> getAllMultiVideoProgramSortByNameAsc(Integer pageNumber, Integer pageSize);
-
-    Page<Program> getAllMultiVideoProgramSortByNameDesc(Integer pageNumber, Integer pageSize);
-
-    Page<Program> getAllMultiVideoProgramSortByNewestFirst(Integer pageNumber, Integer pageSize);
-
-    Page<Program> getAllMultiVideoProgramSortByOldestFirst(Integer pageNumber, Integer pageSize);
-
-    //getAllSeasonalVideoProgram
-    Page<Program> getAllSeasonalVideoProgramSortByNameAsc(Integer pageNumber, Integer pageSize);
-
-    Page<Program> getAllSeasonalVideoProgramSortByNameDesc(Integer pageNumber, Integer pageSize);
-
-    Page<Program> getAllSeasonalVideoProgramSortByNewestFirst(Integer pageNumber, Integer pageSize);
-
-    Page<Program> getAllSeasonalVideoProgramSortByOldestFirst(Integer pageNumber, Integer pageSize);
-
-    // filterByProgramName
-    Page<Program> filterByProgramName(Integer pageNumber, Integer pageSize, String name);
-
-    Page<Program> filterByProgramType(Integer pageNumber, Integer pageSize, String type);
-
-    Page<Program> filterByProgramLanguage(Integer pageNumber, Integer pageSize, String languages);
-
-    Long countByType(String type);
-
-
 }

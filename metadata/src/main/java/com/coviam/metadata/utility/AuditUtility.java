@@ -35,7 +35,6 @@ public class AuditUtility {
                 .assetId(assetId)
                 .modifier(userEmail)
                 .changes(changes)
-                .flag(0)
                 .build();
 
         callAudit(auditResponse);
@@ -55,7 +54,6 @@ public class AuditUtility {
                 .assetId(assetId)
                 .modifier(userEmail)
                 .changes(changes)
-                .flag(0)
                 .build();
 
         callAudit(auditResponse);
@@ -73,7 +71,6 @@ public class AuditUtility {
                 .assetId(assetId)
                 .modifier(userEmail)
                 .changes(changes)
-                .flag(0)
                 .build();
 
         callAudit(auditResponse);

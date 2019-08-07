@@ -36,7 +36,7 @@ public class SingleVideoController {
     }
 
     @RequestMapping(path = "/addSingleVideoInBulk", method = RequestMethod.POST)
-    public ResponseEntity<List<SingleVideoResponse>> addSingleVideoByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<List<SingleVideoResponse>> addSingleVideoInBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
         File file = new File(uploadingDir + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);

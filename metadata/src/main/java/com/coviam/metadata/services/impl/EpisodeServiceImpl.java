@@ -102,12 +102,11 @@ public class EpisodeServiceImpl implements EpisodeServices {
                         log.info("Added episode with Episode Number : {}", episode.getEpisodeNumber());
                         Episode episode1 = addSingleEpisodes(episode);
                         EpisodeResponse episodeResponse = new EpisodeResponse();
+                        episode.setId(episode1.getId());
+                        episodeResponse.setEpisode(episode);
+                        episodeResponse.setIsSuccessful(episode1 != null);
+                        episodeResponseList.add(episodeResponse);
 
-                        if (episode1 != null) {
-                            episodeResponse.setEpisode(episode1);
-                            episodeResponse.setIsSuccessful(true);
-                            episodeResponseList.add(episodeResponse);
-                        }
 
                     });
                 }

@@ -36,6 +36,7 @@ public class SearchUtility {
         programSearchResponse.setKeywords(Arrays.asList(program.getKeywords()));
         programSearchResponse.setLanguages(Arrays.asList(program.getLanguages().split(" ")));
 
+
         programSearchResponse.setCategory(program.getCategory());
 
         callSearch(programSearchResponse);

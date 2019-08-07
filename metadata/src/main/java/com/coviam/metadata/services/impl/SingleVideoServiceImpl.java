@@ -86,6 +86,7 @@ public class SingleVideoServiceImpl implements SingleVideoServices {
 
                         SingleVideo singleVideo1 = addEpisodes(singleVideo);
                         SingleVideoResponse singleVideoResponse = new SingleVideoResponse();
+
                         singleVideo.setId(singleVideo1.getId());
                         singleVideoResponse.setSingleVideo(singleVideo);
                         singleVideoResponse.setIsSuccessful(singleVideo1 != null);

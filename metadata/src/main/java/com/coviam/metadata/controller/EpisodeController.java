@@ -40,7 +40,7 @@ public class EpisodeController {
     }
 
     @RequestMapping(path = "/addEpisodeInBulk", method = RequestMethod.POST)
-    public ResponseEntity<List<EpisodeResponse>> addEpisodeByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<List<EpisodeResponse>> addEpisodeInBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
         File file = new File(uploadingDir + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);

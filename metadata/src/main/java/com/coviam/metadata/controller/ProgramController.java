@@ -27,6 +27,7 @@ public class ProgramController {
     @Autowired
     private ProgramServices programServices;
 
+
     @PutMapping("/addProgram")
     public ResponseEntity<Program> addProgram(@RequestBody ProgramRequest programRequest) {
         return ResponseEntity.ok(programServices.addProgram(programRequest));
@@ -89,20 +90,12 @@ public class ProgramController {
     }
 
     @RequestMapping(path = "/addProgramInBulk", method = RequestMethod.POST)
-    public ResponseEntity<List<ProgramResponse>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<List<ProgramResponse>> addProgramInBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
         File file = new File(uploadingDir + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);
         List<ProgramResponse> programResponseList = programServices.addProgramByBulkUpload(file);
         file.delete();
         return ResponseEntity.ok(programResponseList);
-    }
-
-    @GetMapping("/count")
-    public ResponseEntity<?> count(
-            @RequestParam(name = "programType", required = false) String type) {
-
-        log.info("Count for Program type : {} ", type);
-        return ResponseEntity.ok(programServices.countByType(type));
     }
 }
