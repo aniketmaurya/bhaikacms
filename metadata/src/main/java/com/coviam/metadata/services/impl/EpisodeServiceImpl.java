@@ -103,9 +103,9 @@ public class EpisodeServiceImpl implements EpisodeServices {
                         Episode episode1 = addSingleEpisodes(episode);
                         EpisodeResponse episodeResponse = new EpisodeResponse();
 
-                        if (episode1 == null) {
-                            episodeResponse.setEpisode(episode);
-                            episodeResponse.setIsSuccessful(false);
+                        if (episode1 != null) {
+                            episodeResponse.setEpisode(episode1);
+                            episodeResponse.setIsSuccessful(true);
                             episodeResponseList.add(episodeResponse);
                         }
 

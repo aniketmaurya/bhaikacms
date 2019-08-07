@@ -74,8 +74,8 @@ public class SeasonController {
         return ResponseEntity.ok(seasonServices.getAllMultiVideo(pageNumber, pageSize));
     }
 
-    @RequestMapping(path = "/addSeasonByBulk", method = RequestMethod.POST)
-    public ResponseEntity<List<SeasonResponse>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    @RequestMapping(path = "/addSeasonInBulk", method = RequestMethod.POST)
+    public ResponseEntity<List<SeasonResponse>> addSeasonByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
         File file = new File(uploadingDir + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);

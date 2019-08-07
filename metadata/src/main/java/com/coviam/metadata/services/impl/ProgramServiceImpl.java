@@ -226,11 +226,11 @@ public class ProgramServiceImpl implements ProgramServices {
                             .build();
                     Program program = addProgram(programRequest);
                     ProgramResponse programResponse = new ProgramResponse();
-                    if (program == null) {
+                    programRequest.setId(program.getId());
                         programResponse.setProgramRequest(programRequest);
-                        programResponse.setIsSuccessful(false);
+                    programResponse.setIsSuccessful(program != null);
                         programResponseList.add(programResponse);
-                    }
+
                     log.info("Added program with program id:{}", program.getId());
 
                 }

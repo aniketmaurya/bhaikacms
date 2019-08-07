@@ -39,8 +39,8 @@ public class EpisodeController {
         return ResponseEntity.ok(episodeService.getEpisodesBySeasonId(seasonId, pageNumber, pageSize));
     }
 
-    @RequestMapping(path = "/addEpisodeByBulk", method = RequestMethod.POST)
-    public ResponseEntity<List<EpisodeResponse>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    @RequestMapping(path = "/addEpisodeInBulk", method = RequestMethod.POST)
+    public ResponseEntity<List<EpisodeResponse>> addEpisodeByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
         File file = new File(uploadingDir + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);

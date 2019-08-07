@@ -89,7 +89,7 @@ public class ProgramController {
         return ResponseEntity.ok(Optional.of(programServices.sendAboutToExpire()));
     }
 
-    @RequestMapping(path = "/addProgramByBulk", method = RequestMethod.POST)
+    @RequestMapping(path = "/addProgramInBulk", method = RequestMethod.POST)
     public ResponseEntity<List<ProgramResponse>> addProgramByBulk(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         String uploadingDir = System.getProperty("user.dir") + "/src/FileUpload/";
         File file = new File(uploadingDir + multipartFile.getOriginalFilename());

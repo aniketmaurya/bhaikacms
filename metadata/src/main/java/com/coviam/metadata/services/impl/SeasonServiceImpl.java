@@ -165,11 +165,12 @@ public class SeasonServiceImpl implements SeasonServices {
                                 .build();
 
                         Season season = addSeason(seasonRequest);
+                        seasonRequest.setId(season.getId());
+                        log.info("season response {}", season);
                         SeasonResponse seasonResponse = new SeasonResponse();
-                        if (season == null) {
-                            seasonResponse.setSeasonRequest(seasonRequest);
-                            seasonResponse.setIsSuccessful(false);
-                        }
+                        seasonResponse.setSeasonRequest(seasonRequest);
+                        seasonResponse.setIsSuccessful(season != null);
+
                         log.info("Added season with season id:{}", season.getId());
                         seasonResponseList.add(seasonResponse);
                     });
