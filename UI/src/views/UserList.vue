@@ -6,7 +6,9 @@
                     <div class="col-sm-8"><h2>User <b>Details</b></h2></div>
                     <div class="col-sm-4">
                         <div class="search-box">
-                            <input @input="search()" type="text" class="form-control" placeholder="Search here">
+                            <form @submit.prevent="handleSubmit()">
+                                <input v-model="page.searchText" type="text" class="form-control" placeholder="Search here">
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -17,9 +19,9 @@
                             <thead>
                                 <tr>
                                     <th style="cursor:pointer;" @click="sort('name')">User Name <i class="fa fa-sort"></i></th>
-                                    <th style="cursor:pointer;" @click="sort('email')">User Email</th>
-                                    <th style="cursor:pointer;" @click="sort('roleId')">Role<i class="fa fa-sort"></i></th>
-                                    <th style="cursor:pointer;" @click="sort('isActive')">Is Active</th>
+                                    <th style="cursor:pointer;" @click="sort('email')">User Email <i class="fa fa-sort"></i></th>
+                                    <th style="cursor:pointer;" @click="sort('roleId')">Role <i class="fa fa-sort"></i></th>
+                                    <th style="cursor:pointer;" @click="sort('isActive')">Is Active <i class="fa fa-sort"></i></th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -57,14 +59,19 @@
                         </table>
                 </div>    
             </div>
-            <div v-if="userList.totalElements!=0">
+            <div v-if="userList.content">
             <div class="clearfix">
-                <div class="hint-text">Showing <b><span v-if="userList.number!=(userList.totalPages-1)">{{((page.pageNumber+1)*userList.numberOfElements)}}</span>
-                    <span v-else>{{((userList.number*userList.size)+userList.numberOfElements)}}</span></b> out of <b>{{ userList.totalElements }}</b> entries</div>
-                <!-- <div class="hint-text">Showing <b>{{ allAudits.size }}</b> out of <b>{{ allAudits.totalElements }}</b> entries</div> -->
+                <div class="hint-text">Showing <b>{{((userList.size)*userList.number)+1}} -
+                    <span v-if="userList.number!=(userList.totalPages-1)">{{(userList.size*(userList.number+1))}}</span> 
+                    <span v-else>{{ userList.totalElements }}</span>
+                    </b> out of <b>{{ userList.totalElements }}</b> entries</div>
                 <ul class="pagination">
+                    Page:
+                    <input style="width:60px;" type="number" v-model="currentPage"/>
+                    <button style="margin:10px;" class="btn btn-success" v-if="currentPage<=userList.totalPages" @click="renderPage()">Go</button>
+                    <button style="margin:10px;" class="btn btn-danger" v-else>Go</button>
+
                     <button v-if="page.pageNumber!=0" @click="prvPage()"   class="btn btn-primary">Prev</button>
-                    <span> {{page.pageNumber+1}} Out of {{userList.totalPages}}</span>
                     <button v-if="page.pageNumber!=(userList.totalPages-1)" @click="nextPage()" style="margin:10px;" class="btn btn-primary">Next</button>
                 </ul>
             </div>

@@ -80,7 +80,7 @@ export default {
                     if(resp.uploadLink) {
                         this.multiVideo.seasonImgUrls.thumbnail = resp.uploadLink
                     } else {
-                        this.$swal('File type not supported')
+                        this.$swal(resp.message)
                     }
                 }).catch( (err) => {
                     console.log(err)
@@ -94,7 +94,7 @@ export default {
                     if(resp.uploadLink) {
                         this.multiVideo.seasonImgUrls.avatar = resp.uploadLink
                     } else {
-                        this.$swal('File type not supported')
+                        this.$swal(resp.message)
                     }
                 }).catch( (err) => {
                     console.log(err)

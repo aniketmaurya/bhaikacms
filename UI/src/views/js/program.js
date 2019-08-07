@@ -1,6 +1,18 @@
-import { mapActions } from 'vuex';
+
+import VueTagsInput from '@johmun/vue-tags-input';
+
+import { mapActions, mapGetters } from 'vuex';
 export default {
     name:'Program',
+    computed:{
+        ...mapGetters([
+            'languages',
+            'getStackOfCategories'
+        ])
+    },
+    components:{
+        VueTagsInput
+    },
     data() {
         return {
             program: {
@@ -20,14 +32,17 @@ export default {
                     avatar: "",
                 },
                 userId:null,
-                userEmail:""
-            }
+                userEmail:"",
+            },
+            tag:'',
+            tags: [],
         }
     },
     methods: {
         ...mapActions([
             'addProgram',
             'imageUpload',
+            'getLanguages'
         ]),
         init() {
             if (this.$route.params.name == "singleVideo") {
@@ -39,6 +54,7 @@ export default {
             else {
                 this.program.type = "Seasonal video program"
             }
+            this.getLanguages()
         },
         handleSubmit() {
             //change date to long
@@ -46,7 +62,14 @@ export default {
             this.program.expiryDate = this.convertDateToLong(new Date(this.program.expiryDate))
             this.program.userId = this.$session.get('userId')
             this.program.userEmail = this.$session.get('email')
-
+             
+            for(let i=0;i<this.tags.length;i++) {
+                if(i==0) {
+                    this.program.keywords = this.tags[i].text
+                }
+                this.program.keywords  = this.program.keywords+','+this.tags[i].text
+            }
+            
             //adding program to database 
             this.addProgram(this.program).then( (resp) => {
                 this.$swal('','Successfully added','success')
@@ -92,14 +115,14 @@ export default {
                     if(resp.uploadLink) {
                         this.program.imgUrls.avatar = resp.uploadLink
                     } else {
-                        this.$swal('File type not supported')
+                        this.$swal(resp.message)
                     }
                 }).catch( (err) => {
                     console.log(err)
                 })
             }
              
-        }
+        },
 
     },
     mounted() {

@@ -2,11 +2,18 @@
     <!-- <div class="container"> -->
         <div class="table-wrapper">
             <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-8"><h2>Audit <b>Details</b></h2></div>
-                    <div class="col-sm-4">
-                        <div class="search-box">
-                            <input type="text" class="form-control" placeholder="Search here">
+                <div class="form-inline">
+                    <div class="form-group">
+                            From
+                            <input v-model="startDate"  style="margin-right:20px;" class="form-control" type="date">
+                    </div>
+                        <div class="form-group">
+                            To
+                            <input  v-model="endDate"  class="form-control" type="date">
+                        </div>
+                    <div class="form-group">
+                        <div class="pull-right">
+                            <button @click="handleExport()" style="margin-left:10px;" class="btn btn-primary">Export to PDF</button>
                         </div>
                     </div>
                 </div>
@@ -16,24 +23,23 @@
                         <table class="table table-striped table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    
-                                    <th>Asset <i class="fa fa-sort"></i></th>
-                                    <th>Action <i class="fa fa-sort"></i></th>
-                                    <th>Timestamp</th>
-                                    <th>Modifier <i class="fa fa-sort"></i></th>
-                                    <th>Old Value</th>
-                                    <th>New Value</th>
+                                    <th width="15%" @click="sort('asset')" class="hover">Asset <i class="fa fa-sort"></i></th>
+                                    <th width="10%" @click="sort('action')" class="hover">Action <i class="fa fa-sort"></i></th>
+                                    <th width="15%" @click="sort('actionTime')" class="hover">Timestamp <i class="fa fa-sort"></i></th>
+                                    <th width="13%" @click="sort('modifier')" class="hover">Modifier <i class="fa fa-sort"></i></th>
+                                    <th width="24%">Old Value</th>
+                                    <th width="24%">New Value</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="audit in allAudits.content" :key="audit">
+                                <tr v-for="audit in allAudits.content" :key="audit.auditId">
         
-                                    <td>{{ audit.asset }}</td>
-                                    <td>{{ audit.action }}</td>
-                                    <td>{{ changeDate(audit.actionTime) }}</td>
-                                    <td>{{ audit.modifier }}</td>
-                                    <td>{{ audit.oldValue }}</td>
-                                    <td>{{ audit.newValue }}</td>
+                                    <td width="15%">{{ audit.asset }}</td>
+                                    <td width="10%">{{ audit.action }}</td>
+                                    <td width="15%">{{ changeDate(audit.actionTime) }}</td>
+                                    <td width="13%">{{ audit.modifier }}</td>
+                                    <td width="24%">{{ audit.oldValue }}</td>
+                                    <td width="24%">{{ audit.newValue }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -41,12 +47,18 @@
             </div>
             <div v-if="allAudits.totalElements!=0">
             <div class="clearfix">
-                <div class="hint-text">Showing <b><span v-if="allAudits.number!=(allAudits.totalPages-1)">{{((page.pageNumber+1)*allAudits.numberOfElements)}}</span>
-                    <span v-else>{{((allAudits.number*allAudits.size)+allAudits.numberOfElements)}}</span></b> out of <b>{{ allAudits.totalElements }}</b> entries</div>
+                <div class="hint-text">Showing <b>{{((allAudits.size)*allAudits.number)+1}} - 
+                    <span v-if="allAudits.number!=(allAudits.totalPages-1)">{{(allAudits.size*(allAudits.number+1))}}</span>
+                    <span v-else>{{ allAudits.totalElements }}</span>
+                    </b> out of <b>{{ allAudits.totalElements }}</b> entries</div>
                 <!-- <div class="hint-text">Showing <b>{{ allAudits.size }}</b> out of <b>{{ allAudits.totalElements }}</b> entries</div> -->
                 <ul class="pagination">
+                    Page:
+                    <input style="width:60px;" type="number" v-model="currentPage"/>
+                    <button style="margin:10px;" class="btn btn-success" v-if="currentPage<=allAudits.totalPages" @click="renderPage()">Go</button>
+                    <button style="margin:10px;" class="btn btn-danger" v-else>Go</button>
+
                     <button v-if="page.pageNumber!=0" @click="prvPage()"   class="btn btn-primary">Prev</button>
-                    <span> {{page.pageNumber+1}} Out of {{allAudits.totalPages}}</span>
                     <button v-if="page.pageNumber!=(allAudits.totalPages-1)" @click="nextPage()" style="margin:10px;" class="btn btn-primary">Next</button>
                 </ul>
             </div>
@@ -61,9 +73,7 @@
         </div>
     <!-- </div> -->
 </template>
-
 <script src="./js/audit.js"></script>
-
 <style type="text/css">
     .table-wrapper {
         background: #fff;
@@ -166,4 +176,10 @@
         margin-top: 6px;
         font-size: 95%;
     }    
+    .hover:hover{
+        cursor: pointer;
+    }
+    .pull-right {
+        float: right;
+    }
 </style>

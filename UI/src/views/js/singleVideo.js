@@ -12,7 +12,11 @@ export default {
                 id:"",
                 userId:""
             },
-            searchText:""
+            searchData: {
+                searchText:"",
+                videoType:"Single video program"
+            }
+            
         }
     },
     computed: {
@@ -24,7 +28,7 @@ export default {
         ...mapActions([
             'getSingleVideoPrograms',
             'deleteProgramById',
-            'searchInVideo'
+            'searchInSingleVideo'
         ]),
         init() {
            this.getSingleVideoPrograms(this.page) 
@@ -61,10 +65,10 @@ export default {
             }
         },
         handleSubmit() {
-            this.searchInVideo(this.searchText).then( (resp) => {
-                this.$router.push('/singleVideos')
+            this.searchInSingleVideo(this.searchData).then( (resp) => {
+                console.log(resp)
             }).catch((err)=> {
-
+                console.log(err)
             }) 
 
         }

@@ -1,4 +1,3 @@
-
 <template>
     <div class="container">
         <div class="add-container">
@@ -44,9 +43,8 @@
         </div>
     </div>
 </template>
-<script src="./js/category.js"></script>
-
-<style>
+<script src='./js/category.js'></script>
+<style >
 .category-component{
   display:flex;
   position:absolute;
@@ -90,8 +88,3 @@
   padding:10px;
 }
 </style>
-
-
-
-
-

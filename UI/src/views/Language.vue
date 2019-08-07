@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12">
             <form class="program-form" style="padding:15px;" @submit.prevent="handleSubmit()">
-                <h2 class="form-heading">ADD LANGUAGE</h2>
+                <h2 class="form-heading">LANGUAGE</h2>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>Language</label>
@@ -14,6 +14,16 @@
                     <button type="submit" class="btn btn-success">Save</button>
                 </div>
             </form>
+            <!-- <div class="row">
+                <div class="col-md-6">
+                    <vue-tags-input v-model="tag" :tags="tags" @tags-changed="newTags => tags = newTags"/>
+                </div>
+                <div class="col-md-6">
+                    <button @click="handleSubmit()" class="btn btn-success">Save</button>
+                </div>    
+            </div> -->
+                
+
         </div>
     </div>
     <div class="row">
@@ -40,9 +50,14 @@
 </template>
 
 <script>
+import VueTagsInput from '@johmun/vue-tags-input';
+
 import { mapActions, mapGetters } from 'vuex';
 export default {
     name:'Language',
+    components:{
+        VueTagsInput
+    },
     data() {
         return {
             language: [
@@ -54,6 +69,8 @@ export default {
                 id:"",
                 name:""
             },
+            tag:'',
+            tags: [],
             isEdit:true
         }
     },
@@ -72,10 +89,12 @@ export default {
         handleSubmit() {
             this.addLanguage(this.language).then ( (resp) => {
                 if(resp) {
-                    this.$swal('Added')
-                    this.getLanguages()   
+                    this.$swal(this.language[0].name+' Added')
+                    this.getLanguages()
+                    this.language[0].name=""
                 } else {
                     this.$swal(this.language[0].name+" already exists")
+                    this.tags=[]
                 }
             }).catch((err) => {
                 console.log(err)
@@ -88,7 +107,7 @@ export default {
             this.deleteLanguageByName(name).then( (resp) => {
                 console.log(resp)
                 if(resp) {
-                    this.$swal("Deleted")
+                    this.$swal(name.name+" Deleted")
                     this.getLanguages()
                 }
             }).catch( (err) => {

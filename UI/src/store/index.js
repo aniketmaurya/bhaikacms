@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import vueResource from 'vue-resource'
+import { stat } from 'fs';
 
 Vue.use(Vuex)
 Vue.use(vueResource)
@@ -27,6 +28,13 @@ export default new Vuex.Store({
       editable: false,
     },
     languages:{},
+    crewRoles:{},
+    categories:{
+      name:"Categories",
+      id:"category",
+      subCategories:[],
+    },
+    stackOfCategories:[]
     
   },
   
@@ -79,6 +87,20 @@ export default new Vuex.Store({
     },
     setAdminCount(state,payload) {
       state.adminCount = payload
+    },
+    setCrewRoles(state,payload) {
+      state.crewRoles = payload
+    },
+    setCategories(state,payload){
+      state.categories.subCategories=payload
+    },
+    setStackOfCategories(state,nodes){
+      window.console.log(nodes)
+      for(let i=0;i<nodes.length;i++){
+        state.stackOfCategories.push(nodes[i].name)
+          if(nodes[i].subCategories && nodes[i].subCategories.length>0 )
+              setStackOfCategories(nodes[i].subCategories)
+      }
     }
   },
 
@@ -106,10 +128,16 @@ export default new Vuex.Store({
         commit('setUserList',resp.body)
       }).catch( (err) => {
       console.log(err)
-      reject(false)
     })
     },
-
+    searchUser : ({commit},payload) => {
+      Vue.http.get("http://172.16.20.78:8080/useradmin/searchUser?input="+payload.searchText+"&pageNumber="+payload.pageNumber+"&pageSize="+payload.pageSize+"&sortBy="+payload.sortBy+"&order="+payload.order).then( (resp) => {
+        console.log(resp.body)
+        commit('setUserList',resp.body)
+      }).catch( (err) => {
+      console.log(err)
+      })
+    },
     addUser : ({commit},payload) => {
       return new Promise ((resolve,reject) => {
         Vue.http.post("http://172.16.20.78:8080/useradmin/addUserAdmin",JSON.stringify(payload)).then( (resp) => {
@@ -269,6 +297,7 @@ export default new Vuex.Store({
         })
       })
     },
+    //Language
     addLanguage: ({commit},payload) => {
       return new Promise((resolve,reject) => {
         Vue.http.post("http://172.16.20.95:8081/admin/addLanguage",JSON.stringify(payload)).then( (resp) => {
@@ -308,6 +337,37 @@ export default new Vuex.Store({
         })
       })
     },
+    //CREW ROLES
+    getCrewRoles: ({commit}) => {
+      Vue.http.get("http://172.16.20.95:8081/admin/getAllCrewRoles").then((resp) => {
+          commit('setCrewRoles',resp.body)
+      }).catch((err) => {
+          console.log(err)
+      })
+    },
+    
+    addCrewRoles: ({commit},payload) => {
+      return new Promise((resolve,reject) => {
+        Vue.http.put("http://172.16.20.95:8081/admin/addCrew",JSON.stringify(payload)).then( (resp) => {
+          // console.log(resp.body)
+          resolve(resp.body)
+        }).catch( (err) => {
+          console.log(err)
+          reject(false)
+        })
+      })
+    },
+    deleteCrewRoles: ({commit},payload) => {
+      return new Promise((resolve,reject) => {
+        Vue.http.delete("http://172.16.20.95:8081/admin/deleteCrewRole?crewId="+payload.id).then((resp) => {
+          resolve(resp.body)
+        }).catch((err) => {
+          console.log(err)
+          reject(resp.body)
+        })
+      })
+    },
+    
 
     
 
@@ -323,6 +383,17 @@ export default new Vuex.Store({
     }).catch( (err) => {
       console.log(err)
     })
+    },
+    getReport: ({commit},payload) => {
+      return new Promise((resolve,reject) => {
+        Vue.http.post("http://172.16.20.83:8082/audit/getReport?start="+payload.startDate+"&end="+payload.endDate).then( (resp) => {
+           console.log(resp.body)
+          resolve(resp.body)
+        }).catch( (err) => {
+          console.log(err)
+          reject(err)
+        })
+      })
     },
 
     /*---------------------------Other Services--------------------------------*/
@@ -343,15 +414,41 @@ export default new Vuex.Store({
     //Testing Phase
     searchInVideo : ({commit},payload) => { 
       return new Promise((resolve,reject) => {
-        Vue.http.get("http://172.16.20.101:8080/solrSearch/search?searchTerm="+payload+"&pageNumber=0&pageSize=5").then( (resp) => {
-          commit('setSingleVideos',resp.body)
+        Vue.http.get("http://172.16.20.101:8080/solrSearch/search?searchTerm="+payload.searchText+"&pageNumber=0&pageSize=5&videoType="+payload.videoType).then( (resp) => {
+          commit('setMultiVideos',resp.body)
           console.log(resp.body)
         }).catch( (err) => {
           console.log(err)
         })
       })
     },  
-     
+
+    searchInSingleVideo : ({commit},payload) => {
+      return new Promise((resolve,reject) => {
+        Vue.http.get("http://172.16.20.101:8080/solrSearch/search?searchTerm="+payload.searchText+"&pageNumber=0&pageSize=5&videoType="+payload.videoType).then( (resp) => {
+          commit('setSingleVideos',resp.body)
+          console.log(resp.body)
+        }).catch( (err) => {
+          console.log(err)
+        })
+      })
+    },
+
+
+    //Categories
+    fetchCategoriesAction({commit}){
+      Vue.http.get("http://172.16.20.95:8081/admin/getCompleteTree")
+      .then(response => response.json())
+      .then(response => {
+        commit('setCategories',response)
+
+      })
+    },
+    calculateStack({commit},payload){
+      commit('setStackOfCategories',payload.subCategories)
+      // commit('setStackOfCategories')
+  }
+
     
   },
   getters: {
@@ -402,6 +499,15 @@ export default new Vuex.Store({
     },
     userCount(state) {
       return state.userCount
+    },
+    crewRoles(state) {
+      return state.crewRoles
+    },
+    getCategories(state){
+      return state.categories
+    },
+    getStackOfCategories(state){
+      return state.stackOfCategories
     }
   }
 })

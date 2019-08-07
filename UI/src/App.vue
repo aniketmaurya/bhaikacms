@@ -15,17 +15,25 @@
 
 <script>
 import SideBar from '@/components/SideBar.vue'
-import { mapGetters } from 'vuex';
+import { mapGetters,mapActions } from 'vuex';
 
 export default {
   name:'App',
   computed: {
       ...mapGetters([
-          'isLoggedIn'
+          'isLoggedIn',
+          'getCategories'
       ])
   },
   components:{
       SideBar,   
+  },
+  methods: {
+      ...mapActions(['fetchCategoriesAction','calculateStack'])
+  },
+  created() {
+      this.fetchCategoriesAction()
+      this.calculateStack(this.getCategories)
   }
   
 }

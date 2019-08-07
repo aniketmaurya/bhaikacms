@@ -22,7 +22,7 @@ export default {
             this.$store.commit('setUsetDetails',{
                 status:false
             })
-            this.$swal('','Successfully logout','success')
+            // this.$swal('','Successfully logout','success')
             this.$router.push('/login')
 
             }).catch( (err) => {

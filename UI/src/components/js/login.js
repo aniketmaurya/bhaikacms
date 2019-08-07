@@ -16,7 +16,7 @@ export default {
 		handleSubmit() {
            this.signIn(this.user).then( (resp) => {
 			    if (resp.login==true) {
-				    this.$swal('',resp.message,'success')
+				    // this.$swal('',resp.message,'success')
 					this.$session.set('userId',resp.userId)
 					this.$session.set('roleId',resp.roleId)
 					this.$session.set('email',resp.email)

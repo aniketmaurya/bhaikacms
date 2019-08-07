@@ -9,13 +9,15 @@ export default {
                 pageSize:10,
                 sortBy:"",
                 order:0,
+                searchText:""
             },
             deleteData : {
                 idDelete:"",
                 id:""
             },
+            currentPage:1,
             tempValue: null,
-            editing: false
+            editing: false,
         }
     },
     computed: {
@@ -27,7 +29,8 @@ export default {
     methods: {
         ...mapActions([
             'getUserList',
-            'deleteUser'
+            'deleteUser',
+            'searchUser'
         ]),
         init() {
             if(this.$session.get('roleId') === 0) {
@@ -65,13 +68,17 @@ export default {
             if(this.page.pageNumber < this.userList.totalPages-1)
             {
                 this.page.pageNumber = this.page.pageNumber+1
+                this.currentPage = this.currentPage+1
                 this.page.pageSize = 10
+                
                 this.getUserList(this.page)
             }
         },
         prvPage() {
             if (this.page.pageNumber!=0) {
                 this.page.pageNumber = this.page.pageNumber-1
+                if(this.currentPage!=0)
+                    this.currentPage = this.currentPage-1
                 this.page.pageSize = 10
                 this.getUserList(this.page)
             }
@@ -106,9 +113,9 @@ export default {
         handleActivate(id) {
             this.deleteData.idDelete = id
             this.deleteData.id = this.$session.get('userId')
-            console.log(this.deleteData)
             this.deleteUser(this.deleteData).then( (resp) => {
             if(resp.deleted) {
+                console.log(resp)
                 this.$swal(resp.message)
                 this.getUserList(this.page)
             } else {
@@ -143,6 +150,13 @@ export default {
             else
                this.page.order=0
             this.getUserList(this.page)
+        },
+        handleSubmit() {
+            this.searchUser(this.page)
+        },
+        renderPage() {
+            this.page.pageNumber = this.currentPage-1
+            this.getUserList(this.page);
         }
 
     },

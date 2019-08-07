@@ -3,7 +3,7 @@
         <div v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="heading">ADMIN</div>
         <div v-else class="heading">USER</div>
         <li class="navbar-li-contents"><router-link class="navbar-contents" :to="'/'">Home</router-link></li>
-        <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1"  class="navbar-li-contents"><router-link class="navbar-contents" :to="'/userList'">All Users</router-link></li>
+        <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1"  class="navbar-li-contents"><router-link class="navbar-contents" :to="'/userList/0'">All Users</router-link></li>
         <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="navbar-li-contents"><router-link class="navbar-contents" :to="'/audit'">Audit</router-link></li>
         <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="navbar-li-contents"><router-link class="navbar-contents" :to="'/addUser'">Add User</router-link></li>
         <ul class="sub-heading">Video</ul>
@@ -11,9 +11,9 @@
             <li class="navbar-li-contents"><router-link class="navbar-contents" :to="'/multiVideo'">Multi Video Program</router-link></li>
             <li class="navbar-li-contents"><router-link class="navbar-contents" :to="'/seasonalVideo'">Seasonal Program</router-link></li>
         <ul v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="sub-heading">Add Metadata</ul>
-            <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="navbar-li-contents"><router-link class="navbar-contents" to="#">Add Category</router-link></li>
-            <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="navbar-li-contents"><router-link class="navbar-contents" :to="'/addCrew'">Add Crew</router-link></li>
-            <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="navbar-li-contents"><router-link class="navbar-contents" :to="'/addLanguage'">Add Language</router-link></li>
+            <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="navbar-li-contents"><router-link class="navbar-contents" to="/addCategory">Category</router-link></li>
+            <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="navbar-li-contents"><router-link class="navbar-contents" :to="'/addCrew'">Crew Roles</router-link></li>
+            <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="navbar-li-contents"><router-link class="navbar-contents" :to="'/addLanguage'">Language</router-link></li>
         <div v-if="this.$session.has('userId')"  class="sub-heading"><router-link :to="'/logout'" style="color:white;margin-left:20px;">Logout</router-link></div>
     </ul>
 </template>

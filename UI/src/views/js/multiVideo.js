@@ -16,13 +16,18 @@ export default {
             programData: {
                 id:"",
                 userId:""
+            },
+            searchData: {
+                searchText:"",
+                videoType:"Multi video program"
             }
         }
     },
     methods: {
         ...mapActions([
             'getMultiVideoPrograms',
-            'deleteProgramById'
+            'deleteProgramById',
+            'searchInVideo'
         ]),
         init() {
             this.getMultiVideoPrograms(this.page) 
@@ -57,6 +62,9 @@ export default {
                 this.page.pageSize = 5
                 this.getSeasonalVideoPrograms(this.page)
             }
+        },
+        handleSearch() {
+            this.searchInVideo(this.searchData)
         },
 
     },

@@ -13,7 +13,7 @@
             </form>
         </div>
         <div class="col-md-6">
-            <router-link :to="'/program/singleVideo'"><button class="btn btn-success">Upload new program</button></router-link>
+            <router-link :to="'/program/seasonalVideo'"><button class="btn btn-success">Upload new program</button></router-link>
         </div>
     </div>
 </div>
@@ -25,7 +25,7 @@
         <div class="col-md-8 px-3">
             <div class="card-block col-md-5 px-3">
                 <router-link :to="'/seasons/'+program.id"><h3 class="card-title">{{ program.name }}</h3></router-link>
-                <p class="card-text"><b>Upload Id : </b>xxxx</p>
+                <p class="card-text"><b>Upload Id : </b>{{ program.id }}</p>
                 <p class="card-text"><b>Start Date : </b>{{ changeTime(program.startDate) }}</p>
                 <p class="card-text"><b>Expiry Date : </b>{{ changeTime(program.expiryDate) }}</p>
                 <p class="card-text"><b>Upload Date : </b>{{ changeTime(program.creationDate) }}</p>
@@ -35,7 +35,7 @@
                 <p class="card-text"><b>Description : </b>{{ program.description }}</p>
                 <p class="card-text"><b>Category : </b>{{ program.category.name }}</p>
                 <p class="card-text"><b>Languages : </b>{{ program.languages }}</p>
-                <p class="card-text"><b>Parental Rating : </b>{{ program.parentalRating }}</p>
+                <p class="card-text"><b>Parental Rating : </b>{{ program.parentalRating }} +</p>
             </div>
             <div class="card-block col-md-3 px-3">
                 <div class="help1"> </div>
@@ -57,7 +57,13 @@
             <button v-if="page.pageNumber!=(seasonalVideos.totalPages-1)" @click="nextPage()" style="margin:10px;" class="btn btn-primary">Next</button>
         </ul>
     </div>
-
+</div>
+<div v-else>
+    <div class="row">
+        <div class="col-md-6"> 
+            <h1 class="msg">Nothing to Show</h1>
+        </div>
+    </div>
 </div>
 </div>
 </div>
