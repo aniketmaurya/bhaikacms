@@ -22,12 +22,14 @@ public interface UserAdminService {
     //boolean validateLogin(String userId, UUID token);
 
     boolean logOut(LogOutDto logOutDto);
-
-    UserEmailDto getUserEmailId(String id);
-
+    
     boolean validateLogin(String userId);
 
     Long countUser(Integer roleId);
 
     Boolean editChanges(EditDetailsDto editDetailsDto);
+
+    Boolean sendEmail(String email);
+
+    UserEmailDto getUserEmailId(String id);
 }

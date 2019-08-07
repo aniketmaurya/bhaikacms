@@ -32,18 +32,33 @@ public class AuditUtility {
         callAudit(auditRequestDto);
     }
 
-    public void deleteAudit(String userName, String userEmail, String modifierEmail, List<Change> changes) {
+    public void deleteAudit(Integer flag,String userName, String userEmail, String modifierEmail, List<Change> changes) {
+        if(flag==0) {
+            AuditRequestDto auditRequestDto = AuditRequestDto.builder()
+                    .asset(userName)
+                    .assetId(userEmail)
+                    .action("ACTIVATED")
+                    .modifier(modifierEmail)
+                    .changes(changes)
+                    .flag(1)
+                    .build();
 
-        AuditRequestDto auditRequestDto = AuditRequestDto.builder()
-                .asset(userName)
-                .assetId(userEmail)
-                .action("DELETED")
-                .modifier(modifierEmail)
-                .changes(changes)
-                .flag(1)
-                .build();
+            callAudit(auditRequestDto);
+        }
 
-        callAudit(auditRequestDto);
+        if(flag==1) {
+            AuditRequestDto auditRequestDto = AuditRequestDto.builder()
+                    .asset(userName)
+                    .assetId(userEmail)
+                    .action("DEACTIVATED")
+                    .modifier(modifierEmail)
+                    .changes(changes)
+                    .flag(1)
+                    .build();
+
+            callAudit(auditRequestDto);
+        }
+
     }
 
 

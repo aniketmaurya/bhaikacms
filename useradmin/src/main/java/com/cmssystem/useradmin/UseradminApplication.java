@@ -21,8 +21,8 @@ public class UseradminApplication {
     private int redisPort = 6379;
 
 
-    @Value("${spring.cache.redis.time-to-live}")
-    private int DEFAULT_TTL;
+    //@Value("${spring.cache.redis.time-to-live}")
+    //private int DEFAULT_TTL;
 
     public static void main(String[] args) {
         SpringApplication.run(UseradminApplication.class, args);
@@ -50,12 +50,12 @@ public class UseradminApplication {
 //        return cacheManager;
 //    }
 
-    @Bean("redisCacheManager")
+   /* @Bean("redisCacheManager")
     public CacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(DEFAULT_TTL));
         return new RedisCacheManager(RedisCacheWriter.lockingRedisCacheWriter(redisConnectionFactory), redisCacheConfiguration);
-    }
+    }*/
 }
 
 

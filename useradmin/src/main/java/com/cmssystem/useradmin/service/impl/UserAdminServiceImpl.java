@@ -15,12 +15,11 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 //import com.cmssystem.useradmin.dto.UserAdminResponseDto;
 //import com.cmssystem.useradmin.dto.UserDeleteResponseDto;
@@ -30,13 +29,25 @@ import java.util.UUID;
 public class UserAdminServiceImpl implements UserAdminService {
 
 
+
+    private static final List<String> ALLOWED=Arrays.asList("email","name","roleId","isActive");
+
+
     @Autowired
     private UserAdminRepository userAdminRepository;
 
     @Autowired
     private UserAdminTokenRepository userAdminTokenRepository;
 
-    private static final List<String> ALLOWED=Arrays.asList("email","name","roleId","isActive");
+    private JavaMailSender javaMailSender;
+
+
+    @Autowired
+    public UserAdminServiceImpl(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
+
+
 
     @Override
     public UserAdminAddResponseDto addUser(UserAdminDetailsDto userAdminDetailsDto) {
@@ -130,20 +141,22 @@ public class UserAdminServiceImpl implements UserAdminService {
     public UserDeleteResponseDto deleteUser(String idDelete, String id) {
         UserAdmin userAdmin = userAdminRepository.findById(idDelete).get();
         UserAdmin userAdmin1 = userAdminRepository.findById(id).get();
+        AuditUtility auditUtility = new AuditUtility();
         UserDeleteResponseDto userDeleteResponseDto = new UserDeleteResponseDto();
         if (userAdmin != null && (userAdmin1.getRoleId()) == 1) {
             userAdmin.setActive(!userAdmin.isActive());
             userDeleteResponseDto.setDeleted(true);
             if(userAdmin.isActive()==true) {
                 userDeleteResponseDto.setMessage(userAdmin.getName() + " got enabled " + "by " + userAdmin1.getName());
+                auditUtility.deleteAudit(0,userAdmin.getName(), userAdmin.getEmail(), userAdmin1.getEmail(), new ArrayList<Change>());
             }
             if(userAdmin.isActive()==false)
             {
                 userDeleteResponseDto.setMessage(userAdmin.getName() + " got disabled " + "by " + userAdmin1.getName());
+                auditUtility.deleteAudit(1,userAdmin.getName(), userAdmin.getEmail(), userAdmin1.getEmail(), new ArrayList<Change>());
+
             }
             userAdminRepository.save(userAdmin);
-            AuditUtility auditUtility = new AuditUtility();
-            auditUtility.deleteAudit(userAdmin.getName(), userAdmin.getEmail(), userAdmin1.getEmail(), new ArrayList<Change>());
 
             return userDeleteResponseDto;
         } else {
@@ -273,6 +286,7 @@ public class UserAdminServiceImpl implements UserAdminService {
             userAdminRepository.save(userAdmin);
         }
 
+        log.warn(userAdmin.getEmail());
         AuditUtility auditUtility = new AuditUtility();
         auditUtility.editAudit(userAdmin.getName(), userAdmin.getEmail(), userAdmin.getEmail(), changes);
 
@@ -286,6 +300,28 @@ public class UserAdminServiceImpl implements UserAdminService {
         log.warn("Token Deleted For user.");
         return true;
     }
+
+
+    @Override
+    public Boolean sendEmail(String email) {
+        Random random = new Random();
+        String id = String.format("%04d", random.nextInt(10000));
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(email);
+        mail.setFrom("devicemartnew@gmail.com");
+        mail.setSubject("Change password");
+        //System.out.println("hello"+"\n"+"world");
+        mail.setText("Sending password \n OTP is :"+id);
+        try {
+            javaMailSender.send(mail);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 
     @Override
     public UserEmailDto getUserEmailId(String id) {
