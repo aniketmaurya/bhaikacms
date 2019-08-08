@@ -111,6 +111,8 @@ public class GeneratePdfReport {
             document.add(table);
 
             document.close();
+            System.out.println("DOCUMENT:");
+            System.out.println(document);
 
         } catch (DocumentException ex) {
 

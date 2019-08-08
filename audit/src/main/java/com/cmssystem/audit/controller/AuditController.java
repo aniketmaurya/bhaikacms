@@ -58,12 +58,14 @@ public class AuditController {
     public ResponseEntity<InputStreamResource> auditReport(@RequestParam(value = "start") Long start,
                                                            @RequestParam(value = "end") Long end) {
 
+        log.warn("REPORT AT CONTROLLER: {} {}", start, end);
+
         List<AuditResponseDto> audits = auditService.getAuditsToExport(start, end);
 
         ByteArrayInputStream bis = GeneratePdfReport.pdfReport(audits);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "inline; filename=report.pdf");
+        headers.add("Content-Disposition", "attachment; filename=report.pdf");
 
         return ResponseEntity
                 .ok()

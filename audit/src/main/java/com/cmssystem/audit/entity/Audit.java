@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -25,9 +26,11 @@ public class Audit {
     private String assetId;
     private String action;
     private Long actionTime;
+    @NotNull
     private String modifier;
     private String oldValue;
     private String newValue;
+    @NotNull
     private Integer flag; //0->metadata 1->user
 }
 

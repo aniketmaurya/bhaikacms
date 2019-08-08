@@ -16,9 +16,9 @@ public interface AuditRepository extends PagingAndSortingRepository<Audit, Strin
 
     List<Audit> findByActionTimeBetween(Long start, Long end);
 
-    Page<Audit> findByModifierAndActionTimeBetween(String modifier, Long start, Long end, Pageable pageable);
+    Page<Audit> findByModifierContainingAndActionTimeBetween(String modifier, Long start, Long end, Pageable pageable);
 
-    Page<Audit> findByModifier(String modifier, Pageable pageable);
+    Page<Audit> findByModifierContaining(String modifier, Pageable pageable);
 
     @Query(value = "SELECT modifier FROM audit WHERE asset_id = ?1 ORDER BY action_time LIMIT 1 OFFSET 0", nativeQuery = true)
     String findRecentModifierByAssetId(String contentId);

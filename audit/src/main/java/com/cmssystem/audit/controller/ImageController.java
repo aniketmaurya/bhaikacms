@@ -21,12 +21,13 @@ import java.util.List;
 @Slf4j
 public class ImageController {
 
-    private static final double MAX_IMAGE_SIZE = 5 * Math.pow(1024, 2);
-    private static final double MAX_VIDEO_SIZE = 5 * Math.pow(1024, 3);
+    private static final double MAX_IMAGE_SIZE = 5 * Math.pow(1024, 2);     //5 MB
+    private static final double MAX_VIDEO_SIZE = 5 * Math.pow(1024, 3);     //5 GB
     private static final List<String> ALLOWED_AVATAR_RES = Arrays.asList("300*211", "780*780", "1000*10000", "1200*1200");
     private static final List<String> ALLOWED_THUMB_RES = Arrays.asList("300*211", "780*780", "1000*10000", "1200*1200");
     private static final List<String> ALLOWED_IMAGE_EXT = Arrays.asList("jpg", "jpeg", "png");
     private static final List<String> ALLOWED_VIDEO_EXT = Arrays.asList("mp4", "3gp", "webm", "mpeg4");
+
     @Autowired
     private ImageService imageService;
 
@@ -42,7 +43,8 @@ public class ImageController {
                 return ResponseEntity.ok(new ImageUploadResponse("File Type Not Supported", ""));
             } else if (!checkForSize(multipartFile, fileType)) {
                 return ResponseEntity.ok(new ImageUploadResponse("File Size Exceeded", ""));
-            } //else if (fileType.equalsIgnoreCase("image") && !checkForResolution(multipartFile,type)) {
+            }
+//            else if (fileType.equalsIgnoreCase("image") && !checkForResolution(multipartFile,type)) {
 //                return ResponseEntity.ok(new ImageUploadResponse("Image Resolution Incorrect", ""));
 //            }
             return ResponseEntity.ok(imageService.uploadImage(multipartFile, fileType, type));

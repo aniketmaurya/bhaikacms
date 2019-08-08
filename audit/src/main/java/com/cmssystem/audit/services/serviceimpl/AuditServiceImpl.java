@@ -54,10 +54,10 @@ public class AuditServiceImpl implements AuditService {
                 .actionTime(System.currentTimeMillis())
                 .asset(addAuditRequestDto.getAsset())
                 .assetId(addAuditRequestDto.getAssetId())
-                .modifier(addAuditRequestDto.getModifier())
+                .modifier(addAuditRequestDto.getModifier() == null ? "Unknown" : addAuditRequestDto.getModifier())
                 .oldValue(oldValue)
                 .newValue(newValue)
-                .flag(addAuditRequestDto.getFlag())
+                .flag(addAuditRequestDto.getFlag() == null ? -1 : addAuditRequestDto.getFlag())
                 .build();
 
         log.debug("Audit Old data: {}", audit.getOldValue());
@@ -107,10 +107,10 @@ public class AuditServiceImpl implements AuditService {
             page = auditRepository.findAll(pageRequest);
             log.debug("Actionby is null & date not provided.");
         } else if (!StringUtils.isEmpty(modifier) && (start == -1 && end == -1)) {
-            page = auditRepository.findByModifierAndActionTimeBetween(modifier, start, end, pageRequest);
+            page = auditRepository.findByModifierContainingAndActionTimeBetween(modifier, start, end, pageRequest);
             log.debug("Actionby is {} & date is {} & {}", modifier, start, end);
         } else {
-            page = auditRepository.findByModifier(modifier, pageRequest);
+            page = auditRepository.findByModifierContaining(modifier, pageRequest);
             log.debug("Actionby is {} & date is null.", modifier);
         }
 
@@ -132,56 +132,11 @@ public class AuditServiceImpl implements AuditService {
             auditResponseDtos.add(convertAuditToDto(audit));
         return auditResponseDtos;
     }
-/*
-    @Override
-    public List<AuditResponseDto> getAuditsToExport(AuditFilterDto filterDto) {
 
-        log.debug("Came into getAudits");
-
-        String actionBy = (filterDto.getUserId() == null || filterDto.getUserId().trim().length() == 0) ? "" : filterDto.getUserId().trim();
-        Long start, end;
-        if (filterDto.getStartDate() == null && filterDto.getEndDate() == null) {
-            start = (long) -1;
-            end = (long) -1;
-        } else {
-            start = (filterDto.getStartDate() == null) ? 0 : filterDto.getStartDate();
-            end = (filterDto.getEndDate() == null) ? System.currentTimeMillis() : filterDto.getEndDate();
-        }
-        Integer pageSize = filterDto.getPageSize() == null ? 10 : filterDto.getPageSize();
-        Integer pageNumber = filterDto.getPageNumber() == null ? 0 : filterDto.getPageNumber();
-        String sortBy=filterDto.getSortBy() == null ? "actionTime" : filterDto.getSortBy();
-
-        log.debug("RequestDto:: {}", filterDto);
-        log.debug("Converted:: by: {}  start: {}  end: {}  size: {}  pg: {}", actionBy, start, end, pageSize, pageNumber);
-
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize,
-                Sort.by(filterDto.getSortOrder()==null || filterDto.getSortOrder()==0? Sort.Direction.DESC: Sort.Direction.ASC, sortBy));
-
-        List<Audit> page;
-        if (StringUtils.isEmpty(actionBy) && !(start == -1 && end == -1)) {
-            page = auditRepository.findByActionTimeBetween(start, end);
-            log.debug("Actionby null & date is {} & {}.", start, end);
-        } else if (StringUtils.isEmpty(actionBy) && (start == -1 && end == -1)) {
-            page = (List<Audit>) auditRepository.findAll();
-            log.debug("Actionby is null & date not provided.");
-        } else if (!StringUtils.isEmpty(actionBy) && (start == -1 && end == -1)) {
-            page = auditRepository.findByModifierAndActionTimeBetween(actionBy, start, end);
-            log.debug("Actionby is {} & date is {} & {}", actionBy, start, end);
-        } else {
-            page = auditRepository.findByModifier(actionBy);
-            log.debug("Actionby is {} & date is null.", actionBy);
-        }
-        List<AuditResponseDto> responseDtos=new ArrayList<>();
-        for(Audit audit : page)
-        responseDtos.add(convertAuditToDto(audit));
-
-        return responseDtos;
-    }
-*/
 
     private AuditResponseDto convertAuditToDto(Audit audit) {
         String asset;
-        if (audit.getFlag() == 0)
+        if (audit.getFlag() == 1)
             asset = audit.getAsset().concat("(").concat(audit.getAssetId()).concat(")");
         else
             asset = audit.getAsset();
