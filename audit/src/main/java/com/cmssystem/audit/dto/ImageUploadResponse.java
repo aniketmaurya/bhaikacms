@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ImageUploadResponse {
-    String imageName;
+    String message;
     String uploadLink;
 }

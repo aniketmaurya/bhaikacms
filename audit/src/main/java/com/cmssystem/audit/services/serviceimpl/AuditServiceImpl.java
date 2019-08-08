@@ -2,8 +2,8 @@ package com.cmssystem.audit.services.serviceimpl;
 
 import com.cmssystem.audit.dto.AddAuditRequestDto;
 import com.cmssystem.audit.dto.AuditFilterDto;
+import com.cmssystem.audit.dto.AuditResponseDto;
 import com.cmssystem.audit.dto.Changes;
-import com.cmssystem.audit.dto.GetAuditResponseDto;
 import com.cmssystem.audit.entity.Audit;
 import com.cmssystem.audit.repository.AuditRepository;
 import com.cmssystem.audit.services.AuditService;
@@ -15,23 +15,38 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 @Slf4j
 public class AuditServiceImpl implements AuditService {
 
 
+    private static final List<String> ALLOWED_SORT = Arrays.asList("asset", "action", "actionTime", "modifier");
     @Autowired
     private AuditRepository auditRepository;
-
 
     @Override
     public Boolean addAudit(AddAuditRequestDto addAuditRequestDto) {
 
         log.debug("addAudit in AuditServiceImpl");
+
         String oldValue = "", newValue = "";
-        for (Changes changes : addAuditRequestDto.getChanges()) {
-            oldValue = oldValue.concat(changes.getFieldChanged()).concat(":").concat(changes.getOldValue()).concat(", ");
-            newValue = newValue.concat(changes.getFieldChanged()).concat(":").concat(changes.getNewValue()).concat(", ");
+
+        if (addAuditRequestDto.getChanges() == null || addAuditRequestDto.getChanges().size() == 0) {
+            oldValue = "-";
+            newValue = "-";
+        } else {
+            for (Changes changes : addAuditRequestDto.getChanges()) {
+                oldValue = oldValue.concat(changes.getFieldChanged().toUpperCase())
+                        .concat(": ").concat(changes.getOldValue()).concat(", ");
+                newValue = newValue.concat(changes.getFieldChanged().toUpperCase())
+                        .concat(": ").concat(changes.getNewValue()).concat(", ");
+            }
+            oldValue = oldValue.substring(0, oldValue.length() - 2);
+            newValue = newValue.substring(0, newValue.length() - 2);
         }
 
         Audit audit = Audit.builder()
@@ -39,9 +54,10 @@ public class AuditServiceImpl implements AuditService {
                 .actionTime(System.currentTimeMillis())
                 .asset(addAuditRequestDto.getAsset())
                 .assetId(addAuditRequestDto.getAssetId())
-                .modifier(addAuditRequestDto.getModifier())
-                .oldValue(oldValue.substring(0, oldValue.length() - 2))
-                .newValue(newValue.substring(0, newValue.length() - 2))
+                .modifier(addAuditRequestDto.getModifier() == null ? "Unknown" : addAuditRequestDto.getModifier())
+                .oldValue(oldValue)
+                .newValue(newValue)
+                .flag(addAuditRequestDto.getFlag() == null ? -1 : addAuditRequestDto.getFlag())
                 .build();
 
         log.debug("Audit Old data: {}", audit.getOldValue());
@@ -58,11 +74,12 @@ public class AuditServiceImpl implements AuditService {
     }
 
     @Override
-    public Page<GetAuditResponseDto> getAudits(AuditFilterDto filterDto) {
+    public Page<AuditResponseDto> getAudits(AuditFilterDto filterDto) {
 
         log.debug("Came into getAudits");
 
-        String actionBy = (filterDto.getUserId() == null || filterDto.getUserId().trim().length() == 0) ? "" : filterDto.getUserId().trim();
+        String modifier = (filterDto.getModifier() == null || filterDto.getModifier().trim().length() == 0) ? "" : filterDto.getModifier().trim();
+
         Long start, end;
         if (filterDto.getStartDate() == null && filterDto.getEndDate() == null) {
             start = (long) -1;
@@ -71,27 +88,30 @@ public class AuditServiceImpl implements AuditService {
             start = (filterDto.getStartDate() == null) ? 0 : filterDto.getStartDate();
             end = (filterDto.getEndDate() == null) ? System.currentTimeMillis() : filterDto.getEndDate();
         }
+
         Integer pageSize = filterDto.getPageSize() == null ? 10 : filterDto.getPageSize();
         Integer pageNumber = filterDto.getPageNumber() == null ? 0 : filterDto.getPageNumber();
+        String sortBy = filterDto.getSortBy() == null || !ALLOWED_SORT.contains(filterDto.getSortBy()) ? "actionTime" : filterDto.getSortBy();
 
         log.debug("RequestDto:: {}", filterDto);
-        log.debug("Converted:: by: {}  start: {}  end: {}  size: {}  pg: {}", actionBy, start, end, pageSize, pageNumber);
+        log.debug("Converted:: by: {}  start: {}  end: {}  size: {}  pg: {}", modifier, start, end, pageSize, pageNumber);
 
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "actionTime"));
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize,
+                Sort.by(filterDto.getSortOrder() == null || filterDto.getSortOrder() == 0 ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
 
         Page<Audit> page;
-        if (StringUtils.isEmpty(actionBy) && !(start == -1 && end == -1)) {
+        if (StringUtils.isEmpty(modifier) && !(start == -1 && end == -1)) {
             page = auditRepository.findByActionTimeBetween(start, end, pageRequest);
             log.debug("Actionby null & date is {} & {}.", start, end);
-        } else if (StringUtils.isEmpty(actionBy) && (start == -1 && end == -1)) {
+        } else if (StringUtils.isEmpty(modifier) && (start == -1 && end == -1)) {
             page = auditRepository.findAll(pageRequest);
             log.debug("Actionby is null & date not provided.");
-        } else if (!StringUtils.isEmpty(actionBy) && (start == -1 && end == -1)) {
-            page = auditRepository.findByModifierAndActionTimeBetween(actionBy, start, end, pageRequest);
-            log.debug("Actionby is {} & date is {} & {}", actionBy, start, end);
+        } else if (!StringUtils.isEmpty(modifier) && (start == -1 && end == -1)) {
+            page = auditRepository.findByModifierContainingAndActionTimeBetween(modifier, start, end, pageRequest);
+            log.debug("Actionby is {} & date is {} & {}", modifier, start, end);
         } else {
-            page = auditRepository.findByModifier(actionBy, pageRequest);
-            log.debug("Actionby is {} & date is null.", actionBy);
+            page = auditRepository.findByModifierContaining(modifier, pageRequest);
+            log.debug("Actionby is {} & date is null.", modifier);
         }
 
 
@@ -100,15 +120,31 @@ public class AuditServiceImpl implements AuditService {
 
     @Override
     public String getRecentModifier(String contentId) {
+        log.warn("SERVICE LEVEL:: {}", contentId);
         return auditRepository.findRecentModifierByAssetId(contentId);
     }
 
-    private GetAuditResponseDto convertAuditToDto(Audit audit) {
-        return GetAuditResponseDto.builder()
+    @Override
+    public List<AuditResponseDto> getAuditsToExport(Long start, Long end) {
+        List<Audit> audits = auditRepository.findByActionTimeBetween(start, end);
+        List<AuditResponseDto> auditResponseDtos = new ArrayList<>();
+        for (Audit audit : audits)
+            auditResponseDtos.add(convertAuditToDto(audit));
+        return auditResponseDtos;
+    }
+
+
+    private AuditResponseDto convertAuditToDto(Audit audit) {
+        String asset;
+        if (audit.getFlag() == 1)
+            asset = audit.getAsset().concat("(").concat(audit.getAssetId()).concat(")");
+        else
+            asset = audit.getAsset();
+        return AuditResponseDto.builder()
                 .auditId(audit.getAuditId())
                 .action(audit.getAction())
                 .actionTime(audit.getActionTime())
-                .asset(audit.getAsset().concat("(").concat(audit.getAssetId()).concat(")"))
+                .asset(asset)
                 .modifier(audit.getModifier())
                 .oldValue(audit.getOldValue())
                 .newValue(audit.getNewValue())

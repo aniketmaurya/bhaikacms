@@ -17,4 +17,5 @@ public class AddAuditRequestDto {
     private String action;
     private String modifier;
     private List<Changes> changes;
+    private Integer flag; //0>metadata 1>users
 }

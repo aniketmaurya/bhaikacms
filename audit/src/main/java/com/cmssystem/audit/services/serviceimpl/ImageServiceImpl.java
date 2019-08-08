@@ -37,10 +37,10 @@ public class ImageServiceImpl implements ImageService {
                             .build(),
                     multipartFile.getBytes());
 
-            return new ImageUploadResponse(multipartFile.getOriginalFilename()+ " Uploaded!", blobInfo.getMediaLink());
+            return new ImageUploadResponse(multipartFile.getOriginalFilename() + " Uploaded!", blobInfo.getMediaLink());
         } catch (Exception e) {
             log.error("Error in image service: {}", e.getMessage());
-            return new ImageUploadResponse("Error: "+e.getMessage(), "");
+            return new ImageUploadResponse("Error: " + e.getMessage(), "");
         }
     }
 
