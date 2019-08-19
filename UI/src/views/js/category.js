@@ -39,7 +39,7 @@ export default {
           },
           submit(){
             window.console.log(this.addCategory)
-            this.$http.post("http://172.16.20.95:8081/admin/addCategory?categoryName="+this.addCategory.categoryName+"&parentName="+this.addCategory.parentName)
+            this.$http.post("http://10.177.7.38:8081/admin/addCategory?categoryName="+this.addCategory.categoryName+"&parentName="+this.addCategory.parentName)
             .then(response => response.json())
             .then(response => {
               if(response.categoryName===this.addCategory.categoryName){
@@ -53,7 +53,7 @@ export default {
           },
           deleteCategory(){
             window.console.log(this.addCategory.categoryId)
-            this.$http.delete("http://172.16.20.95:8081/admin/deleteCategory?categoryId="+this.addCategory.categoryId)
+            this.$http.delete("http://10.177.7.38:8081/admin/deleteCategory?categoryId="+this.addCategory.categoryId)
             .then(response => response.json())
             .then(response => {
               if(response){
@@ -65,7 +65,7 @@ export default {
           editCategory(){
             window.console.log(this.addCategory.parentName)
             window.console.log(this.addCategory.newName)
-            this.$http.put("http://172.16.20.95:8081/admin/updateCategory?categoryName="+this.addCategory.parentName+"&newName="+this.addCategory.newName)
+            this.$http.put("http://10.177.7.38:8081/admin/updateCategory?categoryName="+this.addCategory.parentName+"&newName="+this.addCategory.newName)
             .then(response => response.json())
             .then(response => {
               if(response.categoryName===this.addCategory.newName){

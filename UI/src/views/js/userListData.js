@@ -102,7 +102,6 @@ export default {
         },
         toggleRoleName (roleId) {
             let roleName = ''
-            
             roleId === 0 ? roleName = 'Admin' : roleName = 'User'
             //console.log(roleName)
             return roleName
@@ -112,12 +111,6 @@ export default {
             id === 0 ? roleId = 1 : roleId=0
             //this.tempValueRole= roleId
             return roleId
-        },
-        chanegRoleName(roleId) {
-            if (roleId === 0)
-               return "User"
-            else
-               return "Admin"
         },
         checkToggleValue(event) {
             // check select change

@@ -22,6 +22,7 @@ export default {
 					this.$session.set('email',resp.email)
 					localStorage.setItem('isLoggedIn', 'true')
 					this.$session.set('token',resp.token)
+					localStorage.setItem('token',resp.token)
 					this.$store.commit('setUsetDetails', {
 						status:true,
 						...resp
