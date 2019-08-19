@@ -40,7 +40,7 @@
                     <tr v-for="language in languages" :key="language.id">
                         <td>{{ language.name }}</td>
                         <td><button @click="handleDelete(language)" class="btn btn-danger">Remove</button></td>
-                        <td><button @click="handleEdit(language)" class="btn btn-primary">Edit</button></td> 
+                        <!-- <td><button @click="handleEdit(language)" class="btn btn-primary">Edit</button></td>  -->
                     </tr>
                 </tbody>
             </table>

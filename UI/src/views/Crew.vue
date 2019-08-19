@@ -30,7 +30,7 @@
                     <tr v-for="crewRole in crewRoles" :key="crewRole.id">
                         <td>{{ crewRole.role }}</td>
                         <td><button @click="handleDelete(crewRole)" class="btn btn-danger">Remove</button></td>
-                        <td><button @click="handleEdit(crewRole)" class="btn btn-primary">Edit</button></td> 
+                        <!-- <td><button @click="handleEdit(crewRole)" class="btn btn-primary">Edit</button></td>  -->
                     </tr>
                 </tbody>
             </table>

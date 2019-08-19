@@ -40,7 +40,7 @@
             <div class="card-block col-md-3 px-3">
                 <div class="help1"> </div>
                 <p><button @click="deleteProgram(program.id)"  class="btn btn-danger">Remove</button></p>
-                <router-link :to="'/seasonVideoForm'"><button class="btn btn-primary">Edit</button></router-link>
+                <!-- <router-link :to="'/seasonVideoForm'"><button class="btn btn-primary">Edit</button></router-link> -->
             </div>
         </div>
     </div>

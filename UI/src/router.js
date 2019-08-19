@@ -172,7 +172,16 @@ let router = new Router({
       meta: {
         authentication: 'required'
       }
+    },
+    {
+      path: '/search',
+     name: 'search',
+     component: () => import('./views/search.vue'),
+     meta: {
+       authentication: 'required'
+     }
     }
+
 
   ]
 })

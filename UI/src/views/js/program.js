@@ -7,7 +7,8 @@ export default {
     computed:{
         ...mapGetters([
             'languages',
-            'getStackOfCategories'
+            'getStackOfCategories',
+            'crewRoles'
         ])
     },
     components:{
@@ -15,6 +16,7 @@ export default {
     },
     data() {
         return {
+            inputArray: [],
             program: {
                 type:"",
                 name:"",
@@ -33,6 +35,9 @@ export default {
                 },
                 userId:null,
                 userEmail:"",
+                crewList: {
+        
+                }
             },
             tag:'',
             tags: [],
@@ -42,7 +47,8 @@ export default {
         ...mapActions([
             'addProgram',
             'imageUpload',
-            'getLanguages'
+            'getLanguages',
+            'getCrewRoles'
         ]),
         init() {
             if (this.$route.params.name == "singleVideo") {
@@ -55,6 +61,7 @@ export default {
                 this.program.type = "Seasonal video program"
             }
             this.getLanguages()
+            this.getCrewRoles()
         },
         handleSubmit() {
             //change date to long
@@ -70,7 +77,17 @@ export default {
                 }
                 this.program.keywords  = this.program.keywords+','+this.tags[i].text
             }
-            
+            // let index =1
+            // this.program.crewList[index] = "xyz"
+            // console.log(this.program.crewList)
+            console.log(this.inputArray)
+            this.inputArray.forEach(input => {
+                let index = input.role
+                console.log(index)
+                this.program.crewList[index] = input.roleName
+            })
+            console.log(this.program.crewList)
+
             //adding program to database 
             this.addProgram(this.program).then( (resp) => {
                 this.$swal('','Successfully added','success')
@@ -92,7 +109,6 @@ export default {
             return date.getTime()
         },
         processFile(event,type) {
-            debugger
             if (type=='Thumbnail') {
                 let formData = new FormData()
                 formData.append('file', event.target.files[0])
@@ -126,6 +142,16 @@ export default {
         },
         handleCancel() {
             this.$router.go(-1)
+        },
+        addInput() {
+            const input = {
+                role: '',
+                roleName: ''
+            }
+            this.inputArray.push(input)
+        },
+        removeInput(index) {
+            this.inputArray.splice(index, 1)
         }
 
     },

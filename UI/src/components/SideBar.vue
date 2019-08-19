@@ -2,8 +2,9 @@
     <ul v-if="this.isLoggedIn || this.$session.has('userId')" class="main-container">
         <div v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="heading"><router-link class="navbar-contents" :to="'/'">ADMIN</router-link></div>
         <div v-else class="heading"><router-link class="navbar-contents" :to="'/'">USER</router-link></div>
+        <div><input @keyup.enter="pushToSearch" v-model="searchTerm" class="form-control" type="text" placeholder="Search here"></div>
         <!-- <li class="navbar-li-contents"><router-link class="navbar-contents" :to="'/'">Home</router-link></li> -->
-        <li class="navbar-li-contents"><router-link class="navbar-contents" :to="'/bulkUpload'">Bulk Upload</router-link></li>
+        <!-- <li class="navbar-li-contents"><router-link class="navbar-contents" :to="'/bulkUpload'">Bulk Upload</router-link></li> -->
         <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1"  class="navbar-li-contents"><router-link class="navbar-contents" :to="'/userList'">All Users</router-link></li>
         <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="navbar-li-contents"><router-link class="navbar-contents" :to="'/audit'">Audit</router-link></li>
         <li v-if="this.userDetails.roleId==1 || this.$session.get('roleId')==1" class="navbar-li-contents"><router-link class="navbar-contents" :to="'/addUser'">Add User</router-link></li>

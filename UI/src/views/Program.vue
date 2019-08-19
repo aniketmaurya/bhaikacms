@@ -40,11 +40,11 @@
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="inputCity">Start date</label>
-                <input  v-model="program.startDate" type="date" class="form-control" >
+                <input  v-model="program.startDate" type="datetime-local" class="form-control" >
             </div>
             <div class="form-group col-md-4">
                 <label for="inputZip">Expiry date</label>
-                <input v-model="program.expiryDate" type="date" class="form-control" >
+                <input v-model="program.expiryDate" type="datetime-local" class="form-control" >
             </div>
              <div class="form-group col-md-4">
                 <label for="inputState">Category</label>
@@ -65,6 +65,23 @@
                 <img height="50" width="50" v-if="program.imgUrls.avatar" :src="program.imgUrls.avatar" alt="">
             </div>
         </div>
+        <div @click="addInput" class="btn btn-primary"> Add Crew </div>
+       <br>
+       <br>
+       <div class="col-sm-6" v-for="(input, index) in inputArray" :key="index">
+       <span>
+           <select class="form-group col-sm-2" v-model="input.role">
+               <option  v-for="crew in crewRoles" :key="crew.id">{{crew.role}}</option>
+           </select>
+           <br>
+           <input v-model="input.roleName" type="text" class="form-control">
+           <br>
+           <div :v-model="input.roleName" @click="removeInput(index)" class="btn btn-primary"> Remove </div>
+           <br>
+       </span>
+       </div>
+       <br>
+
         <div class="button">
             <span class="button1"><button type="submit" class="btn btn-primary">Save program</button></span>
             <span class="button1"><button @click="handleCancel()"  class="btn btn-primary">Close</button></span>
@@ -79,7 +96,7 @@
 .box {
     padding:20px;
     margin:20px;
-    height:600px;
+    height:auto;
     border-radius: 10px;
 	box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
 }
@@ -88,7 +105,7 @@
     color: #2980B9;
 }
 .button {
-    margin-top:530px;
+    margin-top:400px;
 }
 .button1 {
     margin:10px;

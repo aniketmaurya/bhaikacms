@@ -24,7 +24,7 @@
         </div>
         <div class="col-md-8 px-3">
             <div class="card-block col-md-5 px-3">
-                <router-link :to="'/seasons/'+program.id"><h3 class="card-title">{{ program.name }}</h3></router-link>
+                <router-link :to="'#'"><h3 class="card-title">{{ program.name }}</h3></router-link>
                 <p class="card-text"><b>Upload Id : </b>{{ program.id }}</p>
                 <p class="card-text"><b>Start Date : </b>{{ changeTime(program.startDate) }}</p>
                 <p class="card-text"><b>Expiry Date : </b>{{ changeTime(program.expiryDate) }}</p>
@@ -40,7 +40,7 @@
             <div class="card-block col-md-3 px-3">
                 <div class="help1"> </div>
                 <p><button @click="deleteProgram(program.id)"  class="btn btn-danger">Remove</button></p>
-                <router-link :to="'/seasonVideoForm'"><button class="btn btn-primary">Edit</button></router-link>
+                <!-- <router-link :to="'/seasonVideoForm'"><button class="btn btn-primary">Edit</button></router-link> -->
             </div>
         </div>
     </div>

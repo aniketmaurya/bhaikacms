@@ -18,7 +18,7 @@
         </div>
         <div class="form-group col-md-12">
             <label for="inputAddress">Video Url</label>
-            <input type="file"  @change="processFile($event)"  class="form-control" required>
+            <input type="text"  v-model="singleVideo.videoUrl" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-primary">Save video</button>
     </form>

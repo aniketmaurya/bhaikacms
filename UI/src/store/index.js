@@ -40,6 +40,7 @@ export default new Vuex.Store({
     //   name="",
     //   id=""
     // }
+    searchResult:{}
   },
   
   mutations: {
@@ -104,6 +105,9 @@ export default new Vuex.Store({
     setProgramCount(state,payload){
       console.log(payload)
       state.programCount=payload
+    },
+    setSearchResult(state,payload){
+      state.searchResult = payload
     }
   },
 
@@ -449,7 +453,7 @@ export default new Vuex.Store({
 
 
     //Testing Phase
-    searchInVideo : ({commit},payload) => { 
+    searchVideo : ({commit},payload) => { 
       return new Promise((resolve,reject) => {
         Vue.http.get("http://172.16.20.101:8080/solrSearch/search?searchTerm="+payload.searchText+"&pageNumber=0&pageSize=5&videoType="+payload.videoType).then( (resp) => {
           commit('setMultiVideos',resp.body)
@@ -458,7 +462,22 @@ export default new Vuex.Store({
           console.log(err)
         })
       })
-    },  
+    }, 
+    
+    
+    searchInVideo : ({commit},payload) => {
+      console.log('payload', payload.data)
+      return new Promise((resolve,reject) => {
+        Vue.http.get("http://172.16.20.101:8080/solrSearch/search?searchTerm="+payload.data.searchTerm)
+        .then( (resp) => {
+          commit('setSearchResult',resp.body)
+          console.log("it is a dummy    ",resp.body)
+        }).catch( (err) => {
+          console.log(err)
+        })
+      })
+    },
+ 
 
     searchInSingleVideo : ({commit},payload) => {
       return new Promise((resolve,reject) => {
@@ -552,6 +571,9 @@ export default new Vuex.Store({
     },
     programCount(state) {
       return state.programCount
+    },
+    getSearchResult(state) {
+      return state.searchResult
     }
   }
 })

@@ -31,7 +31,6 @@ export default {
         ...mapGetters([])
     },
     created () {
-        console.log(this.data),
         this.newData = this.data
         this.userName=this.data.name
         this.role=this.data.roleId
@@ -128,18 +127,12 @@ export default {
             this.editState=!this.editState
         },
         saveEdit(){
-            window.console.log(this.userName)
-            window.console.log(this.data.isActive)
             if(this.userName!=this.data.name||this.role!=this.data.roleId){
                 this.sendData.name=this.userName
                 this.sendData.roleId=this.role
                 this.sendData.id=this.data.id
                 this.sendData.isActive=this.data.active
-                window.console.log(this.role)
-                window.console.log(this.sendData)
-                window.console.log()
                 this.editState=false,
-                window.console.log()
                 this.$http.post("http://172.16.20.78:8080/useradmin/editCredentials",JSON.stringify(this.sendData))
                 .then(response => response.json())
                 .then(response => {
